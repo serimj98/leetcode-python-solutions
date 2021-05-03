@@ -1,0 +1,11 @@
+class Solution:
+  def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+    #Solution 1: O(n log n) / O(n)
+    intervals.sort()
+    sol = [intervals[0]]
+    for interval in intervals[1:]:
+      if sol[-1][1] >= interval[0]:
+        #in case the second interval is within first interval
+        sol[-1][1] = max(sol[-1][1], interval[1])
+      else: sol.append(interval)
+    return sol
