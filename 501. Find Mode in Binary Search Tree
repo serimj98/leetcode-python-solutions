@@ -1,0 +1,24 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def findMode(self, root: TreeNode) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    mode = Counter()
+    def recursive(node):
+      if not node: return
+      recursive(node.left)
+      mode[node.val] += 1
+      recursive(node.right)
+    recursive(root)
+
+    common = mode.most_common()
+    max_val = common[0][1]
+    sol = []
+    for key, value in common:
+      if value == max_val:
+        sol.append(key)
+    return sol
