@@ -1,0 +1,10 @@
+class Solution:
+  def countSquares(self, matrix: List[List[int]]) -> int:
+    #Solution 1: O(r*c) / O(1)
+    sol = 0
+    for row in range(len(matrix)):
+      for col in range(len(matrix[0])):
+        if matrix[row][col] and row > 0 and col > 0:
+          matrix[row][col] = min(matrix[row-1][col], matrix[row][col-1], matrix[row-1][col-1]) + 1
+        sol += matrix[row][col]
+    return sol
