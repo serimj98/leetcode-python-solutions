@@ -1,0 +1,22 @@
+class Solution:
+  def numSplits(self, s: str) -> int:
+    #Solution 1 (TLE): O(n^2) / O(1)
+    sol = 0
+    for idx in range(1, len(s)):
+      #idx = 1: s[:idx] = a / s[idx:] = acaba
+      #idx = 5: s[:idx] = aacab / s[idx:] = a
+      if len(set(s[:idx])) == len(set(s[idx:])): sol += 1
+    return sol
+  
+    #Solution 2: O(n) / O(n)
+    l, r = ([0] * len(s)), ([0] * len(s))
+    l_set, r_set = set(), set()
+    for i in range(len(s)):
+      l_set.add(s[i])
+      l[i] = len(l_set)
+      r_set.add(s[-1-i])
+      r[-1-i] = len(r_set)
+    sol = 0
+    for i in range(len(s)-1):
+      if l[i] == r[i+1]: sol += 1
+    return sol
