@@ -1,0 +1,7 @@
+class Solution:
+  def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    #Solution 1: O(n k log k) / O(n)
+    sol = defaultdict(list)
+    for s in strs:
+      sol[tuple(sorted(s))].append(s) #tuples can be added as keys in dictionaries
+    return sol.values()
