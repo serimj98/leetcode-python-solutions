@@ -1,0 +1,37 @@
+class Solution:
+  def sortedListToBST(self, head: ListNode) -> TreeNode:
+    #Solution 1: O(n log n) / O(log n), balanced binary tree
+    if not head: return None
+    if not head.next: return TreeNode(head.val)
+    
+    temp = None
+    slow = fast = head #slow is at middle element of linked list
+    while fast and fast.next:
+      temp = slow
+      slow = slow.next
+      fast = fast.next.next
+    
+    # cut into two linked lists into head (beginning to root) and temp (root.next to end)
+    temp.next = None
+    
+    root = TreeNode(slow.val)
+    root.left = self.sortedListToBST(head)
+    root.right = self.sortedListToBST(slow.next)
+    
+    return root
+  
+    #Solution 2: O(n) / O(n)
+    linked = []
+    while head:
+      linked.append(head.val)
+      head = head.next
+    
+    def recursive(l, r):
+      if l > r: return None
+      mid = l + (r - l) // 2
+      root = TreeNode(linked[mid])
+      root.left = recursive(l, mid-1)
+      root.right = recursive(mid+1, r)
+      return root
+    
+    return recursive(0, len(linked)-1)
