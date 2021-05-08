@@ -1,0 +1,22 @@
+class Solution:
+  def minDistance(self, word1: str, word2: str) -> int:
+    #Solution 1: O(n*m) / O(n*m)
+    """
+    DP bottom-up solution
+    - find the longest common subsequence between the two words
+    - how many operations are needed to change from top string to left string
+    - pattern is minimum of left and top number + 1
+    - number of deletions required: length of both words - number of deletions for both words
+    
+      " a b c
+    " 0 1 2 3
+    a 1 1 2 3
+    b 2 2 3 4
+    c 3 3 4 5
+    """
+    m, n = len(word1), len(word2)
+    dp = [[0] * (n + 1) for i in range(m + 1)] #2d DP array
+    for i in range(m):
+      for j in range(n):
+        dp[i+1][j+1] = max(dp[i][j + 1], dp[i + 1][j], dp[i][j] + (word1[i] == word2[j]))
+    return m + n - 2*dp[m][n]
