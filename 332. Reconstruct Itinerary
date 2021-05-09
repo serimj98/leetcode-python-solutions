@@ -1,0 +1,21 @@
+class Solution:
+  def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+    #Solution 1: O(n log n) / O(n)
+    graph = defaultdict(list)
+    for ticket in tickets:
+      graph[ticket[0]].append(ticket[1])
+    
+    for node in graph:
+      graph[node].sort(reverse = True)
+
+    stack = ["JFK"]
+    sol = []
+    while stack:
+      cur = stack[-1]
+      #append to stack until path is all added until there is no next step
+      if cur in graph and len(graph[cur]) > 0:
+        stack.append(graph[cur].pop())
+      #add if no path after this step, as it would be the last step; cannot go anywhere from here
+      else: sol.append(stack.pop())
+    
+    return sol[::-1]
