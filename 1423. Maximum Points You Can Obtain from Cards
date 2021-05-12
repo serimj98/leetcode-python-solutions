@@ -1,0 +1,10 @@
+class Solution:
+  def maxScore(self, cardPoints: List[int], k: int) -> int:
+    #Solution 1: O(n-k) / O(1)
+    total = sum(cardPoints)
+    window = sum(cardPoints[:len(cardPoints)-k])
+    sol = total-window
+    for i in range(k):
+      window = window - cardPoints[i] + cardPoints[len(cardPoints)-k+i]
+      sol = max(sol, total-window)
+    return sol
