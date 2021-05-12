@@ -1,0 +1,27 @@
+class Solution:
+  def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+    #Solution 1: O(n^2) / O(1)
+    def travel(idx):
+      gas_amt = 0
+      for i in range(len(gas)):
+        cur_pos = (idx + i) % len(gas)
+        gas_amt += gas[cur_pos] - cost[cur_pos]
+        if gas_amt < 0: return False
+      return True
+
+    for i in range(len(gas)):
+      if travel(i): return i
+    return -1
+    
+    #Solution 2: O(n) / O(1)
+    if sum(gas) < sum(cost): return -1
+    pos, gas_amt = 0, 0
+    for i in range(len(gas)):
+      gas_amt += gas[i] - cost[i]
+      if gas_amt < 0:
+        gas_amt = 0
+        #we can start from next station after i because gas_amt is positive until i-1
+        #since any position between previous pos and i-1 has a positive gas_amt, subtracting
+        #accumulation would make the difference even bigger, hence should start from i+1
+        pos = i + 1 #means cannot go to next step, so reset position
+    return pos
