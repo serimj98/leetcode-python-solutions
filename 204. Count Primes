@@ -1,0 +1,13 @@
+class Solution:
+  def countPrimes(self, n: int) -> int:
+    #Solution 1 The Sieve of Eratosthenes: O(log log n) / O(n)
+    sol = 0
+    if n <= 2: return 0
+    primes = [True] * n #all values less than n
+    primes[0] = primes[1] = False #0 and 1 are not prime
+    
+    for i in range(2, int(n**0.5)+1): #i >= sqrt(n) already marked False
+      if primes[i]:
+        #change all multiples of i excluding i to become False
+        primes[i * i: n: i] = [False] * len(primes[i * i: n: i])
+    return sum(primes)
