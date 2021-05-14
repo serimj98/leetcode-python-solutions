@@ -1,0 +1,15 @@
+class Solution:
+  def generateParenthesis(self, n: int) -> List[str]:
+    #Solution 1 Backtracking: O(4^n/root(n)) / O(4^n/root(n))
+    sol = []
+    def backtrack(s, l, r):
+      if len(s) == 2*n:
+        sol.append(s)
+        return
+      if l < n:
+        backtrack(s+'(', l+1, r)
+      if l > r:
+        backtrack(s+')', l, r+1)
+      
+    backtrack("", 0, 0)
+    return sol
