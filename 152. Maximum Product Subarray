@@ -1,0 +1,14 @@
+class Solution:
+  def maxProduct(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    #keep track of both min and max product before current element,
+    #as product of the two negatives will be positive and can potentially be the largest product
+    max_val, min_val, sol = nums[0], nums[0], nums[0]
+    for i in range(1, len(nums)):
+      #need to track current max and min in a separate variable to use
+      #previous max_val and min_val value when calculating cur_min and cur_max
+      cur_max = max(nums[i], max_val*nums[i], min_val*nums[i])
+      cur_min = min(nums[i], max_val*nums[i], min_val*nums[i])
+      max_val, min_val = cur_max, cur_min
+      sol = max(sol, max_val)
+    return sol
