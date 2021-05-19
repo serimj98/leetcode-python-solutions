@@ -1,0 +1,18 @@
+class Solution:
+  def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+    #Solution 1: O(row*col) / O(row*col), recursive stack
+    sp = image[sr][sc]
+    if sp == newColor: return image
+    rows = len(image)
+    cols = len(image[0])
+    
+    def dfs(row, col):
+      if row >= 0 and row < rows and col >= 0 and col < cols and image[row][col] == sp:
+        image[row][col] = newColor
+        dfs(row+1, col)
+        dfs(row-1, col)
+        dfs(row, col+1)
+        dfs(row, col-1)
+      
+    dfs(sr, sc)
+    return image
