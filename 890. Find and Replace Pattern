@@ -1,0 +1,15 @@
+class Solution:
+  def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+    #Solution 1: O(len(word)*len(words)) / O(word)
+    sol = []
+    def isMatch(word, pattern):
+      match = dict()
+      for w, p in zip(word, pattern): #('a', 'a'), ('b', 'b'), ('c', 'b')
+        if w in match and match[w] != p: return False
+        elif w not in match and p in match.values(): return False
+        match[w] = p
+      return True
+    
+    for word in words:
+      if isMatch(word, pattern): sol.append(word)
+    return sol
