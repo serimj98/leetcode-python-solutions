@@ -1,0 +1,13 @@
+class Solution:
+  def toLowerCase(self, s: str) -> str:
+    #Solution 1: O(n) / O(1)
+    return s.lower()
+  
+    #Solution 2: O(n) / O(n)
+    diff = ord('a') - ord('A')
+    sol = ""
+    for c in s:
+      if  65 <= ord(c) <= 90:
+        sol += chr(ord(c) + diff)
+      else: sol += c
+    return sol
