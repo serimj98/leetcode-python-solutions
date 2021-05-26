@@ -1,0 +1,16 @@
+class Solution:
+  def letterCasePermutation(self, S: str) -> List[str]:
+    #Solution 1 Backtracking: O(2^n * n) / O(2^n * n)
+    sol = []
+    def backtrack(cur="", remaining=S):
+      if len(cur) == len(S):
+        sol.append(cur)
+        return
+      ch = remaining[0]
+      if not ch.isalpha():
+        backtrack(cur+ch, remaining[1:])
+      else:
+        backtrack(cur+ch.upper(), remaining[1:])
+        backtrack(cur+ch.lower(), remaining[1:])
+    backtrack()
+    return sol
