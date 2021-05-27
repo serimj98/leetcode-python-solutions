@@ -1,0 +1,7 @@
+class Solution:
+  def minPartitions(self, n: str) -> int:
+    #Solution 1: O(n) / O(n)
+    return max([int(i) for i in n])
+  
+    #Solution 2: O(n) / O(n)
+    return max(set(n))
