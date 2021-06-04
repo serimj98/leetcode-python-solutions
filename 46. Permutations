@@ -1,0 +1,13 @@
+class Solution:
+  def permute(self, nums: List[int]) -> List[List[int]]:
+    #Solution 1: O(n!*n) / O(n)
+    sol = []
+    def backtrack(cur, seen):
+      if len(cur) == len(nums):
+        sol.append(cur)
+        return
+      for i in range(len(nums)):
+        if i not in seen:
+          backtrack(cur+[nums[i]], seen+[i])
+    backtrack([], [])
+    return sol
