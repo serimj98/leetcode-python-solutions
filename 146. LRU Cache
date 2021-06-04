@@ -1,0 +1,24 @@
+class LRUCache:
+
+  def __init__(self, capacity: int):
+    self.capacity = capacity
+    self.lru = dict()
+
+  def get(self, key: int) -> int:
+    #O(1) / O(capacity)
+    if key in self.lru:
+      last_used = self.lru[key]
+      del self.lru[key]
+      self.lru[key] = last_used #move to end of dict
+      return last_used
+    else: return -1
+
+  def put(self, key: int, value: int) -> None:
+    #O(1) / O(capacity)
+    if key not in self.lru:
+      if len(self.lru) >= self.capacity:
+        del self.lru[list(self.lru.keys())[0]]
+      self.lru[key] = value
+    else:
+      del self.lru[key]
+      self.lru[key] = value
