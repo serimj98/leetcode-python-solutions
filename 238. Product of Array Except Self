@@ -1,0 +1,29 @@
+class Solution:
+  def productExceptSelf(self, nums: List[int]) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    left, right = [0] * len(nums), [0] * len(nums)
+    left[0] = 1
+    for i in range(len(nums)-1):
+      left[i+1] = left[i]*nums[i]
+    
+    right[len(nums)-1] = 1
+    for i in range(len(nums)-1, 0, -1):
+      right[i-1] = right[i]*nums[i]
+    
+    sol = []
+    for i in range(len(left)):
+      sol.append(left[i]*right[i])
+    return sol
+    
+    #Solution 2: O(n) / O(1)
+    sol = []
+    prod = 1
+    for i in nums:
+      sol.append(prod)
+      prod *= i
+    
+    prod = 1
+    for i in range(len(nums)-1, -1, -1):
+      sol[i] *= prod
+      prod *= nums[i]
+    return sol
