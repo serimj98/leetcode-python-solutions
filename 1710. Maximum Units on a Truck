@@ -1,0 +1,25 @@
+class Solution:
+  def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -> int:
+    #Solution 1: O(n log n) / O(1)
+    sol = 0
+    boxTypes = sorted(boxTypes, key = lambda x: x[1], reverse = True)
+    if not truckSize: return 0
+    for _ in range(truckSize):
+      if boxTypes:
+        sol += boxTypes[0][1]
+        boxTypes[0][0] -= 1
+        if boxTypes[0][0] == 0: boxTypes = boxTypes[1:]
+    return sol
+    
+    #Solution 2: O(n log n) / O(1)
+    sol = 0
+    boxTypes = sorted(boxTypes, key = lambda x: x[1], reverse = True)
+    for box in boxTypes:
+      if truckSize:
+        if box[0] < truckSize:
+          sol += box[0] * box[1]
+          truckSize -= box[0]
+        else:
+          sol += box[1] * truckSize
+          truckSize = 0
+    return sol
