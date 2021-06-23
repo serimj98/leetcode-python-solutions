@@ -1,0 +1,15 @@
+class Solution:
+  def longestStrChain(self, words: List[str]) -> int:
+    #Solution 1: O(n*s*s + n log n); s = length of word / O(n)
+    sol = 1
+    words_dict = {}
+    words = sorted(words, key = len)
+    
+    for cur in words:
+      words_dict[cur] = 1
+      for i in range(len(cur)):
+        prev = cur[:i] + cur[i+1:]
+        if prev in words_dict:
+          words_dict[cur] = max(words_dict[cur], words_dict[prev] + 1)
+          sol = max(sol, words_dict[cur])
+    return sol
