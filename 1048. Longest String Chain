@@ -10,6 +10,6 @@ class Solution:
       for i in range(len(cur)):
         prev = cur[:i] + cur[i+1:]
         if prev in words_dict:
-          words_dict[cur] = max(words_dict[cur], words_dict[prev] + 1)
+          words_dict[cur] = words_dict[prev] + 1
           sol = max(sol, words_dict[cur])
     return sol
