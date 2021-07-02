@@ -1,0 +1,8 @@
+class Solution:
+  def grayCode(self, n: int) -> List[int]:
+    #Solution 1: O(2^n) / O(1), result list is not considered as extra space
+    sol = [0]
+    for i in range(n):
+      for j in range(len(sol)-1, -1, -1): #loop backwards to differ by one from previous element
+        sol.append(sol[j] | 1 << i) #put 1 at the head of sol[j], ex. 101 | 1000 == 1101
+    return sol
