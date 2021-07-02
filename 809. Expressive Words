@@ -1,0 +1,24 @@
+class Solution:
+  def expressiveWords(self, s: str, words: List[str]) -> int:
+    #Solution 1: O(len(words)*len(word)) / O(1)
+    def stretchyCount(idx: int, string: str) -> int: #length of repeated characters in string
+      temp = idx
+      while temp < len(string) and string[temp] == string[idx]: temp += 1
+      return temp - idx
+    
+    def stretchyWord(s: str, word: str) -> bool: #return if current word is stretchy
+      w_idx, s_idx = 0, 0
+      while w_idx < len(word) and s_idx < len(s):
+        if word[w_idx] == s[s_idx]:
+          word_len = stretchyCount(w_idx, word) #1
+          s_len = stretchyCount(s_idx, s) #3
+          if (s_len < 3 and word_len != s_len) or (s_len >= 3 and s_len < word_len): return False
+          w_idx += word_len
+          s_idx += s_len
+        else: return False
+      return w_idx == len(word) and s_idx == len(s)    
+
+    sol = 0
+    for word in words:
+      if stretchyWord(s, word): sol += 1
+    return sol
