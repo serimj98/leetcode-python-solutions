@@ -1,0 +1,23 @@
+class Solution:
+  def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
+    #Solution 1 Heap: O(n + k log k) / O(n)
+    heap, sol = [], []
+    for i in arr: heap.append((abs(i-x), i))
+    heapify(heap) #O(log n), heappush = O(n log n)
+    #heappop will consider second element of tuple of first element is equivalent
+    for i in range(k): sol.append(heappop(heap)[1]) #O(log k)
+    return sorted(sol) #O(k log k)
+  
+    #Solution 2 Binary search: O(log (n - k) + k) / O(k)
+    #l or r is a potential index that k elements start with,
+    #so needs to be k less than length of array at least
+    l, r = 0, len(arr) - k
+    while l < r:
+      m = (l + r) // 2
+      #[1, 2, 3, 4, 5, 6, 7, 8], k = 3, x = 4
+      #l = 0, r = 5, #arr[m] = 3, arr[m + k] = 6
+      #if difference between arr[m] and x is greater than difference between arr[m + k] and x
+      #move l, since we know k elements won't include arr[l] and the elements smaller than that
+      if x - arr[m] > arr[m + k] - x: l = m + 1
+      else: r = m
+    return arr[l:l+k]
