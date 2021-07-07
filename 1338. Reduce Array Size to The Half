@@ -1,0 +1,23 @@
+class Solution:
+  def minSetSize(self, arr: List[int]) -> int:
+    # #Solution 1: O(n^2) / O(n) - TLE
+    # sol = 0
+    # size = len(arr)
+    # count_arr = Counter(arr)
+    # while size > len(arr) // 2:
+    #   sol += 1
+    #   most_common = count_arr.most_common(1)[0][0]
+    #   size -= count_arr[most_common]
+    #   del count_arr[most_common]
+    # return sol
+  
+    #Solution 2: O(n log n) / O(n)
+    sol = 0
+    size = len(arr)
+    count_arr = list(Counter(arr).values()) #because we don't care what the actual values are
+    count_arr.sort()
+    while size > len(arr) // 2:
+      sol += 1
+      most_common = count_arr.pop()
+      size -= most_common
+    return sol
