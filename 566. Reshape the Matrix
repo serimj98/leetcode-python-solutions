@@ -1,0 +1,16 @@
+class Solution:
+  def matrixReshape(self, mat: List[List[int]], r: int, c: int) -> List[List[int]]:
+    #Solution 1: O(r*c) / O(r*c)
+    rows, cols = len(mat), len(mat[0])
+    if rows*cols != r*c: return mat
+    r_idx, c_idx = 0, 0
+    sol = [[0] * c for i in range(r)]
+    for row in range(rows):
+      for col in range(cols):
+        sol[r_idx][c_idx] = mat[row][col]
+        if c_idx == c - 1:
+          c_idx = 0
+          r_idx += 1
+        else:
+          c_idx += 1
+    return sol
