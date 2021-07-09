@@ -1,0 +1,19 @@
+class Solution(object):
+  def findLength(self, A, B):
+    #Solution 1: O(A*B) / O(A*B)
+    """
+    check if there is the same value in both arrays to check if there is the same subarray
+       "" 1 2 3 2 1
+    ""  0 0 0 0 0 0
+    3   0 0 0 1 0 0
+    2   0 0 1 0 2 0 <- if same element of 2, and previous element 3 is also the same
+    1   0 1 0 0 0 3
+    4   0 0 0 0 0 0
+    7   0 0 0 0 0 0
+    """
+    dp = [[0] * (len(B) + 1) for _ in range(len(A) + 1)]
+    for i in range(len(A) - 1, -1, -1):
+      for j in range(len(B) - 1, -1, -1):
+        if A[i] == B[j]:
+          dp[i][j] = dp[i + 1][j + 1] + 1
+    return max(max(row) for row in dp)
