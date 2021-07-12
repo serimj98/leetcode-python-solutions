@@ -1,0 +1,25 @@
+class Solution:
+  def removeStones(self, stones: List[List[int]]) -> int:
+    #Solution 1: O(n^2) / O(n)
+    rows, cols =collections.defaultdict(list), collections.defaultdict(list)
+    for i,j in stones:
+      rows[i].append(j)
+      cols[j].append(i)
+    seen = set()
+    
+    def dfs(i,j):
+      for col in rows[i]:
+        if (i, col) not in seen:
+          seen.add((i, col))
+          dfs(i, col)
+      for row in cols[j]:
+        if (row, j) not in seen:
+          seen.add((row, j))
+          dfs(row, j)
+          
+    islands = 0
+    for i,j in stones:
+      if (i,j) not in seen:
+        islands += 1
+        dfs(i, j)
+    return len(stones) - islands
