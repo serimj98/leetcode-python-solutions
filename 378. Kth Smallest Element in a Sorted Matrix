@@ -1,0 +1,9 @@
+class Solution:
+  def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+    #Solution 1: O(n log n) / O(n), n = r*c
+    ordered = []
+    for r in range(len(matrix)):
+      for c in range(len(matrix[0])):
+        ordered.append(matrix[r][c])
+    ordered.sort()
+    return ordered[k-1]
