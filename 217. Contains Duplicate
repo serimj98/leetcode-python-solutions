@@ -1,0 +1,11 @@
+class Solution:
+  def containsDuplicate(self, nums: List[int]) -> bool:
+    #Solution 1: O(1) / O(n)
+    return len(set(nums)) != len(nums)
+  
+    #Solution 2: O(n) / O(n)
+    seen = set()
+    for i in nums:
+      if i in seen: return True
+      seen.add(i)
+    return False
