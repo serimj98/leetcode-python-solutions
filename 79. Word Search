@@ -1,0 +1,39 @@
+class Solution:
+  def exist(self, board: List[List[str]], word: str) -> bool:
+    #Solution 1: O(rows*cols*3^len(word)) / O(len(word)) recursion stack
+    rows, cols = len(board), len(board[0])
+    
+    def dfs(r, c, word):
+      if not word: return True
+      if r >= rows or r < 0 or c >= cols or c < 0 or word[0] != board[r][c]:
+        return False
+      cur = board[r][c]
+      board[r][c] = '#'
+      sol = dfs(r+1, c, word[1:]) or dfs(r-1, c, word[1:]) \
+            or dfs(r, c+1, word[1:]) or dfs(r, c-1, word[1:])
+      board[r][c] = cur
+      return sol
+    
+    for row in range(rows):
+      for col in range(cols):
+        if dfs(row, col, word): return True
+    return False
+  
+    #Solution 2: O(rows*cols*3^len(word)) / O(len(word)) recursion stack
+    rows, cols = len(board), len(board[0])
+    
+    def dfs(r, c, word_idx):
+      if word_idx == len(word): return True
+      if r >= rows or r < 0 or c >= cols or c < 0 or word[word_idx] != board[r][c]:
+        return False
+      cur = board[r][c]
+      board[r][c] = '#'
+      sol = dfs(r+1, c, word_idx+1) or dfs(r-1, c, word_idx+1) \
+            or dfs(r, c+1, word_idx+1) or dfs(r, c-1, word_idx+1)
+      board[r][c] = cur
+      return sol
+    
+    for row in range(rows):
+      for col in range(cols):
+        if dfs(row, col, 0): return True
+    return False
