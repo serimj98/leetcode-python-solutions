@@ -1,0 +1,27 @@
+class NumArray:
+
+  #Solution 1
+  def __init__(self, nums: List[int]):
+    #O(1) / O(1)
+    self.nums = nums
+
+  def sumRange(self, left: int, right: int) -> int:
+    #O(n) / O(1)
+    return sum(self.nums[left:right+1])
+  
+  #Solution 2
+  def __init__(self, nums: List[int]):
+    #O(n) / O(n)
+    self.cumsum = [nums[0]]
+    for i in nums[1:]:
+      self.cumsum.append(self.cumsum[-1] + i)
+
+  def sumRange(self, left: int, right: int) -> int:
+    #O(1) / O(1)
+    if left == 0: return self.cumsum[right]
+    return self.cumsum[right] - self.cumsum[left-1]
+
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# param_1 = obj.sumRange(left,right)
