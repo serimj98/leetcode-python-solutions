@@ -27,3 +27,21 @@ class Solution:
       sol[i] *= prod
       prod *= nums[i]
     return sol
+
+    #Solution 3: O(n) / O(n)
+    totalProduct = 1
+    zeroIndex = []
+    for i in range(len(nums)):
+      if nums[i] != 0:
+        totalProduct *= nums[i]
+      else:
+        zeroIndex.append(i)
+    sol = [0] * len(nums)
+    if len(zeroIndex) > 1: return sol
+    if len(zeroIndex) == 1:
+      sol[zeroIndex[0]] = totalProduct
+      return sol
+    if not zeroIndex:
+      for i in range(len(nums)):
+        sol[i] = totalProduct // nums[i]
+      return sol
