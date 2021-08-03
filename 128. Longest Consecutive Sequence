@@ -1,0 +1,29 @@
+class Solution:
+  def longestConsecutive(self, nums: List[int]) -> int:
+    #Solution 1: O(n log n) / O(1)
+    if not nums: return 0
+    nums.sort()
+    max_count, cur_count = 0, 0
+    for i in range(1, len(nums)):
+      if nums[i-1] + 1 == nums[i]:
+        cur_count += 1
+        max_count = max(max_count, cur_count)
+      elif nums[i-1] == nums[i]:
+        continue
+      else:
+        cur_count = 0
+    return max_count + 1
+  
+    #Solution 2: O(n) / O(n)
+    nums = set(nums)
+    count = 0
+    while nums:
+      first = last = nums.pop()
+      while first - 1 in nums:
+        first -= 1
+        nums.remove(first)
+      while last + 1 in nums:
+        last += 1
+        nums.remove(last)
+      count = max(count, last - first + 1)
+    return count
