@@ -1,0 +1,32 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+    #Solution 1 Recursive: O(n) / O(n)
+    def recursive(p_node, q_node):
+      if not p_node and not q_node: return True
+      if p_node and not q_node: return False
+      if not p_node and q_node: return False
+      if p_node.val != q_node.val: return False
+      return recursive(p_node.left, q_node.left) and recursive(p_node.right, q_node.right)
+    return recursive(p, q)
+  
+    #Solution 2 Iterative: O(n) / O(n)
+    def sameCheck(p_node, q_node):
+      if not p_node and not q_node: return True
+      if p_node and not q_node: return False
+      if not p_node and q_node: return False
+      if p_node.val != q_node.val: return False
+      return True
+    
+    queue = deque([p, q])
+    if queue:
+      p, q = queue.popleft()
+      if not sameCheck(p, q): return False
+      if p: queue.append([p.left, q.left])
+      if q: queue.append([p.right, q.left])
+    return True
