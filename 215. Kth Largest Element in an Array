@@ -1,0 +1,16 @@
+class Solution:
+  def findKthLargest(self, nums: List[int], k: int) -> int:
+    #Solution 1: O(n log n) / O(1)
+    nums.sort()
+    return nums[-k]
+  
+    #Solution 2: O(n + k log n) / O(1)
+    for i in range(len(nums)): #O(n)
+      nums[i] *= -1
+    heapify(nums) #O(n)
+    for i in range(k): #O(k)
+      kth = heappop(nums) #O(log n)
+    return kth * -1
+  
+    #Solution 3: O(n + k log n) / O(1)
+    return nlargest(k, nums)[-1]
