@@ -1,0 +1,11 @@
+class Solution:
+  def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+    #Solution 1: O(n^3) / O(n)
+    dp = [0] * (len(s) + 1) #1 means that you can start at this position
+    dp[0] = 1
+    wordDict = set(wordDict)
+    for i in range(len(s)):
+      for j in range(i, len(s)):
+        if dp[i] and s[i:j+1] in wordDict:
+          dp[j+1] = 1
+    return dp[-1]
