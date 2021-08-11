@@ -1,0 +1,25 @@
+class Solution:
+  def coinChange(self, coins: List[int], amount: int) -> int:
+    #Solution 1 Top-down DP: O(amount*coins) / O(amount)
+    @lru_cache(None)
+    def dp(amount):
+      if not amount: return 0
+      if amount < 0: return float("inf")
+      minChange = float("inf")
+      for coin in coins:
+        minChange = min(minChange, dp(amount - coin) + 1)
+      return minChange
+    sol = dp(amount)
+    if sol == float("inf"): return -1
+    return sol
+  
+    #Solution 2 Bottom-up DP: O(amount*coins) / O(amount)
+    #index represents minimum number of coins needed for each amount
+    dp = [amount + 1] * (amount + 1)
+    dp[0] = 0 #wwhen amount = 0
+    for i in range(1, amount + 1):
+      for coin in coins:
+        if i >= coin:
+          dp[i] = min(dp[i], dp[i-coin] + 1)
+    if dp[-1] == amount + 1: return -1
+    return dp[-1]
