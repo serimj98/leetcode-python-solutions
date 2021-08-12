@@ -1,0 +1,9 @@
+class Solution:
+  def indexPairs(self, text: str, words: List[str]) -> List[List[int]]:
+    #Solution 1: O(word^2*text) / O(text)
+    sol = []
+    for t in range(len(text)):
+      for word in words:
+        if t+len(word)-1 < len(text) and text[t:t+len(word)] == word:
+          sol.append([t,t+len(word)-1])
+    return sorted(sol)
