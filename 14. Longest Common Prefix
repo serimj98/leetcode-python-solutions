@@ -1,0 +1,20 @@
+class Solution:
+  def longestCommonPrefix(self, strs: List[str]) -> str:
+    #Solution 1: O(strs*len(chars)) / O(1)
+    minLen = float("inf")
+    for s in strs:
+      minLen = min(minLen, len(s))
+    sol = ""
+    for i in range(minLen):
+      cur = strs[0][i]
+      for j in range(len(strs)):
+        if cur != strs[j][i]: return sol
+      sol += cur
+    return sol
+  
+    #Solution 2: O(len(chars)) / O(1)
+    if not strs: return ""
+    s1, s2 = min(strs), max(strs) #minimum and maximum in alphabetical order
+    for i in range(len(s1)):
+      if s1[i] != s2[i]: return s1[:i]
+    return s1
