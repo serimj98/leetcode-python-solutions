@@ -1,0 +1,17 @@
+class Solution:
+  def totalFruit(self, tree: List[int]) -> int:
+    #Solution 1: O(n) / O(n)
+    sol = 0
+    unique = 0
+    start, end = 0, 0 #index of first and last included fruit
+    count = defaultdict(int)
+    while end < len(tree):
+      count[tree[end]] += 1
+      if count[tree[end]] == 1: unique += 1
+      while unique > 2:
+        count[tree[start]] -= 1
+        if not count[tree[start]]: unique -= 1
+        start += 1
+      sol = max(sol, end - start + 1)
+      end += 1
+    return sol
