@@ -1,0 +1,13 @@
+class Solution:
+  def combine(self, n: int, k: int) -> List[List[int]]:
+    #Solution 1: O(k*2^n) / O(k*2^n)
+    sol = []
+    nums = list(range(1, n+1))
+    def backtrack(cur, remaining):
+      if len(cur) == k:
+        sol.append(cur)
+        return
+      for i in range(len(remaining)):
+        backtrack(cur + [remaining[i]], remaining[i+1:])
+    backtrack([], nums)
+    return sol
