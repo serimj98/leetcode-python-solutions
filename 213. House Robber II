@@ -1,0 +1,24 @@
+class Solution:
+  def rob(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(n)
+    if not nums: return 0
+    if len(nums) == 1: return nums[0]
+    if len(nums) == 2: return max(nums)
+    def singleRob(houses):
+      dp =  [0] * len(houses)
+      dp[0], dp[1] = houses[0], max(houses[0], houses[1])
+      for i in range(2, len(houses)):
+        dp[i] = max(dp[i-2] + houses[i], dp[i-1])
+      return dp[-1]
+    return max(singleRob(nums[1:]), singleRob(nums[:-1]))
+  
+    #Solution 2: O(n) / O(1)
+    if not nums: return 0
+    if len(nums) == 1: return nums[0]
+    if len(nums) == 2: return max(nums)
+    def singleRob(start, end):
+      rob, notRob = 0, 0
+      for idx in range(start, end):
+        rob, notRob = notRob + nums[idx], max(rob, notRob)
+      return max(rob, notRob)
+    return max(singleRob(1, len(nums)), singleRob(0, len(nums)-1))
