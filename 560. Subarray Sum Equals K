@@ -1,0 +1,21 @@
+class Solution:
+  def subarraySum(self, nums: List[int], k: int) -> int:
+    #Solution 1 TLE: O(n^2) / O(1)
+    sol = 0
+    for start in range(len(nums)):
+      cur_sum = 0
+      for end in range(start, len(nums)):
+        cur_sum += nums[end]
+        if cur_sum == k: sol += 1
+    return sol
+  
+    #Solution 2: O(n) / O(n)
+    #when the sum increases by k, we found a subarray with sum equal to k
+    sol, total = 0, 0
+    cumSum = defaultdict(int)
+    cumSum[0] = 1
+    for num in nums:
+      total += num
+      sol += cumSum[total-k] #do we have a previous cumulative sum increased by k?
+      cumSum[total] += 1
+    return sol
