@@ -1,0 +1,20 @@
+class Solution:
+  def sortedSquares(self, nums: List[int]) -> List[int]:
+    #Solution 1: O(n log n)/ O(n)
+    sol = []
+    for i in nums:
+      sol.append(i*i)
+    return sorted(sol)
+  
+    #Solution 2: O(n) / O(n)
+    sortList = deque() #use queue so we don't have to reverse at the end
+    l, r = 0, len(nums) - 1
+    while l <= r: #each sides have the biggest numbers, so append greater number first
+      left, right = abs(nums[l]), abs(nums[r])
+      if left < right:
+        sortList.appendleft(right*right)
+        r -= 1
+      else:
+        sortList.appendleft(left*left)
+        l += 1
+    return sortList
