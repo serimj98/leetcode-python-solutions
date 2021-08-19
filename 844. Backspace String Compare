@@ -1,0 +1,13 @@
+class Solution:
+  def backspaceCompare(self, S: str, T: str) -> bool:
+    #Solution 1: O(S + T) / O(S + T)
+    def backspaced(s):
+      stack = []
+      for i in list(s):
+        if i == "#":
+          if stack:
+            stack.pop()
+        else:
+          stack.append(i)
+      return ''.join(stack)
+    return backspaced(S) == backspaced(T)
