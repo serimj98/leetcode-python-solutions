@@ -1,0 +1,18 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
+    #Solution 1: O(min(t1, t2)) / O(min(t1, t2))
+    def recursive(n1, n2):
+      if n1 and n2:
+        n1.val += n2.val
+        n1.left = recursive(n1.left, n2.left)
+        n1.right = recursive(n1.right, n2.right)
+        return n1
+      else:
+        return n1 or n2
+    return recursive(t1, t2)
