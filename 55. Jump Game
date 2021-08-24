@@ -1,0 +1,16 @@
+class Solution:
+  def canJump(self, nums: List[int]) -> bool:
+    #Solution 1: O(n) / O(1)
+    idx = len(nums) - 1
+    for i in range(len(nums)-1, -1, -1):
+      if i + nums[i] >= idx:
+        idx = i
+    return idx == 0
+  
+    #Solution 2: O(n) / O(1)
+    idx = 0
+    for i in range(len(nums)):
+      if i > idx:
+        return False
+      idx = max(idx, i + nums[i])
+    return True
