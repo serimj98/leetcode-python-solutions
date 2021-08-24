@@ -1,0 +1,14 @@
+class Solution:
+  def singleNumber(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(n)
+    seen = defaultdict(int)
+    for num in nums:
+      seen[num] += 1
+    for i in seen:
+      if seen[i] == 1: return i
+      
+    #Solution 2: O(n) / O(1)
+    sol = 0
+    for num in nums:
+      sol ^= num #XOR; ((2^2)^(1^1)^(4^4)^(5)) => (0^0^0^5) => 5
+    return sol
