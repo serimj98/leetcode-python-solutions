@@ -1,0 +1,14 @@
+class Solution:
+  def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    #Solution 1: O(2^n) / O(2^n)
+    sol = []
+    def backtrack(curSum, curPath, remaining):
+      if curSum == target:
+        sol.append(curPath)
+        return
+      if curSum > target: return
+      for i in range(len(remaining)):
+        #for each i, remaining will generate all combinations that use remaining[i]
+        backtrack(curSum + remaining[i], curPath + [remaining[i]], remaining[i:])
+    backtrack(0, [], candidates)
+    return sol
