@@ -1,0 +1,9 @@
+class Solution:
+  def majorityElement(self, nums: List[int]) -> int:
+    #Solution 1: O(n log n) / O(1)
+    nums.sort()
+    return nums[len(nums)//2]
+  
+    #Solution 2: O(n) / O(n)
+    numsCounter = Counter(nums)
+    return max(numsCounter.keys(), key=numsCounter.get)
