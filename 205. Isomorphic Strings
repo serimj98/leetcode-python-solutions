@@ -1,0 +1,10 @@
+class Solution:
+  def isIsomorphic(self, s: str, t: str) -> bool:
+    #Solution 1: O(s+t) / O(s+t)
+    sDict, tDict = {}, {}
+    for i in range(len(s)):
+      if s[i] in sDict and sDict[s[i]] != t[i]: return False
+      if t[i] in tDict and tDict[t[i]] != s[i]: return False
+      sDict[s[i]] = t[i]
+      tDict[t[i]] = s[i]
+    return True
