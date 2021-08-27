@@ -1,0 +1,27 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def countNodes(self, root: Optional[TreeNode]) -> int:
+    #Solution 1: O(n) / O(n)
+    def recursive(node):
+      if not node: return 0
+      return 1 + recursive(node.left) + recursive(node.right)
+    return recursive(root)
+    
+    #Solution 2: O(logn*logn) / O(n)
+    def getDepth(node):
+      if not node: return 0
+      #to get the maximum depth, as last level could be uncomplete
+      return 1 + getDepth(node.left)
+    def recursive(node):
+      if not node: return 0
+      left, right = getDepth(node.left), getDepth(node.right)
+      if left == right: #left subtree is complete
+        return pow(2, left) + recursive(node.right)
+      else: #left height is greater, right subtree is complete
+        return pow(2, right) + recursive(node.left)
+    return recursive(root)
