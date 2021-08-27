@@ -1,0 +1,22 @@
+class Solution:
+  def countComponents(self, n: int, edges: List[List[int]]) -> int:
+    #Solution 1: O(v+e) / O(v+e)
+    sol = 0
+    visited = [False] * n
+    graph = {x:[] for x in range(n)}
+    #create a graph with all neighbors corresponding to a node
+    for a, b in edges:
+      graph[a].append(b)
+      graph[b].append(a)
+    #check if node is not visited, then change all neighbors to visited
+    def dfs(node):
+      if visited[node]: return
+      visited[node] = True
+      for neigh in graph[node]:
+        dfs(neigh)
+    #do the same for all nodes and increase count if not visited
+    for i in range(n):
+      if not visited[i]:
+        dfs(i)
+        sol += 1
+    return sol
