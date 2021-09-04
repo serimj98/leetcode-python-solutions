@@ -1,0 +1,17 @@
+class Solution:
+  def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+    #Solution 1: O(n log k) / O(n), n = nums1 + nums2
+    heap = []
+    for i in nums1:
+      for j in nums2:
+        if len(heap) < k:
+          #Python uses min heap - in order to pop the largest element, use inverse
+          heappush(heap, (-i-j, [i, j])) #O(n log n)
+        elif heap and -heap[0][0] > i + j:
+          heappop(heap)
+          heappush(heap, (-i-j, [i, j]))
+        else: break #allows O(n log k)
+    sol = []
+    for i in range(min(k, len(heap))):
+      sol.append(heappop(heap)[1]) #O(k log n)
+    return sol
