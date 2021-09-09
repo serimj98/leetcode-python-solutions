@@ -1,0 +1,22 @@
+class Solution:
+  def canPartitionKSubsets(self, nums: List[int], k: int) -> bool:
+    #Solution 1: O(k*2^n), include element or not / O(n)
+    if sum(nums) % k != 0: return False
+    subsetSum = sum(nums) // k
+    seen = [0] * len(nums)
+    #try bigger numbers first, so we can complete groups faster
+    nums.sort(reverse=True)
+    def backtrack(k, idx, curSum):
+      #last group must be
+      if k == 1: return True
+      #backtrack starts again when finding one group - seen is updated
+      if curSum == subsetSum: return backtrack(k-1, 0, 0)
+      #idx will be the next element of the nums list we're currently looking at
+      for i in range(idx, len(nums)):
+        #if not seen and subset so far is less than our target
+        if not seen[i] and curSum + nums[i] <= subsetSum:
+          seen[i] = 1
+          if backtrack(k, i+1, curSum + nums[i]): return True
+          seen[i] = 0
+      return False
+    return backtrack(k, 0, 0)
