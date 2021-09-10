@@ -1,0 +1,25 @@
+class Solution:
+  def firstMissingPositive(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(n)
+    numsSet = set(nums)
+    for i in range(1, len(nums)+2):
+      if i not in numsSet: return i
+    
+    #Solution 2: O(n) / O(1)
+    #change all values out of range of our solution set [1, len(nums)] to zero
+    for i in range(len(nums)):
+      if nums[i] < 0 or nums[i] > len(nums): nums[i] = 0
+    #+/- indicates if we have a value corresponding to that index
+    #abs(value) indicates the value that exists in the array, marked - if exists
+    for i in range(len(nums)):
+      val = abs(nums[i])
+      if 0 < val <= len(nums):
+        #change to negative value to mark this index is seen
+        if nums[val-1] > 0: nums[val-1] *= -1
+        #changed to a negative value that won't be within our solution set range
+        elif nums[val-1] == 0: nums[val-1] = -len(nums) - 1
+        #if nums[val-1] < 0, means it was already changed and index was marked
+    #all existing values are marked -, so find the next positive value
+    for i in range(1, len(nums) + 1):
+      if nums[i - 1] >= 0: return i
+    return len(nums) + 1
