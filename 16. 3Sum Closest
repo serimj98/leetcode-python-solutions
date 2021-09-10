@@ -1,0 +1,17 @@
+class Solution:
+  def threeSumClosest(self, nums: List[int], target: int) -> int:
+    #Solution 1: O(n^2) / O(1)
+    nums.sort()
+    finalSum = nums[0] + nums[1] + nums[2]
+    diff = abs(target - finalSum)
+    for i in range(len(nums) - 2):
+      j, k = i + 1, len(nums) - 1
+      while j < k:
+        curSum = nums[i] + nums[j] + nums[k]
+        if abs(target - curSum) < diff:
+          finalSum = curSum
+          diff = abs(target - curSum)
+        if curSum == target: return target
+        elif curSum < target: j += 1
+        else: k -= 1
+    return finalSum
