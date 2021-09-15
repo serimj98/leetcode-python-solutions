@@ -1,0 +1,26 @@
+class Solution:
+  def findTargetSumWays(self, nums: List[int], target: int) -> int:
+    #Solution 1 TLE: O(2^n) / O(n)
+    self.sol = 0
+    def backtrack(cur, remaining):
+      if not remaining:
+        if cur == target:
+          self.sol += 1
+        return
+      backtrack(cur + remaining[0], remaining[1:])
+      backtrack(cur - remaining[0], remaining[1:])
+    backtrack(0, nums)
+    return self.sol
+  
+    #Solution 2: O(2^n) / O(n)
+    count = defaultdict(int)
+    count[0] = 1
+    for x in nums:
+      step = defaultdict(int)
+      for y in count:
+        #saves next step of each iteration in expression as {value: count}
+        #ex. {0:1} -> next num is 1 -> {1:1, -1: 1}
+        step[y + x] += count[y]
+        step[y - x] += count[y]
+      count = step
+    return count[target]
