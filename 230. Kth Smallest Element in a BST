@@ -1,0 +1,42 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+    #Solution 1: O(n log n) / O(n)
+    smallest = []
+    def recursive(node):
+      if not node: return
+      smallest.append(node.val)
+      recursive(node.left)
+      recursive(node.right)
+    recursive(root)
+    smallest.sort()
+    return smallest[k-1]
+  
+    #Solution 2 Heap: O(n log k) / O(n)
+    smallest = []
+    def recursive(node):
+      if not node: return
+      smallest.append(node.val)
+      recursive(node.left)
+      recursive(node.right)
+    recursive(root)
+    heapify(smallest)
+    return nsmallest(k, smallest)[-1]
+  
+    #Solution 3: O(n) / O(n)
+    #use the fact that the tree is a BST, hence is sorted in order when using inorder traversal
+    smallest = []
+    def inorder(node):
+      if not node: return
+      inorder(node.left)
+      smallest.append(node.val)
+      inorder(node.right)
+    inorder(root)
+    return smallest[k-1]
+  
+  
