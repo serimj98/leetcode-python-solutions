@@ -1,0 +1,19 @@
+class Solution:
+  def validTree(self, n: int, edges: List[List[int]]) -> bool:
+    #Solution 1: O(v+e) / O(v+e)
+    if n - 1 != len(edges): return False
+    seen = set()
+    neighbors = defaultdict(list)
+    for edge in edges:
+      neighbors[edge[0]].append(edge[1])
+      neighbors[edge[1]].append(edge[0])
+    def recursive(node, parent):
+      if node in seen: return
+      seen.add(node)
+      for nei in neighbors[node]:
+        #since undirected graph, adjacency list will detect A -> B -> A as edge
+        if nei == parent: continue
+        if nei in seen: return False
+        recursive(nei, node)
+      return True
+    return recursive(0, -1) and len(seen) == n
