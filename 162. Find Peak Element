@@ -1,0 +1,18 @@
+class Solution:
+  def findPeakElement(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    for i in range(len(nums)-1):
+      #if increasing only, will return the last element
+      #if decreasing only, will return the first element
+      #if peak in the middle, will return at first point there is a decreasing trend
+      if nums[i] > nums[i+1]: return i
+    return len(nums) - 1
+  
+    #Solution 2: O(log n) / O(1)
+    #find the subarray with the higher value when comparing two elements in the middle
+    l, r = 0, len(nums) - 1
+    while l < r:
+      m = (l + r) // 2
+      if nums[m] > nums[m+1]: r = m
+      else: l = m + 1
+    return l
