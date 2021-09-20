@@ -1,0 +1,15 @@
+class Solution:
+  def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+    #Solution 1: O(n*n!), n for [:i] + [i+1:] / O(n^2), generating n-1, n-2... n times
+    sol = []
+    nums.sort()
+    def backtrack(cur, remaining):
+      if len(cur) == len(nums):
+        sol.append(cur)
+        return
+      for i in range(len(remaining)):
+        if i > 0 and remaining[i] == remaining[i-1]:
+          continue
+        backtrack(cur + [remaining[i]], remaining[:i] + remaining[i+1:])
+    backtrack([], nums)
+    return sol
