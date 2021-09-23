@@ -1,0 +1,21 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+  def oddEvenList(self, head: ListNode) -> ListNode:
+    #Solution 1: O(n) / O(1)
+    if not head: return
+    if not head.next or not head.next.next: return head
+    odd, even, evenPointer = head, head.next, head.next
+    while odd and even:
+      if not even.next: #even number of nodes
+        odd.next = None
+        break
+      odd.next = odd.next.next
+      even.next = even.next.next
+      odd = odd.next
+      even = even.next
+    odd.next = evenPointer
+    return head
