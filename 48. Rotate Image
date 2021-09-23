@@ -1,0 +1,12 @@
+class Solution:
+  def rotate(self, matrix: List[List[int]]) -> None:
+    """
+    Do not return anything, modify matrix in-place instead.
+    """
+    #Solution 1: O(n^2) / O(1)
+    for i in range(len(matrix)//2): #reverse rows
+      matrix[i], matrix[len(matrix)-i-1] = matrix[len(matrix)-i-1], matrix[i]
+    for i in range(len(matrix)): #transpose; row -> col, col -> row
+      #only need to swap elements before the (i,i) diagonal line
+      for j in range(i): #4x4: (1,0), (2,0), (2,1), (3,0), (3,1), (3,2)
+        matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
