@@ -1,0 +1,8 @@
+class Solution:
+  def frequencySort(self, s: str) -> str:
+    #Solution 1: O(n log k) / O(k), where k is the # of unique characters
+    sCounter = Counter(s).most_common()
+    sol = ""
+    for i in sCounter:
+      sol += i[0] * i[1]
+    return sol
