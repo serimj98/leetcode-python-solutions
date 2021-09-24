@@ -1,0 +1,52 @@
+class Solution:
+  def isMatch(self, s: str, p: str) -> bool:
+    #Solution 1 Top-down: O((s+p)* 2^(s+p)) / O(s^2 + p^2)
+    def backtrack(i, j):
+      if i >= len(s) and j >= len(p): return True #pattern match
+      #j >= len(p) case: s = "aa" (i = 1) , p = "a" (j = 1)
+      #i >= len(s) case: s = "a" (i = 1), p = "a*b*" (j = 2)
+      if j >= len(p): return False
+      
+      #check if there is a possible match in current comparison
+      match = False
+      if i < len(s):
+        if s[i] == p[j] or p[j] == ".":
+          match = True
+      
+      if (j + 1) < len(p) and p[j+1] == "*":
+        #case 1: don't use * -> backtrack(i, j + 2)
+        #case 2: use * -> match and backtrack(i + 1, j)
+        return backtrack(i, j + 2) or (match and backtrack(i + 1, j))
+      
+      if match:
+        return backtrack(i + 1, j + 1) #move onto next comparison
+      return False
+    return backtrack(0, 0)
+  
+    #Solution 2 Top-down with Memo: O(s*p) / O(s*p)
+    memo = {}
+    def backtrack(i, j):
+      if (i, j) in memo: return memo[(i, j)]
+      if i >= len(s) and j >= len(p): return True #pattern match
+      #j >= len(p) case: s = "aa" (i = 1) , p = "a" (j = 1)
+      #i >= len(s) case: s = "a" (i = 1), p = "a*b*" (j = 2)
+      if j >= len(p): return False
+      
+      #check if there is a possible match in current comparison
+      match = False
+      if i < len(s):
+        if s[i] == p[j] or p[j] == ".":
+          match = True
+      
+      if (j + 1) < len(p) and p[j+1] == "*":
+        #case 1: don't use * -> backtrack(i, j + 2)
+        #case 2: use * -> match and backtrack(i + 1, j)
+        memo[(i, j)] = backtrack(i, j + 2) or (match and backtrack(i + 1, j))
+        return memo[(i, j)]
+      
+      if match:
+        memo[(i, j)] = backtrack(i + 1, j + 1) #move onto next comparison
+        return memo[(i, j)]
+      memo[(i, j)] = False
+      return False
+    return backtrack(0, 0)
