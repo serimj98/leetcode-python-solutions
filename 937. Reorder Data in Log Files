@@ -1,0 +1,11 @@
+class Solution:
+  def reorderLogFiles(self, logs: List[str]) -> List[str]:
+    #Solution 1: O(m * n log n), m = length of log / O(n) 
+    sol = []
+    dig, let = [], []
+    for log in logs:
+      if log.split()[1][0].isnumeric(): dig.append(log)
+      else: let.append(log)
+    #sort by content first, then identifier if content is the same
+    let.sort(key = lambda x: (x.split()[1:], x.split()[0]))
+    return let + dig
