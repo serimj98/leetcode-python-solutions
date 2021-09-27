@@ -1,0 +1,37 @@
+class Solution:
+  def setZeroes(self, matrix: List[List[int]]) -> None:
+    """
+    Do not return anything, modify matrix in-place instead.
+    """
+    #Solution 1: O(r*c) / O(r+c)
+    rowChange, colChange = set(), set()
+    for r in range(len(matrix)):
+      for c in range(len(matrix[0])):
+        if matrix[r][c] == 0:
+          rowChange.add(r)
+          colChange.add(c)
+    for r in range(len(matrix)):
+      for c in range(len(matrix[0])):
+        if r in rowChange: matrix[r][c] = 0
+        if c in colChange: matrix[r][c] = 0
+    
+    #Solution 2: O(r*c) / O(1)
+    colZero = False
+    for r in range(len(matrix)):
+      #matrix[0][0] can be indicating first row has to be zero or first column has to be zero
+      #use matrix[0][0] as indication of first row and use colZero as indication of first column
+      if matrix[r][0] == 0: colZero = True
+      for c in range(1, len(matrix[0])):
+        if matrix[r][c] == 0:
+          matrix[r][0] = 0
+          matrix[0][c] = 0
+    for r in range(1, len(matrix)):
+      for c in range(1, len(matrix[0])):
+        if matrix[r][0] == 0 or matrix[0][c] == 0:
+          matrix[r][c] = 0
+    if matrix[0][0] == 0: #first row has to be set to zero
+      for c in range(len(matrix[0])):
+        matrix[0][c] = 0
+    if colZero:
+      for r in range(len(matrix)):
+        matrix[r][0] = 0
