@@ -1,0 +1,21 @@
+class Solution:
+  def invalidTransactions(self, transactions: List[str]) -> List[str]:
+    #Solution 1: O(n^2) / O(n)
+    sol = set()
+    trans = defaultdict(list) #{'alice':[[20, 800, 'mtv'], [50, 100, 'beijing']]}
+    for t_str in transactions:
+      t = t_str.split(',')
+      if int(t[2]) > 1000:
+        sol.add(t_str)
+      if t[0] in trans:
+        for d in trans[t[0]]:
+          if abs(int(t[1]) - d[0]) <= 60 and t[3] != d[2]:
+            sol.add(t_str)
+            sol.add(t[0] + ',' + str(d[0]) + ',' + str(d[1]) + ',' + d[2])
+      trans[t[0]].append([int(t[1]), int(t[2]), t[3]])
+    sol = list(sol)
+    identical = set()
+    for t in transactions:
+      if t in identical: sol.append(t)
+      identical.add(t)
+    return list(sol)
