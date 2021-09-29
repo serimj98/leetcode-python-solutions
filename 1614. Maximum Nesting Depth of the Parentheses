@@ -1,0 +1,22 @@
+class Solution:
+  def maxDepth(self, s: str) -> int:
+    #Solution 1: O(n) / O(n)
+    sol = 0
+    stack = [] #only keep track of the opening parenthesis
+    for c in s:
+      if c == "(":
+        stack.append("(")
+        sol = max(sol, len(stack)) #when opening, guaranteed closing
+      elif c == ")":
+        stack.pop() #'()()' has a depth of 1, keep track of when nesting ends
+    return sol
+  
+    #Solution 2: O(n) / O(1)
+    sol, stack = 0, 0
+    for c in s:
+      if c == "(":
+        stack += 1
+        sol = max(sol, stack)
+      elif c == ")":
+        stack -= 1
+    return sol
