@@ -1,0 +1,20 @@
+class Solution:
+  def search(self, nums: List[int], target: int) -> bool:
+    #Solution 1: O(n) because of duplicate check, otherwise O(log n) / O(1)
+    l, r = 0, len(nums) - 1
+    while l <= r:
+      m = (l + r) // 2
+      #if nums[l] and nums[m] are the same, don't know which array nums[m] is part of
+      while l < m and nums[l] == nums[m]: l += 1
+      if nums[m] == target: return True
+      if nums[l] <= nums[m]: #inflection point on the right
+        if nums[l] <= target <= nums[m]:
+          r = m - 1
+        else:
+          l = m + 1
+      else: #inflection point on the left
+        if nums[m] <= target <= nums[r]:
+          l = m + 1
+        else:
+          r = m - 1
+    return False
