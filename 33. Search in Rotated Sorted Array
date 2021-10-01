@@ -11,7 +11,7 @@ class Solution:
         else:
           l = m + 1
       else: #inflection point is in the left, [m, r] is ascending
-        if nums[l] <= target <= nums[m]:
+        if nums[m] <= target <= nums[r]:
           l = m + 1
         else:
           r = m - 1
