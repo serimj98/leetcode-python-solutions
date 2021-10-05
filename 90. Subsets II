@@ -1,0 +1,12 @@
+class Solution:
+  def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+    #Solution 1: O(2^n) / O(n)
+    sol = []
+    nums.sort()
+    def backtrack(cur, index):
+      sol.append(cur)
+      for i in range(index , len(nums)):
+        if i > index and nums[i] == nums[i-1]: continue
+        backtrack(cur + [nums[i]], i + 1)
+    backtrack([], 0)
+    return sol
