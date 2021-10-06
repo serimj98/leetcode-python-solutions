@@ -1,0 +1,22 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def delNodes(self, root: TreeNode, to_delete: List[int]) -> List[TreeNode]:
+    #Solution 1: O(n) / O(n)
+    sol = []
+    delete = set(to_delete)
+    def recursive(node):
+      if not node: return
+      node.left, node.right = recursive(node.left), recursive(node.right)
+      if node.val in delete:
+        if node.left: sol.append(node.left)
+        if node.right: sol.append(node.right)
+        return None
+      return node
+    recursive(root)
+    if root.val not in delete: sol.append(root)
+    return sol
