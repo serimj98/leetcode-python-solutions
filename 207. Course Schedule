@@ -1,0 +1,18 @@
+class Solution:
+  def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+    #Solution 1: O(v + e) / O(v + e)
+    preq = defaultdict(list)
+    for p in prerequisites: #{1: [0]}
+      preq[p[0]].append(p[1]) #in order to take key, need to take all courses in value
+    visited = [0] * numCourses #0: not seen, -1: seen while running DFS, 1: seen previously
+    def dfs(course):
+      if visited[course] == -1: return False
+      if visited[course] == 1: return True
+      visited[course] = -1
+      for p in preq[course]:
+        if not dfs(p): return False
+      visited[course] = 1
+      return True
+    for i in range(numCourses):
+      if not dfs(i): return False
+    return True
