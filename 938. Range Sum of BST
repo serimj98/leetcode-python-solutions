@@ -1,0 +1,36 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def rangeSumBST(self, root: TreeNode, low: int, high: int) -> int:
+    #Solution 1: O(n) / O(h)
+    self.sum = 0
+    def recursive(node):
+      if not node: return
+      if low <= node.val <= high:
+        self.sum += node.val
+        recursive(node.left)
+        recursive(node.right)
+      if node.val < low:
+        recursive(node.right)
+      if node.val > high:
+        recursive(node.left)
+    recursive(root)
+    return self.sum
+  
+    #Solution 2: O(n) / O(h)
+    self.sum = 0
+    stack = [root]
+    while stack:
+      cur = stack.pop()
+      if cur:
+        if cur.val > low:
+          stack.append(cur.left)
+        if cur.val < high:
+          stack.append(cur.right)
+        if low <= cur.val <= high:
+          self.sum += cur.val
+    return self.sum
