@@ -1,0 +1,30 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+    #Solution 1 Recursive: O(v + e) / O(v + e)
+    sol = []
+    def recursive(node, curSum, curPath):
+      if not node: return
+      if not node.left and not node.right and curSum + node.val == targetSum:
+        sol.append(curPath + [node.val])
+      recursive(node.left, curSum + node.val, curPath + [node.val])
+      recursive(node.right, curSum + node.val, curPath + [node.val])
+    recursive(root, 0, [])
+    return sol
+  
+    #Solution 2 Iterative: O(v + e) / O(v + e)
+    stack = [(root, 0, [])]
+    sol = []
+    while stack:
+      node, curSum, curPath = stack.pop()
+      if not node: continue
+      if not node.left and not node.right and curSum + node.val == targetSum:
+        sol.append(curPath + [node.val])
+      stack.append((node.left, curSum + node.val, curPath + [node.val]))
+      stack.append((node.right, curSum + node.val, curPath + [node.val]))
+    return sol
