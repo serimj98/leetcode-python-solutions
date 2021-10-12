@@ -1,0 +1,10 @@
+class Solution:
+  def maxProfit(self, prices: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    sol = 0
+    minVal = float('inf')
+    for p in prices:
+      minVal = min(minVal, p)
+      if p > minVal:
+        sol = max(sol, p - minVal)
+    return sol
