@@ -1,0 +1,12 @@
+class Solution:
+  def minDifference(self, nums: List[int]) -> int:
+    #Solution 1: O(n log n) / O(1)
+    if len(nums) <= 3: return 0
+    nums.sort()
+    minDiff = float('inf')
+    l, r = 0, len(nums) - 4
+    while r < len(nums):
+      minDiff = min(minDiff, abs(nums[l] - nums[r]))
+      l += 1
+      r += 1
+    return minDiff
