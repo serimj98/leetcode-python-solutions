@@ -6,7 +6,7 @@
 #         self.right = right
 class Solution:
   def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
-    #Solution 1: O(n) / O(n)
+    #Solution 1: O(n^2) / O(n^2)
     def recursive(l, r):
       if l == r: return
       maxIndex = l
