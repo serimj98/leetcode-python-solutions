@@ -1,0 +1,11 @@
+class Solution:
+  def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    stack = []
+    for asteroid in asteroids:
+      while stack and (asteroid < 0 and stack[-1] > 0):
+        collision = stack[-1] + asteroid
+        if collision <= 0: stack.pop()
+        if collision >= 0: break #don't append asteroid to stack
+      else: stack.append(asteroid) #append when while loop ends
+    return stack
