@@ -1,0 +1,31 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+  def rightSideView(self, root: TreeNode) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    if not root: return
+    level = [root]
+    sol = [root.val]
+    while level:
+      curLevel = []
+      for node in level:
+        if node.left: curLevel.append(node.left)
+        if node.right: curLevel.append(node.right)
+      if curLevel: sol.append(curLevel[-1].val)
+      level = curLevel
+    return sol
+    
+    #Solution 2: O(n) / O(h)
+    sol = []
+    def recursive(node, l):
+      if not node: return
+      if l == len(sol): sol.append(node.val) #first node of current depth
+      recursive(node.right, l+1)
+      recursive(node.left, l+1)
+    recursive(root, 0)
+    return sol
