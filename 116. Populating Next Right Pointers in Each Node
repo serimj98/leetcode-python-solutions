@@ -23,3 +23,17 @@ class Solution:
       level[-1].next = None
       level = nextLevel
     return root
+  
+    #Solution 2: O(n) / O(1)
+    if not root: return
+    curLevel = root
+    nextLevel = root.left
+    while nextLevel:
+      curLevel.left.next = curLevel.right
+      if curLevel.next:
+        curLevel.right.next = curLevel.next.left
+        curLevel = curLevel.next
+      else:
+        curLevel = nextLevel
+        nextLevel = nextLevel.left
+    return root
