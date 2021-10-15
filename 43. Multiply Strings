@@ -1,0 +1,15 @@
+class Solution:
+  def multiply(self, num1: str, num2: str) -> str:
+    #Solution 1: O(num1*num2) / O(num1+num2)
+    sol = [0] * (len(num1) + len(num2))
+    for i in range(len(num1) - 1, -1, -1):
+      carry = 0
+      for j in range(len(num2) - 1, -1, -1):
+        prod = (ord(num1[i]) - ord("0")) * (ord(num2[j]) - ord("0")) + carry
+        carry = (sol[i+j+1] + prod) // 10
+        sol[i+j+1] = (sol[i+j+1] + prod) % 10
+      sol[i] += carry
+    strSol = ''
+    for i in range(len(sol)):
+      strSol += str(sol[i])
+    return strSol.lstrip('0') if strSol.lstrip('0') else '0'
