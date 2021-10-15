@@ -1,0 +1,22 @@
+class Solution:
+  def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+    #Solution 1: O(v + e) / O(v + e)
+    graph = defaultdict(dict)
+    for i, [a, b] in enumerate(equations):
+      graph[a][b] = values[i]
+      graph[b][a] = 1/values[i]
+    
+    def dfs(a, b, seen):
+      if a not in graph or b not in graph: return -1
+      if b in graph[a]: return graph[a][b]
+      for node in graph[a]:
+        if node not in seen:
+          seen.add(node)
+          if dfs(node, b, seen) == -1: continue
+          return dfs(node, b, seen) * graph[a][node]
+      return -1
+    
+    sol = []
+    for c, d in queries:
+      sol.append(dfs(c, d, set()))
+    return sol
