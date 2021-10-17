@@ -1,0 +1,45 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+  def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+    #Solution 1: O(k*# of nodes) / O(1)
+    cur = dummy = ListNode(0)
+    while lists:
+      minVal, minValIdx = float('inf'), -1
+      for i in range(len(lists)):
+        if lists[i] and lists[i].val < minVal:
+          minVal = lists[i].val
+          minValIdx = i
+      if minValIdx != -1:
+        cur.next = lists[minValIdx]
+        cur = cur.next
+        lists[minValIdx] = lists[minValIdx].next
+      for i in range(len(lists)-1, -1, -1):
+        if not lists[i]: lists.pop(i)
+    return dummy.next
+    
+    #Solution 2: O(# of nodes*log k) / O(1)
+    def merge(l, r):
+      cur = dummy = ListNode(0)
+      while l and r:
+        if l.val < r.val:
+          cur.next = l
+          l = l.next
+        else:
+          cur.next = r
+          r = r.next
+        cur = cur.next
+      cur.next = l or r
+      return dummy.next
+    
+    def divideAndConquer(lists):
+      if not lists: return
+      if len(lists) == 1: return lists[0]
+      mid = len(lists) // 2
+      l, r = divideAndConquer(lists[:mid]), divideAndConquer(lists[mid:])
+      return merge(l, r)
+    
+    return divideAndConquer(lists)
