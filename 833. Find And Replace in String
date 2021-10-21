@@ -1,0 +1,35 @@
+class Solution:
+  def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
+    #Solution 1: O(n + m log m), m = len(indices) / O(n)
+    sol = ""
+    strIdx = 0
+    sources = [x for y, x in sorted(zip(indices, sources))]
+    targets = [x for y, x in sorted(zip(indices, targets))]
+    indices.sort()
+    while strIdx < len(s):
+      if indices:
+        curIdx, curSource, curTarget = indices[0], sources[0], targets[0]
+        if strIdx == curIdx:
+          indices, sources, targets = indices[1:], sources[1:], targets[1:]
+          if s[curIdx:curIdx+len(curSource)] == curSource:
+            sol += curTarget
+            strIdx += len(curSource)
+        else:
+          sol += s[strIdx]
+          strIdx += 1
+      else:
+        sol += s[strIdx:]
+        break
+    return sol
+  
+    #Solution 2: O(m), m = len(indices) / O(n)
+    inputs = sorted(zip(indices, sources, targets))
+    sol, lastIdx = "", 0
+    for index, source, target in inputs:
+      if s[index:index+len(source)] == source:
+        sol += s[lastIdx:index]
+        sol += target
+        lastIdx = index + len(source)
+    if lastIdx < len(s):
+      sol += s[lastIdx:]
+    return sol
