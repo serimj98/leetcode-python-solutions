@@ -1,0 +1,17 @@
+class Solution:
+  def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+    #Solution 1: O(f + s) / O(f + s)
+    if not firstList or not secondList: return []
+    sol = []
+    f, s = 0, 0
+    while f < len(firstList) and s < len(secondList):
+      if firstList[f][0] > secondList[s][1]: s += 1
+      elif secondList[s][0] > firstList[f][1]: f += 1
+      else:
+        a = max(firstList[f][0], secondList[s][0])
+        b = min(firstList[f][1], secondList[s][1])
+        sol.append([a, b])
+        if firstList[f][1] < secondList[s][1]: #can only intersect secondList[s]
+          f += 1
+        else: s += 1
+    return sol
