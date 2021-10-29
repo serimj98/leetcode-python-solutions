@@ -1,0 +1,15 @@
+class Solution:
+  def lengthOfLongestSubstring(self, s: str) -> int:
+    #Solution 1: O(n) / O(n)
+    substr = set()
+    l, r = 0, 0
+    sol = 0
+    while r < len(s):
+      if s[r] not in substr:
+        substr.add(s[r])
+        r += 1
+        sol = max(sol, r - l)
+      else:
+        substr.remove(s[l])
+        l += 1
+    return sol
