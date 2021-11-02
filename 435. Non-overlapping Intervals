@@ -1,0 +1,11 @@
+class Solution:
+  def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+    #Solution 1: O(n log n) / O(n)
+    intervals.sort(key = lambda x: x[1]) #by earliest end time
+    curEnd = float('-inf')
+    sol = 0
+    for s, e in intervals:
+      if s >= curEnd:
+        curEnd = e
+      else: sol += 1
+    return sol
