@@ -1,0 +1,15 @@
+class Solution:
+  def countSubstrings(self, s: str) -> int:
+    #Solution 1: O(n^2) / O(1)
+    sol = 0
+    def expand(l, r):
+      count = 0
+      while l >= 0 and r <= len(s)-1 and s[l] == s[r]:
+        l -= 1
+        r += 1
+        count += 1
+      return count
+    for i in range(len(s)):
+      sol += expand(i, i)
+      if i < len(s) - 1: sol += expand(i, i+1)
+    return sol
