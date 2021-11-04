@@ -1,0 +1,24 @@
+class Solution:
+  def isValidSudoku(self, board: List[List[str]]) -> bool:
+    #Solution 1: O(r*c) / O(9)
+    for r in range(len(board)):
+      curNums = set()
+      for c in range(len(board[0])):
+        if board[r][c] != "." and board[r][c] in curNums: return False
+        curNums.add(board[r][c])
+        
+    for c in range(len(board[0])):
+      curNums = set()
+      for r in range(len(board)):
+        if board[r][c] != "." and board[r][c] in curNums: return False
+        curNums.add(board[r][c])
+
+    for rStart in range(3):
+      for cStart in range(3):
+        curNums = set()
+        for r in range(rStart*3, rStart*3 + 3):
+          for c in range(cStart*3, cStart*3 + 3):
+            if board[r][c] != "." and board[r][c] in curNums: return False
+            curNums.add(board[r][c])
+    
+    return True
