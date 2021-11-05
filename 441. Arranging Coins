@@ -1,0 +1,19 @@
+class Solution:
+  def arrangeCoins(self, n: int) -> int:
+    #Solution 1: O(n) / O(1)
+    curRow = 1
+    while n >= curRow:
+      n -= curRow
+      curRow += 1
+    return curRow - 1
+    
+    #Solution 2: O(log n) / O(1)
+    l, r = 0, n
+    while l <= r:
+      m = (l + r) // 2 #number of rows completed
+      #1 + 2 + ... + k = k*(k+1) / 2
+      cur = m * (m + 1) // 2
+      if cur == n: return m
+      elif cur > n: r = m - 1
+      else: l = m + 1
+    return r
