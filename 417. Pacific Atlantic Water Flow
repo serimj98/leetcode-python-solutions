@@ -1,0 +1,29 @@
+class Solution:
+  def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+    #Solution 1: O(r*c) / O(r*c)
+    if not heights: return []
+    pacific, atlantic = set(), set()
+    def dfs(r, c, ocean):
+      ocean.add((r, c)) #add the row and column that can be reached from ocean
+      dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+      for x, y in dirs:
+        dRow, dCol = r + x, c + y
+        if 0 <= dRow < len(heights) and 0 <= dCol < len(heights[0]):
+          if (dRow, dCol) not in ocean: #no need to check again
+            if heights[dRow][dCol] >= heights[r][c]: #starting from ocean to inward
+              dfs(dRow, dCol, ocean)
+    
+    #start only from the cells that are neighboring the ocean
+    for r in range(len(heights)):
+      dfs(r, 0, pacific)
+      dfs(r, len(heights[0])-1, atlantic)
+    for c in range(len(heights[0])):
+      dfs(0, c, pacific)
+      dfs(len(heights)-1, c, atlantic)
+      
+    sol = []
+    for r in range(len(heights)):
+      for c in range(len(heights[0])):
+        if (r, c) in pacific and (r, c) in atlantic: #only if can reach both oceans
+          sol.append([r,c])
+    return sol
