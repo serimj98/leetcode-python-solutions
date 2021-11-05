@@ -1,0 +1,28 @@
+class Solution:
+  def uniqueLetterString(self, s: str) -> int:
+    #Solution 1 TLE: O(n^3) / O(n^2)
+    def unique(sub):
+      if not sub: return 0
+      count = 0
+      sCounter = Counter(sub)
+      for i in sCounter:
+        if sCounter[i] == 1: count += 1
+      return count
+    sol = 0
+    for l in range(len(s)):
+      for r in range(l+1, len(s)+1):
+        sol += unique(s[l:r])
+    return sol
+    
+    #Solution 2: O(n) / O(26)
+    # count how many ways to make each character a unique character in substring
+    index = {c: [-1, -1] for c in ascii_uppercase} #last two previous indices
+    sol = 0
+    for i in range(len(s)):
+      prevPrev, prev = index[s[i]]
+      sol += (i - prev) * (prev - prevPrev)
+      index[s[i]] = [prev, i]
+    for c in index:
+      prevPrev, prev = index[c]
+      sol += (len(s) - prev) * (prev - prevPrev) #XAX(A)XXAX
+    return sol
