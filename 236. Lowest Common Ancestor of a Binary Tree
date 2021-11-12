@@ -7,13 +7,22 @@
 
 class Solution:
   def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-    #Solution 1: O(n) / O(1)
+    #Solution 1: O(n) / O(h) 
     def recursive(node):
-      if not node or node == p or node == q: return node
-      #if p or q is in left or right, left or right will store the value of p or q
-      #if p or q does not exist in path, left or right will contain None
-      left = recursive(node.left)
-      right = recursive(node.right)
-      if left and right: return node
-      else: return left or right
+      if not node: return False
+      left, right = recursive(node.left), recursive(node.right) #if left or right has p or q
+      mid = node == p or node == q #if node is either p or q
+      if left + right + mid >= 2: self.sol = node #if two out of three flags are True
+      return left or right or mid
+    recursive(root)
+    return self.sol
+    
+    #Solution 2: O(n) / O(h)
+    def recursive(node):
+      if not node: return
+      if node == p or node == q: return node
+      left, right = recursive(node.left), recursive(node.right)
+      if not left: return right
+      elif not right: return left
+      else: return node #if p and q found in different subtrees, node is LCA
     return recursive(root)
