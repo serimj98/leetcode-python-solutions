@@ -1,0 +1,19 @@
+class Solution:
+  def increasingTriplet(self, nums: List[int]) -> bool:
+    #Solution 1 TLE: O(n^3) / O(1)
+    for i in range(len(nums)-2):
+      for j in range(i, len(nums)-1):
+        for k in range(j, len(nums)):
+          if nums[i] < nums[j] < nums[k]: return True
+    return False
+  
+    #Solution 2: O(n) / O(1)
+    i, j = float('inf'), float('inf')
+    for num in nums:
+      if num <= i:
+        i = num
+      elif num <= j:
+        j = num
+      else:
+        return True
+    return False
