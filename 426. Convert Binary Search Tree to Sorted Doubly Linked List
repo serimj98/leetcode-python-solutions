@@ -9,6 +9,7 @@ class Node:
 
 class Solution:
   def treeToDoublyList(self, root: 'Node') -> 'Node':
+    #Solution 1: O(n) / O(1)
     if not root: return
     self.head, self.prev = None, None
     def dfs(node):
