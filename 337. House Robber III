@@ -1,0 +1,16 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def rob(self, root: Optional[TreeNode]) -> int:
+    #Solution 1: O(n) / O(h)
+    def recursive(node):
+      if not node: return (0, 0) #($ when rob current node, $ when don't rob current node)
+      left, right = recursive(node.left), recursive(node.right)
+      robNow = node.val + left[1] + right[1]
+      robLater = max(left) + max(right)
+      return (robNow, robLater)
+    return max(recursive(root))
