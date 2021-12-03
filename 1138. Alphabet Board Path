@@ -1,0 +1,22 @@
+class Solution:
+  def alphabetBoardPath(self, target: str) -> str:
+    #Solution 1: O(board + target) / O(board + target)
+    board = ["abcde", "fghij", "klmno", "pqrst", "uvwxy", "z"]
+    alphaDict = {}
+    for r in range(len(board) - 1):
+      for c in range(len(board[0])):
+        alphaDict[board[r][c]] = (r, c)
+    alphaDict["z"] = (5, 0)
+    
+    curPos = (0, 0)
+    sol = []
+    for ch in target:
+      r, c = alphaDict[ch]
+      diffR, diffC = r - curPos[0], c - curPos[1]
+      if diffR < 0: sol.append('U'*(-diffR))
+      if diffC < 0: sol.append('L'*(-diffC))
+      if diffR > 0: sol.append('D'*diffR)
+      if diffC > 0: sol.append('R'*diffC)
+      sol.append('!')
+      curPos = (r, c)
+    return "".join(sol)
