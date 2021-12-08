@@ -1,0 +1,55 @@
+class ListNode:
+  def __init__(self, key, val):
+    self.pair = (key, val)
+    self.next = None
+
+class MyHashMap:
+  def __init__(self):
+    #Solution 1: O(1) / O(n)
+    self.hashLen = 1000
+    self.hash = [None] * self.hashLen
+
+  def put(self, key: int, value: int) -> None:
+    #Solution 1: O(bucket) / O(1)
+    i = key % self.hashLen
+    if not self.hash[i]:
+      self.hash[i] = ListNode(key, value)
+    else:
+      cur = self.hash[i]
+      while True:
+        if cur.pair[0] == key:
+          cur.pair = (key, value)
+          return
+        if cur.next == None: break
+        cur = cur.next
+      cur.next = ListNode(key, value)
+
+  def get(self, key: int) -> int:
+    #Solution 1: O(bucket) / O(1)
+    i = key % self.hashLen
+    cur = self.hash[i]
+    while cur:
+      if cur.pair[0] == key: return cur.pair[1]
+      else: cur = cur.next
+    return -1
+
+  def remove(self, key: int) -> None:
+    #Solution 1: O(bucket) / O(1)
+    i = key % self.hashLen
+    cur = prev = self.hash[i]
+    if not cur: return
+    if cur.pair[0] == key: self.hash[i] = cur.next #if in beginning of bucket
+    else:
+      cur = cur.next
+      while cur:
+        if cur.pair[0] == key:
+          prev.next = cur.next
+          break
+        else: cur, prev = cur.next, prev.next
+
+
+# Your MyHashMap object will be instantiated and called as such:
+# obj = MyHashMap()
+# obj.put(key,value)
+# param_2 = obj.get(key)
+# obj.remove(key)
