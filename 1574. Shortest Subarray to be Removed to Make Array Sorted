@@ -1,0 +1,20 @@
+class Solution:
+  def findLengthOfShortestSubarray(self, arr: List[int]) -> int:
+    decIdx = 0
+    sol = 0
+    while decIdx < len(arr)-1 and arr[decIdx] <= arr[decIdx+1]:
+      decIdx += 1
+    l = decIdx #last element that can be included to left subarray
+    if l == len(arr)-1: return 0
+    decIdx = len(arr) - 1
+    while decIdx > 0 and arr[decIdx] >= arr[decIdx-1]:
+      decIdx -= 1
+    r = decIdx #last element that can be included to right subarray
+    sol = min(r, len(arr) - l - 1)
+    for i in range(l+1):
+      if arr[i] <= arr[r]:
+        sol = min(sol, r - i - 1)
+      elif r < len(arr) - 1:
+        r += 1
+      else: break    
+    return sol
