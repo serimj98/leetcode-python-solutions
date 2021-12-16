@@ -1,0 +1,30 @@
+class SparseVector:
+  #Solution 1: O(n) / O(n)
+  def __init__(self, nums: List[int]):
+    self.nums = nums
+
+  # Return the dotProduct of two sparse vectors
+  def dotProduct(self, vec: 'SparseVector') -> int:
+    sol = 0
+    for i, j in zip(self.nums, vec.nums):
+      sol += i*j
+    return sol
+
+  #Solution 2: O(n) / O(non-zero elements)
+  def __init__(self, nums: List[int]):
+    self.dict = {}
+    for i in range(len(nums)):
+      if nums[i]: self.dict[i] = nums[i]
+
+  # Return the dotProduct of two sparse vectors
+  def dotProduct(self, vec: 'SparseVector') -> int:
+    sol = 0
+    for i, n in self.dict.items():
+      if i in vec.dict:
+        sol += n * vec.dict[i]
+    return sol
+
+# Your SparseVector object will be instantiated and called as such:
+# v1 = SparseVector(nums1)
+# v2 = SparseVector(nums2)
+# ans = v1.dotProduct(v2)
