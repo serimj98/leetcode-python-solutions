@@ -1,0 +1,22 @@
+class Solution:
+  def calculate(self, s: str) -> int:
+    #Solution 1: O(n) / O(n)
+    stack = []
+    def update(op, c):
+      if op == "+": stack.append(c)
+      if op == "-": stack.append(-c)
+      if op == "*": stack.append(stack.pop() * c)
+      if op == "/":
+        prev = stack.pop()
+        if prev < 0: stack.append(-(abs(prev) // c))
+        else: stack.append(prev // c)
+        
+    curVal, sign = 0, "+"
+    for i in range(len(s)):
+      if s[i].isdigit():
+        curVal = 10*curVal + int(s[i])
+      elif s[i] in "+-*/":
+        update(sign, curVal)
+        curVal, sign = 0, s[i]
+    update(sign, curVal)
+    return sum(stack)
