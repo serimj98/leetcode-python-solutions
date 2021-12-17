@@ -1,0 +1,23 @@
+class Solution:
+  def gameOfLife(self, board: List[List[int]]) -> None:
+    #Solution 1: O(r*c) / O(1)
+    """
+    Do not return anything, modify board in-place instead.
+    """
+    for r in range(len(board)):
+      for c in range(len(board[0])):
+        board[r][c] = [board[r][c], board[r][c]] #original, applied rule
+    
+    for r in range(len(board)):
+      for c in range(len(board[0])):
+        neighbors = 0
+        dirs = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+        for d in dirs:
+          if r+d[0] >= 0 and r+d[0] < len(board) and c+d[1] >= 0 and c+d[1] < len(board[0]):
+            neighbors += board[r+d[0]][c+d[1]][0]
+        if board[r][c][0] == 1 and (neighbors < 2 or neighbors > 3): board[r][c][1] = 0
+        elif board[r][c][0] == 0 and neighbors == 3: board[r][c][1] = 1
+    
+    for r in range(len(board)):
+      for c in range(len(board[0])):
+        board[r][c] = board[r][c][1]
