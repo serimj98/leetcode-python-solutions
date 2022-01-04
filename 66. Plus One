@@ -1,0 +1,33 @@
+class Solution:
+  def plusOne(self, digits: List[int]) -> List[int]:
+    #Solution 1: O(n) / O(1)
+    if digits[-1] != 9:
+      digits[-1] += 1
+      return digits
+    else:
+      idx = len(digits) - 1
+      carry = 1
+      while carry:
+        if idx > 0:
+          if digits[idx-1] != 9:
+            digits[idx-1] += 1
+            carry = 0
+          else:
+            digits[idx-1] = 0
+          digits[idx] = 0
+        else:
+          digits.insert(0, 1)
+          carry = 0
+          digits[idx-1] = 0
+        idx -= 1
+    return digits
+    
+    #Solution 2: O(n) / O(1)
+    idx = len(digits) - 1
+    while digits[idx] == 9:
+      digits[idx] = 0
+      idx -= 1
+    if idx == -1:
+      digits.insert(0, 1)
+    else: digits[idx] += 1
+    return digits
