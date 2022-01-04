@@ -1,0 +1,21 @@
+class Solution:
+  def myAtoi(self, s: str) -> int:
+    #Solution 1: O(n) / O(n)
+    s = s.strip()
+    if not s: return 0
+    negative = False
+    if s[0] == "+" or s[0] == "-":
+      if s[0] == "-": negative = True
+      s = s[1:]
+    sol = ""
+    for c in s:
+      if c.isnumeric():
+        sol += c
+      else: break
+    if not sol: return 0
+    if negative:
+      if int(sol)*-1 < -pow(2,31): return -pow(2,31)
+      else: return int(sol)*-1
+    elif not negative:
+      if int(sol) > pow(2,31) - 1: return pow(2,31) - 1
+      else: return int(sol)
