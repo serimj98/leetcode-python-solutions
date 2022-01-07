@@ -1,0 +1,21 @@
+class Solution:
+  def convertToTitle(self, columnNumber: int) -> str:
+    """
+    A   1     AA    26+ 1     BA  2×26+ 1     ...     ZA  26×26+ 1     AAA  1×26²+1×26+ 1
+    B   2     AB    26+ 2     BB  2×26+ 2     ...     ZB  26×26+ 2     AAB  1×26²+1×26+ 2
+    .   .     ..    .....     ..  .......     ...     ..  ........     ...  .............   
+    .   .     ..    .....     ..  .......     ...     ..  ........     ...  .............
+    .   .     ..    .....     ..  .......     ...     ..  ........     ...  .............
+    Z  26     AZ    26+26     BZ  2×26+26     ...     ZZ  26×26+26     AAZ  1×26²+1×26+26
+    
+    ABCD＝A×26³＋B×26²＋C×26¹＋D＝1×26³＋2×26²＋3×26¹＋4
+    """
+    #Solution 1: O(log n) / O(log n)
+    sol = []
+    while columnNumber > 0:
+      #limit range from 0 ~ 25 in instead of 1 ~ 26
+      #A == 1 in Excel column title, but A == 0 in mod operation
+      c = (columnNumber - 1) % 26
+      columnNumber = (columnNumber - 1) // 26
+      sol.append(chr(c + ord('A')))
+    return ''.join(sol[::-1])
