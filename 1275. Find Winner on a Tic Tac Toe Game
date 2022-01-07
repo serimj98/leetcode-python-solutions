@@ -1,0 +1,34 @@
+class Solution:
+  def tictactoe(self, moves: List[List[int]]) -> str:
+    #Solution 1: O(n) / O(1)
+    grid = [['#'] * 3 for i in range(3)]
+    turn = 'A'
+    for a, b in moves:
+      grid[a][b] = turn
+      rowCount = 0
+      for i in range(3): #check row and column 
+        if grid[a][i] != turn: break
+        rowCount += 1
+      if rowCount == 3: return turn
+      rowCount = 0
+      for i in range(3):
+        if grid[i][b] != turn: break
+        rowCount += 1
+      if rowCount == 3: return turn
+      diagFirst, diagSecond = [[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]] #check diagonal
+      if [a,b] in diagFirst:
+        diagCount = 0
+        for aDiag, bDiag in diagFirst:
+          if grid[aDiag][bDiag] != turn: break
+          diagCount += 1
+        if diagCount == 3: return turn
+      if [a,b] in diagSecond:
+        diagCount = 0
+        for aDiag, bDiag in diagSecond:
+          if grid[aDiag][bDiag] != turn: break
+          diagCount += 1
+        if diagCount == 3: return turn
+      if turn == 'A': turn = 'B'
+      else: turn = 'A'
+    if len(moves) < 9: return 'Pending'
+    return 'Draw'
