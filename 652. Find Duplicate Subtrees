@@ -1,0 +1,21 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def findDuplicateSubtrees(self, root: Optional[TreeNode]) -> List[Optional[TreeNode]]:
+    #Solution 1: O(n^2), concatenating string takes extra O(n) / O(n^2)
+    sol = []
+    serializeDict = defaultdict(int)
+    #postorder recursion to collect information about leaf nodes first
+    def serialize(node):
+      if not node: return "#"
+      #preorder with leaf node childrens marked as '#' allows unique serialization
+      preorder = ','.join([str(node.val), serialize(node.left), serialize(node.right)])
+      serializeDict[preorder] += 1
+      if serializeDict[preorder] == 2: sol.append(node)
+      return preorder
+    serialize(root)
+    return sol
