@@ -1,0 +1,35 @@
+class TimeMap:
+
+  def __init__(self):
+    #Solution 1: O(n) / O(1)
+    self.timeDict = defaultdict(list)
+
+  def set(self, key: str, value: str, timestamp: int) -> None:
+    #Solution 1: O(1) / O(1)
+    self.timeDict[key].append([value, timestamp])
+
+  def get(self, key: str, timestamp: int) -> str:
+    #Solution 1: O(log n), n = length of timestamps with key given / O(1)
+    cur = self.timeDict[key]
+    if not cur: return ""
+    #if timestamp we're searching > all existing timestamps, return value of largest timestamp
+    if timestamp > cur[-1][1]: return cur[-1][0]
+    #if timestamp we're searching < all existing timestamps, return ""
+    if timestamp < cur[0][1]: return ""
+    #all timestamps are strictly increasing, hence sorted
+    #find timestamp equal to or bigger than the timestamp we're searching
+    l, r = 0, len(cur) - 1
+    while l <= r:
+      m = (l + r) // 2
+      if cur[m][1] == timestamp: return cur[m][0]
+      if cur[m][1] > timestamp: r = m - 1
+      else: l = m + 1
+    #exit when can't find equivalent timestamp
+    #l will be the element greater than timestamp we're searching - exit when l > r
+    if l < len(cur) - 1: return cur[l][0]
+    else: return cur[r][0]
+
+# Your TimeMap object will be instantiated and called as such:
+# obj = TimeMap()
+# obj.set(key,value,timestamp)
+# param_2 = obj.get(key,timestamp)
