@@ -6,13 +6,29 @@
 #         self.right = right
 class Solution:
   def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
-    #Solution 1: O(min(t1, t2)) / O(min(t1, t2))
-    def recursive(n1, n2):
-      if n1 and n2:
-        n1.val += n2.val
-        n1.left = recursive(n1.left, n2.left)
-        n1.right = recursive(n1.right, n2.right)
-        return n1
-      else:
-        return n1 or n2
-    return recursive(t1, t2)
+    #Solution 1 Recursive: O(n) / O(n)
+    if not t1: return t2
+    if not t2: return t1
+    def recursive(node1, node2):
+      if not node1: return node2
+      if not node2: return node1
+      node1.val += node2.val
+      node1.left = recursive(node1.left, node2.left)
+      node1.right = recursive(node1.right, node2.right)
+      return node1
+    recursive(t1, t2)
+    return t1
+  
+    #Solution 2 Iterative: O(n) / O(n)
+    if not t1: return t2
+    if not t2: return t1
+    stack = [(t1, t2)]
+    while stack:
+      node1, node2 = stack.pop()
+      if not node1 or not node2: continue
+      node1.val += node2.val
+      if not node1.left: node1.left = node2.left
+      else: stack.append((node1.left, node2.left))
+      if not node1.right: node1.right = node2.right
+      else: stack.append((node1.right, node2.right))
+    return t1
