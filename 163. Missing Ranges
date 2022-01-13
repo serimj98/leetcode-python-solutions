@@ -1,0 +1,19 @@
+class Solution:
+  def findMissingRanges(self, nums: List[int], lower: int, upper: int) -> List[str]:
+    #Solution 1: O(n) / O(n)
+    sol = []
+    if not nums:
+      if lower == upper: return [str(lower)]
+      else: return [str(lower) + "->" + str(upper)]
+    cur = nums[0]
+    if cur - (lower - 1) == 2: sol.append(str(lower))
+    if cur - (lower - 1) > 2: sol.append(str(lower) + "->" + str(cur - 1))
+    for i in range(1, len(nums)):
+      if nums[i] - cur == 2:
+        sol.append(str(nums[i-1] + 1))
+      elif nums[i] - cur > 2:
+        sol.append(str(nums[i-1] + 1) + "->" + str(nums[i] - 1))
+      cur = nums[i]
+    if (upper + 1) - cur == 2: sol.append(str(cur + 1))
+    elif (upper + 1) - cur > 2: sol.append(str(cur + 1) + "->" + str(upper))
+    return sol
