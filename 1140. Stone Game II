@@ -1,0 +1,17 @@
+class Solution:
+  def stoneGameII(self, piles: List[int]) -> int:
+    #Solution 1: O(2^n) / O(n)
+    acc = [piles[-1]]
+    for i in range(len(piles)-2, -1, -1):
+      acc.append(acc[-1] + piles[i]) #[4, 8, 17, 24, 26]
+    acc.reverse() #[26, 24, 17, 8, 4], acc[i] represents remaining number of stones
+    memo = {}
+    def dp(i, m): #i = current index, m = piles you can take
+      if (i, m) in memo: return memo[(i, m)]
+      if i + 2*m >= len(piles): return acc[i] #take all remaining stones
+      minStones = float('inf')
+      for x in range(1, 2*m + 1):
+        minStones = min(minStones, dp(i+x, max(m, x)))
+      memo[(i, m)] = acc[i] - minStones
+      return memo[(i, m)]
+    return dp(0, 1)
