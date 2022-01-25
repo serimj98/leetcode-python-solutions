@@ -1,33 +1,20 @@
 class Solution:
   def decodeString(self, s: str) -> str:
-    #Solution 1: O(output) / O(output)
-    """
-    [''] at first we have stack with empty string.
-    ['', 3, ''], open bracket: now we have stack with 3 elements: empty string, number 3 and empty string.
-    ['', 3, 'a']: build our string
-    ['', 3, 'a', 5, ''], open bracket: add number and empty string
-    ['', 3, 'a', 5, 'c'] build string
-    ['', 3, 'accccc'] : now we have closing bracket, so we remove last 3 elements and put accccc into our stack
-    ['acccccacccccaccccc'] we again have closing bracket, so we remove last 3 elements and put new one.
-    ['acccccacccccaccccc', 4, '']: open bracket, add number and empty string to stack
-    ['acccccacccccaccccc', 4, 'b'] build string
-    ['acccccacccccacccccbbbb'] closing bracket: remove last 3 elements and put one new.
-    """
-    stack = [""]
-    num = 0
-    start_bracket = False
-    for char in s:
-      if char.isnumeric():
-        num = num * 10 + int(char)
-      elif char == "[":
-        stack.append(num)
-        num = 0
-        stack.append("")
-      elif char == "]":
-        str1 = stack.pop()
-        rep = stack.pop()
-        str2 = stack.pop()
-        stack.append(str2 + str1 * rep)
-      else:
-        stack[-1] += char
-    return "".join(stack)
+    #Solution 1: O(n) / O(n)
+    stack = []
+    i = 0
+    curNum, curStr = 0, []
+    for c in s:
+      if c == "[":
+        stack.append(curStr)
+        stack.append(curNum)
+        curNum = 0
+        curStr = []
+      elif c == "]":
+        num = stack.pop()
+        prevStr = stack.pop()
+        curStr = prevStr + num*curStr
+      elif c.isnumeric():
+        curNum = curNum*10 + int(c)
+      else: curStr.append(c)
+    return "".join(curStr)
