@@ -1,0 +1,11 @@
+class Solution:
+  def isRobotBounded(self, instructions: str) -> bool:
+    #Solution 1: O(n) / O(1)
+    x, y, d = (0, 0, 0) #0 = N, 1 = E, 2 = S, 3 = W
+    dirs = [(0,1), (-1,0), (0,-1), (1,0)] #N, E, S, W
+    for instruction in instructions:
+      if instruction == "L": d = (d + 1) % 4 #turn left
+      elif instruction == "R": d = (d - 1) % 4 #turn right
+      else: x, y = x + dirs[d][0], y + dirs[d][1]
+    if (x == 0 and y == 0) or d != 0: return True
+    return False
