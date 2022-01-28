@@ -1,0 +1,21 @@
+class Solution:
+  def minSumOfLengths(self, arr: List[int], target: int) -> int:
+    #Solution 1: O(n) / O(n)
+    minLen = [float('inf')] * len(arr) #track minimum length for first subarray
+    curSum = 0 #cumulative sum until reach target sum
+    curMin = float('inf') #keep track of minimum length to fill in minLen
+    sol = float('inf') #update only when meeting another subarray
+    start = 0 #left pointer in sliding window
+    for i in range(len(arr)):
+      curSum += arr[i]
+      while curSum > target: #until window can potentially have target sum
+        curSum -= arr[start]
+        start += 1
+      if curSum == target:
+        length = i - start + 1
+        if start != 0 and minLen[start - 1] != float('inf'):
+          sol = min(sol, minLen[start - 1] + length) #add length of both subarrays
+        curMin = min(curMin, length)
+      minLen[i] = curMin
+    if sol == float('inf'): return -1
+    return sol
