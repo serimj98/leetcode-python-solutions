@@ -1,0 +1,22 @@
+class Solution:
+  def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+    #Solution 1: O(n^2) / O(n)
+    sol = []
+    for i in range(len(nums)):
+      smaller = 0
+      for j in range(len(nums)):
+        if i != j and nums[j] < nums[i]: smaller += 1
+      sol.append(smaller)
+    return sol
+    
+    #Solution 2: O(n log n) / O(n)
+    sortedNums = sorted(nums)
+    numsHash = {}
+    for i in range(len(nums)):
+      if sortedNums[i] not in numsHash:
+        #how many values are smaller than current number
+        numsHash[sortedNums[i]] = i #update with smallest index in sorted array
+    sol = []
+    for num in nums:
+      sol.append(numsHash[num])
+    return sol
