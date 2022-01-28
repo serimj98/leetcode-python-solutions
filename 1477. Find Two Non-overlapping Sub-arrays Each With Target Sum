@@ -13,6 +13,12 @@ class Solution:
         start += 1
       if curSum == target:
         length = i - start + 1
+        """
+        i.e. [1, 1, 1], target = 2
+        minLen = [inf, 2, inf], so minLen[start - 1] = inf
+        i.e. [1, 1, 1, 1], target = 2
+        minLen = [inf, 2, inf, 2], so minLen[start - 1] = 2 -> add to sol
+        """
         if start != 0 and minLen[start - 1] != float('inf'):
           sol = min(sol, minLen[start - 1] + length) #add length of both subarrays
         curMin = min(curMin, length)
