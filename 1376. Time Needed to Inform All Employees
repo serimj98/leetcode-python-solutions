@@ -1,0 +1,24 @@
+class Solution:
+  def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
+    #Solution 1: O(n) / O(n)
+    adj = defaultdict(list)
+    for i in range(len(manager)):
+      adj[manager[i]].append(i) #{manager: employees}, {-1: head} as an exception
+    def dfs(node):
+      time = 0
+      for neighbor in adj[node]:
+        #dfs(neighbor) + informTime[node] represents the weight from node to neighbor
+        time = max(time, dfs(neighbor) + informTime[node])
+      return time
+    return dfs(headID)
+    
+    #Solution 2: O(n) / O(1)
+    def dfs(node):
+      if manager[node] != -1: #not the head
+        informTime[node] += dfs(manager[node]) #add until you reach the head from employee (bottom-up)
+        manager[node] = -1 #mark as -1, we don't need to check any more
+      return informTime[node]
+    sol = 0
+    for i in range(len(manager)):
+      sol = max(sol, dfs(i))
+    return sol
