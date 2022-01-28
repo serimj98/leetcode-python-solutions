@@ -1,0 +1,18 @@
+class Solution:
+  def assignBikes(self, workers: List[List[int]], bikes: List[List[int]]) -> List[int]:
+    #Solution 1: O(mn log mn) / O(mn)
+    def manhattan(i, j):
+      return abs(i[0] - j[0]) + abs(i[1] - j[1])
+    
+    dist = []
+    for i in range(len(workers)):
+      for j in range(len(bikes)):
+        dist.append(((manhattan(workers[i], bikes[j])), i, j))
+    dist.sort() #sort by shortest distance
+    
+    takenBike, sol = set(), [-1] * len(workers)
+    for d, worker, bike in dist:
+      if bike not in takenBike and sol[worker] == -1:
+          sol[worker] = bike
+          takenBike.add(bike)
+    return sol
