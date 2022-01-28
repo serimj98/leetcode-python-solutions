@@ -1,0 +1,13 @@
+class Solution:
+  def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+    #Solution 1: O(n log n) / O(n)
+    intervals.sort() #by start value
+    heap = []
+    for start, end in intervals:
+      if heap and heap[0] <= start:
+        #meeting has ended; replace top of heap with new meeting
+        heapq.heapreplace(heap, end) #O(log n)
+      else:
+        #meeting is still ongoing; add new room's end time to heap
+        heapq.heappush(heap, end) #O(log n)
+    return len(heap)
