@@ -1,0 +1,11 @@
+class Solution:
+  def longestSubstring(self, s: str, k: int) -> int:
+    #Solution 1: O(n^2) / O(1)
+    def recursive(s):
+      if not s or k > len(s): return 0
+      sCounter = Counter(s)
+      for i in range(len(s)):
+        if sCounter[s[i]] < k:
+          return max(recursive(s[:i]), recursive(s[i+1:]))
+      return len(s)
+    return recursive(s)
