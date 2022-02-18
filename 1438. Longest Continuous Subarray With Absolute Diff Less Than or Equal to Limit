@@ -1,0 +1,33 @@
+class Solution:
+  def longestSubarray(self, nums: List[int], limit: int) -> int:
+    #Solution 1 TLE: O(n^2) / O(1)
+    sol = 0
+    for l in range(len(nums)):
+      curMin, curMax = nums[l], nums[l]
+      for r in range(l, len(nums)):
+        curMin = min(curMin, nums[r])
+        curMax = max(curMax, nums[r])
+        if curMax - curMin <= limit: sol = max(sol, r - l + 1)
+        else: break
+    return sol
+    
+    #Solution 2: O(n) / O(n)
+    sol = 0
+    minDeque, maxDeque = deque(), deque()
+    l, r = 0, 0
+    while r < len(nums):
+      #store indices of potential min/max values in current subarray monotonically
+      while minDeque and nums[minDeque[-1]] >= nums[r]:
+        minDeque.pop()
+      while maxDeque and nums[maxDeque[-1]] <= nums[r]:
+        maxDeque.pop()
+      minDeque.append(r)
+      maxDeque.append(r)
+      #nums[minDeque[0]] is minimum in current window, and vice versa
+      if nums[maxDeque[0]] - nums[minDeque[0]] > limit:
+        l += 1
+        if l > minDeque[0]: minDeque.popleft()
+        if l > maxDeque[0]: maxDeque.popleft()
+      sol = max(sol, r - l + 1)
+      r += 1
+    return sol
