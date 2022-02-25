@@ -1,0 +1,46 @@
+class TrieNode:
+  def __init__(self):
+    self.children = defaultdict(TrieNode)
+    self.isEnd = False
+    self.word = ""
+  
+class Trie:
+  def __init__(self):
+    self.root = TrieNode()
+  
+  def insert(self, word):
+    node = self.root
+    for c in word:
+      node = node.children[c]
+    node.isEnd = True
+    node.word = word
+  
+  def bfs(self):
+    queue = deque([self.root])
+    sol = ""
+    while queue:
+      cur = queue.popleft()
+      for node in cur.children.values(): #all paths that stem from node's character
+        if node.isEnd:
+          queue.append(node) #will look at the children of current character in next iteration
+          if len(node.word) > len(sol) or node.word < sol: #with BFS, will always be looking at longer word
+            sol = node.word
+    return sol
+
+class Solution:
+  def longestWord(self, words: List[str]) -> str:
+    #Solution 1: O(n log n) / O(n)
+    words.sort()
+    seenWords = set([""])
+    sol = ""
+    for word in words:
+      if word[:-1] in seenWords:
+        seenWords.add(word)
+        if len(word) > len(sol):
+          sol = word
+    return sol
+    
+    #Solution 2 Trie: O(n) / O(n)
+    trie = Trie()
+    for word in words: trie.insert(word) #build trie
+    return trie.bfs()
