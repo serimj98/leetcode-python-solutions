@@ -6,15 +6,26 @@
 #         self.right = right
 class Solution:
   def sumNumbers(self, root: Optional[TreeNode]) -> int:
-    #Solution 1: O(n) / O(h)
+    #Solution 1 Recursive: O(n) / O(h)
     self.sol = 0
-    def recursive(node, curNum):
+    def recursive(node, cur):
       if not node: return
-      if not node.left and not node.right:
-        curNum = curNum*10 + node.val
-        self.sol += curNum
-        return
-      recursive(node.left, curNum*10 + node.val)
-      recursive(node.right, curNum*10 + node.val)
+      cur = cur*10 + node.val
+      if not node.left and not node.right: #leaf node
+        self.sol += cur
+      recursive(node.left, cur)
+      recursive(node.right, cur)
     recursive(root, 0)
     return self.sol
+
+    #Solution 2 Iterative: O(n) / O(h)
+    stack = [(root, 0)]
+    sol = 0
+    while stack:
+      node, cur = stack.pop()
+      cur = cur*10 + node.val
+      if not node.left and not node.right:
+        sol += cur
+      if node.right: stack.append((node.right, cur))
+      if node.left: stack.append((node.left, cur))
+    return sol
