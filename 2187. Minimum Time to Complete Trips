@@ -1,0 +1,40 @@
+class Solution:
+  def minimumTime(self, time: List[int], totalTrips: int) -> int:
+    # Solution 1 TLE: O(totalTrips) / O(time)
+    if not totalTrips: return 0
+    trips = 0
+    sol = 0
+    busTimeRemaining = defaultdict(int) # {0:1, 1:2, 2:3}
+    for i, t in enumerate(time): # i = bus index, t = time taken for trip
+      busTimeRemaining[i] = t
+    while trips < totalTrips:
+      for bus in busTimeRemaining:
+        busTimeRemaining[bus] -= 1
+        if not busTimeRemaining[bus]:
+          trips += 1
+          busTimeRemaining[bus] = time[bus]
+      sol += 1
+    return sol
+  
+    #Solution 2: O(n log t) / O(1)
+    """
+    intuition: we can find out how many trips all buses can make if we know the time that passed
+    ex. [1, 5, 7, 30], time = 15
+    15 / 1 = 15 trips
+    15 / 5 = 3 trips
+    15 / 7 = 2 trips (2.14 round down to 2)
+    15 / 30 = 0 trips (0.5 round down to 0)
+    """
+    l, r = 0, min(time) * totalTrips
+    sol = 0
+    while l <= r:
+      m = l + (r - l) // 2
+      curTrip = 0
+      for t in time:
+        curTrip += m // t
+      #don't return when curTrip == totalTrips; multiple times where this is the case and we want the minimum
+      if curTrip < totalTrips: l = m + 1
+      else:
+        sol = m #save the closest instance where curTrip >= totalTrips before reducing scope to smaller times
+        r = m - 1
+    return sol
