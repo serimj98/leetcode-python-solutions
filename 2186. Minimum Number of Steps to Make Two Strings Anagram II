@@ -1,0 +1,16 @@
+class Solution:
+  def minSteps(self, s: str, t: str) -> int:
+    #Solution 1: O(s + t) / O(s + t)
+    if not s: return len(t)
+    if not t: return len(s)
+    sol = 0
+    allChars = set(s + t)
+    sCounter, tCounter = Counter(s), Counter(t)
+    for c in allChars:
+      if c in sCounter and c in tCounter:
+        sol += abs(sCounter[c] - tCounter[c])
+      elif c in sCounter and c not in tCounter:
+        sol += sCounter[c]
+      elif c in tCounter and c not in sCounter:
+        sol += tCounter[c]
+    return sol
