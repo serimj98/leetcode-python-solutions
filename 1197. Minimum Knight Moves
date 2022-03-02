@@ -1,0 +1,23 @@
+class Solution:
+  def minKnightMoves(self, x: int, y: int) -> int:
+    #Solution 1 BFS: O(max(x,y)^2) / O(max(x,y)^2)
+    moves = [(-2,1), (-1,2), (1,2), (2,1), (2,-1), (1,-2), (-2,-1), (-1,-2)]
+    visited = set((0, 0))
+    q = deque([(0, 0, 0)]) #x, y, move #
+    while q:
+      for i in range(len(q)):
+        curX, curY, numMoves = q.popleft()
+        if curX == x and curY == y: return numMoves
+        for newX, newY in moves:
+          if (curX + newX, curY + newY) not in visited:
+            q.append((curX + newX, curY + newY, numMoves + 1))
+            visited.add((curX + newX, curY + newY))
+    
+    #Solution 2 DFS: O(x*y) / O(x*y)
+    @lru_cache()
+    def dfs(x, y):
+      if x == 0 and y == 0: return 0
+      #at (1, 1), (2, 0), and (0, 2), it takes two steps to reach (0, 0)
+      if x + y == 2: return 2
+      return min(dfs(abs(x-1), abs(y-2)), dfs(abs(x-2), abs(y-1))) + 1
+    return dfs(abs(x), abs(y))
