@@ -1,14 +1,59 @@
 class Solution:
   def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
-    #Solution 1 Heap: O(n + k log k) / O(n)
-    heap, sol = [], []
-    for i in arr: heap.append((abs(i-x), i))
-    heapify(heap) #O(log n), heappush = O(n log n)
-    #heappop will consider second element of tuple of first element is equivalent
-    for i in range(k): sol.append(heappop(heap)[1]) #O(log k)
+    #Solution 1: O(log n + k) / O(k)
+    """
+    binary search analysis:
+      when x < arr[0] (smaller than minimum):
+        - r keeps getting adjusted to m - 1 and l remains the same
+        - l = 0 / r = -1
+      when x > arr[-1] (bigger than maximum):
+        - l keeps getting adjusted to m + 1 and r remains the same
+        - l = len(arr) / r = len(arr) - 1
+    """
+    if x < arr[0]: return arr[:k]
+    if x > arr[-1]: return arr[len(arr)-k:]
+    def findIndex(arr, x):
+      l, r = 0, len(arr) - 1
+      while l <= r:
+        m = l + (r - l) // 2
+        if arr[m] == x:
+          return m
+        elif arr[m] < x: l = m + 1
+        else: r = m - 1
+      return l
+    idx = findIndex(arr, x) #in the middle of array
+    sol = deque()
+    a, b = idx - 1, idx
+    while len(sol) < k:
+      if abs(arr[a] - x) <= abs(arr[b] - x):
+        sol.appendleft(arr[a])
+        a -= 1
+      else:
+        sol.append(arr[b])
+        b += 1
+      if a < 0:
+        for i in range(k - len(sol)):
+          sol.append(arr[b])
+          b += 1
+        break
+      if b >= len(arr):
+        for i in range(k - len(sol)):
+          sol.appendleft(arr[a])
+          a -= 1
+        break
+    return sol
+  
+    #Solution 2: O(n log n) / O(n)
+    heap = []
+    for i in range(len(arr)): #O(n log n)
+      heappush(heap, (abs(arr[i] - x), arr[i])) #heappush: O(log n)
+    sol = []
+    while len(sol) < k: #O(k log n)
+      #will compare second element if first element is equivalent
+      sol.append(heappop(heap)[1]) #heappop: O(log n)
     return sorted(sol) #O(k log k)
   
-    #Solution 2 Binary search: O(log (n - k) + k) / O(k)
+    #Solution 3 Binary search: O(log (n - k) + k) / O(k)
     #l or r is a potential index that k elements start with,
     #so needs to be k less than length of array at least
     l, r = 0, len(arr) - k
