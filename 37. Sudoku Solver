@@ -1,0 +1,57 @@
+class Solution:
+  def solveSudoku(self, board: List[List[str]]) -> None:
+    """
+    Do not return anything, modify board in-place instead.
+    """
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    
+    for r in range(len(board)):
+      for c in range(len(board[0])):
+        if board[r][c] != ".":
+          num = int(board[r][c])
+          rows[r].add(num)
+          cols[c].add(num)
+          """
+          calculating box index: (r, c)
+          (0-2,0-2) -> box 0 / (0-2,3-5) -> box 1 / (0-2,6-8) -> box 2
+          (3-5,0-2) -> box 3 / (3-5,3-5) -> box 4 / (3-5,6-8) -> box 5
+          (6-8,0-2) -> box 6 / (6-8,3-5) -> box 7 / (6-8,6-8) -> box 8
+          """
+          boxIdx = (r // 3) * 3 + (c // 3)
+          boxes[boxIdx].add(num)
+    
+    def dfs(r, c):
+      if r == 9: #after (8, 8)
+        self.solved = True
+        return
+
+      if c == 8:
+        newR = r + 1
+        newC = 0
+      else:
+        newR = r
+        newC = c + 1
+        
+      if board[r][c] == ".":
+        boxIdx = (r // 3) * 3 + (c // 3)
+        for num in range(1, 10):
+          if num not in rows[r] and num not in cols[c] and num not in boxes[boxIdx]:
+            rows[r].add(num)
+            cols[c].add(num)
+            boxes[boxIdx].add(num)
+            board[r][c] = str(num)
+            
+            dfs(newR, newC)
+            
+            if not self.solved: #else will always remove and board will always be original state
+              rows[r].remove(num)
+              cols[c].remove(num)
+              boxes[boxIdx].remove(num)
+              board[r][c] = '.'
+      else:
+        dfs(newR, newC)
+    
+    self.solved = False
+    dfs(0, 0)
