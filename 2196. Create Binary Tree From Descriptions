@@ -1,0 +1,28 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+    #Solution 1: O(n) / O(n)
+    treeDict = defaultdict(list)
+    children = set()
+    for parent, child, isLeft in descriptions:
+      treeDict[parent].append((child, isLeft))
+      children.add(child)
+    for parent in treeDict:
+      if parent not in children: root = parent
+    sol = node = TreeNode(root)
+    def recursive(node):
+      children = treeDict[node.val]
+      for c in children:
+        if c[1] == 1:
+          node.left = TreeNode(c[0])
+          recursive(node.left)
+        elif c[1] == 0:
+          node.right = TreeNode(c[0])
+          recursive(node.right)
+    recursive(sol)
+    return sol
