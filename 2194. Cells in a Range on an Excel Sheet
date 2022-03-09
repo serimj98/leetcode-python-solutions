@@ -1,0 +1,11 @@
+class Solution:
+  def cellsInRange(self, s: str) -> List[str]:
+    #Solution 1: O(c*r) / O(c*r)
+    if not s: return []
+    e1, e2 = s.split(":")
+    c1, r1, c2, r2 = e1[0], e1[1], e2[0], e2[1]
+    sol = []
+    for c in range(ord(c1), ord(c2)+1):
+      for r in range(int(r1), int(r2)+1):
+        sol.append(chr(c) + str(r))
+    return sol
