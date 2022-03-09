@@ -1,0 +1,23 @@
+class Solution:
+  def minimalKSum(self, nums: List[int], k: int) -> int:
+    #Solution 1 TLE: O(n + k) / O(n)
+    numsSet = set(nums)
+    sol = 0
+    idx = 1
+    while k:
+      if idx not in numsSet:
+        sol += idx
+        k -= 1
+      idx += 1
+      if not k: break
+    return sol
+    
+    #Solution 2: O(n) / O(1)
+    sol = k * (k+1) // 2
+    idx = k + 1
+    nums = sorted(list(set(nums)))
+    for num in nums:
+      if num <= idx: #if smaller than any of the numbers we've used to add so far
+        sol += idx - num
+        idx += 1
+    return sol
