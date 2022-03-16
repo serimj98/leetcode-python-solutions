@@ -1,0 +1,19 @@
+class Solution:
+  def digArtifacts(self, n: int, artifacts: List[List[int]], dig: List[List[int]]) -> int:
+    #Solution 1: O(n*r*c) / O(n)
+    sol = 0
+    digSet = set()
+    for r, c in dig:
+      digSet.add((r, c))
+    for artifact in artifacts:
+      r1, c1, r2, c2 = artifact
+      cur = []
+      for r in range(r1, r2+1):
+        for c in range(c1, c2+1):
+          cur.append((r, c))
+      artifactFound = True
+      for c in cur:
+        if c not in digSet:
+          artifactFound = False
+      if artifactFound: sol += 1
+    return sol
