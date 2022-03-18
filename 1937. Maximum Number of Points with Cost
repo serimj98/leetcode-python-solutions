@@ -1,0 +1,31 @@
+class Solution:
+  def maxPoints(self, points: List[List[int]]) -> int:
+    #Solution 1 TLE: O(r*c^2) / O(r*c)
+    dp = [[0 for i in range(len(points[0]))] for j in range(len(points))]
+    #don't use [[0] * len(points[0])] * len(points) = creates shallow copy of lists
+    dp[0] = points[0]
+    for r in range(1, len(points)):
+      for c in range(len(points[0])):
+        for i in range(len(points[0])):
+          dp[r][c] = max(dp[r][c], points[r][c] + dp[r-1][i] - abs(c-i))
+    return max(dp[-1])
+
+    #Solution 2: O(r*c) / O(c)
+    def leftTracker(arr): #maximum values coming from left
+      left = [arr[0]] + [0] * (len(points[0]) - 1)
+      for i in range(1, len(points[0])):
+        #either the current column or the previous row's immediate left column (-1 for offset)
+        left[i] = max(arr[i], left[i-1] - 1) #left[i-1] tracks the maximum points starting from left
+      return left
+    def rightTracker(arr): #maximum values coming from right
+      right = [0] * (len(points[0]) - 1) + [arr[-1]]
+      for i in range(len(points[0]) - 2, -1, -1):
+        right[i] = max(arr[i], right[i+1] - 1)
+      return right
+    prev = points[0]
+    for r in range(len(points) - 1):
+      left, right, cur = leftTracker(prev), rightTracker(prev), [0] * len(points[0])
+      for i in range(len(cur)):
+        cur[i] = max(left[i], right[i]) + points[r+1][i]
+      prev = cur[:]
+    return max(prev)
