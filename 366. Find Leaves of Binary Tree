@@ -1,0 +1,42 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
+    #Solution 1: O(h*log n) / O(n)
+    if not root: return
+    self.sol = []
+    self.cur = []
+    self.rootFound = False
+    def dfs(node, parent):
+      if not node: return
+      if not node.left and not node.right:
+        self.cur.append(node.val)
+        if parent:
+          if parent.left == node: parent.left = None
+          elif parent.right == node: parent.right = None
+        else: self.rootFound = True
+        return
+      if node.left: dfs(node.left, node)
+      if node.right: dfs(node.right, node)
+    while root:
+      dfs(root, None)
+      self.sol.append(self.cur)
+      self.cur = []
+      if self.rootFound: break
+    return self.sol
+  
+    #Solution 2: O(n) / O(n)
+    self.d = defaultdict(list)
+    def dfs(node):
+      if not node: return 0
+      left = dfs(node.left)
+      right = dfs(node.right)
+      level = max(left, right) + 1
+      self.d[level].append(node.val)
+      return level
+    dfs(root)
+    return self.d.values()
