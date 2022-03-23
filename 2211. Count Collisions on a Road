@@ -1,0 +1,17 @@
+class Solution:
+  def countCollisions(self, directions: str) -> int:
+    #Solution 1: O(n) / O(1)
+    sol = 0
+    l, r = 0, len(directions) - 1
+    #all L direction on the left will not crash into anything
+    for c in directions:
+      if c == "L": l += 1
+      else: break
+    #all R direction on the right will not crash into anything
+    for c in directions[::-1]:
+      if c == "R": r -= 1
+      else: break
+    #all other cars will crash, except cars that are staying
+    for i in range(l, r+1):
+      if directions[i] != "S": sol += 1
+    return sol
