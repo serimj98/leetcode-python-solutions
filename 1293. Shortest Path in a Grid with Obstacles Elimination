@@ -1,0 +1,20 @@
+class Solution:
+  def shortestPath(self, grid: List[List[int]], k: int) -> int:
+    #Solution 1: O(r*c*k) / O(r*c*k)
+    q = deque([(0, 0, k, 0)]) #r, c, remaining eliminations, steps taken
+    visited = set([0, 0, k]) #r, c, remaining eliminations
+    dirs = [(-1,0),(1,0),(0,-1),(0,1)]
+    if len(grid) == 1 and len(grid[0]) == 1: return 0
+    while q:
+      r, c, remaining, steps = q.popleft()
+      for d in dirs:
+        newR, newC = r + d[0], c + d[1]
+        if 0 <= newR < len(grid) and 0 <= newC < len(grid[0]):
+          if newR == len(grid)-1 and newC == len(grid[0])-1: return steps + 1
+          if grid[newR][newC] == 0 and (newR, newC, remaining) not in visited:
+            q.append((newR, newC, remaining, steps + 1))
+            visited.add((newR, newC, remaining))
+          elif remaining > 0 and grid[newR][newC] == 1 and (newR, newC, remaining + 1) not in visited:
+            q.append((newR, newC, remaining - 1, steps + 1))
+            visited.add((newR, newC, remaining - 1))
+    return -1
