@@ -1,0 +1,15 @@
+class Solution:
+  def evalRPN(self, tokens: List[str]) -> int:
+    #Solution 1: O(n) / O(n)
+    stack = []
+    for token in tokens:
+      if token not in "+-*/":
+        stack.append(int(token))
+      else:
+        e2 = stack.pop()
+        e1 = stack.pop()
+        if token == "+": stack.append(e1 + e2)
+        elif token == "-": stack.append(e1 - e2)
+        elif token == "*": stack.append(e1 * e2)
+        elif token == "/": stack.append(int(e1 / e2))
+    return stack[0]
