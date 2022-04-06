@@ -1,0 +1,18 @@
+class Solution:
+  def maximumCandies(self, candies: List[int], k: int) -> int:
+    #Solution 1: O(n log(sum(candies))) / O(1)
+    #when we don't know which value to use (i.e. how many candies to distribute), use binary search
+    if sum(candies) < k: return 0
+    l, r = 1, sum(candies)//k #the min/max candies we can distribute
+    sol = 0
+    while l <= r:
+      m = (l + r) // 2
+      possiblePiles = 0
+      for candy in candies:
+        possiblePiles += candy // m
+      if possiblePiles >= k: #can distribute m candies with our current piles, but want to try greater # of candies
+        sol = max(sol, m)
+        l = m + 1
+      else: #not possible, need to try a smaller value of candies
+        r = m - 1
+    return sol
