@@ -1,0 +1,18 @@
+class Solution:
+  def findWinners(self, matches: List[List[int]]) -> List[List[int]]:
+    #Solution 1: O(n log n) / O(n)
+    matchDict = dict()
+    for match in matches:
+      winner, loser = match
+      if winner not in matchDict: matchDict[winner] = 0
+      if loser not in matchDict: matchDict[loser] = 0
+      matchDict[loser] += 1
+    lostNone, lostOne = [], []
+    for player in matchDict:
+      if matchDict[player] == 0:
+        lostNone.append(player)
+      elif matchDict[player] == 1:
+        lostOne.append(player)
+    lostNone.sort()
+    lostOne.sort()
+    return [lostNone, lostOne]
