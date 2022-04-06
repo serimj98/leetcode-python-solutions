@@ -1,0 +1,12 @@
+class Solution:
+  def customSortString(self, order: str, s: str) -> str:
+    #Solution 1: O(order + s) / O(s)
+    sol = []
+    stringDict = Counter(s)
+    for c in order:
+      if c in stringDict:
+        sol.append(c * stringDict[c])
+        del stringDict[c]
+    for c in stringDict:
+      sol.append(c * stringDict[c])
+    return "".join(sol)
