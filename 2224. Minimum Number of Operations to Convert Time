@@ -1,0 +1,30 @@
+class Solution:
+  def convertTime(self, current: str, correct: str) -> int:
+    #Solution 1: O(1) / O(1)
+    sol = 0
+    cur_hour, cur_minute = [int(t) for t in current.split(":")]
+    cor_hour, cor_minute = [int(t) for t in correct.split(":")]
+    if cur_hour != cor_hour:
+      sol += cor_hour - cur_hour
+    if cur_minute == cor_minute: return sol
+    if cur_minute > cor_minute: #what if current minute is after correct minute?
+      sol -= 1
+      minute_diff = cor_minute + 60 - cur_minute
+    elif cur_minute < cor_minute:
+      minute_diff = cor_minute - cur_minute
+    for interval in [15, 5, 1]:
+      sol += minute_diff // interval
+      minute_diff %= interval
+    return sol
+  
+    #Solution 2: O(1) / O(1)
+    sol = 0
+    cur_hour, cur_minute = [int(t) for t in current.split(":")]
+    cor_hour, cor_minute = [int(t) for t in correct.split(":")]
+    current = cur_hour * 60 + cur_minute
+    correct = cor_hour * 60 + cor_minute
+    minute_diff = correct - current
+    for interval in [60, 15, 5, 1]:
+      sol += minute_diff // interval
+      minute_diff %= interval
+    return sol
