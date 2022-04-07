@@ -21,3 +21,31 @@ class Solution:
     for r in range(len(board)):
       for c in range(len(board[0])):
         board[r][c] = board[r][c][1]
+
+    #Solution 2: O(r*c) / O(1)
+    """
+    Do not return anything, modify board in-place instead.
+    """
+    # 0 = dead, 1 = live, 2 = originally dead but live, 3 = originally live but dead
+    def countNeighbors(r, c):
+      dirs = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+      count = 0
+      for i, j in dirs:
+        if r + i >= 0 and r + i < len(board) and c + j >= 0 and c + j < len(board[0]):
+          if board[r + i][c + j] == 1 or board[r + i][c + j] == 3:
+            count += 1
+      return count
+    
+    for r in range(len(board)):
+      for c in range(len(board[0])):
+        if board[r][c] == 1: #case 1, 2, 3
+          neiCount = countNeighbors(r, c)
+          if neiCount < 2 or neiCount > 3: board[r][c] = 3
+        else: #case 4
+          neiCount = countNeighbors(r, c)
+          if neiCount == 3: board[r][c] = 2
+      
+    for r in range(len(board)):
+      for c in range(len(board[0])):
+        if board[r][c] == 2: board[r][c] = 1
+        elif board[r][c] == 3: board[r][c] = 0
