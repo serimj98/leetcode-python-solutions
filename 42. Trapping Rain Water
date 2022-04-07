@@ -1,17 +1,31 @@
 class Solution:
   def trap(self, height: List[int]) -> int:
     #Solution 1: O(n) / O(n)
-    leftMax, rightMax = [0] * len(height), [0] * len(height)
-    curMax = height[0]
-    for i in range(len(height)):
-      leftMax[i] = max(curMax, height[i])
-      curMax = leftMax[i]
-    curMax = height[-1]
+    left = [height[0]]
+    for i in range(1, len(height)):
+      left.append(max(left[-1], height[i]))
+    
+    right = deque([height[-1]])
     for j in range(len(height)-1, -1, -1):
-      rightMax[j] = max(curMax, height[j])
-      curMax = rightMax[j]
+      right.appendleft(max(right[0], height[j]))
+    
     sol = 0
-    for i in range(1, len(height)-1):
-      #take difference between the lower bound and height at that index
-      sol += (min(leftMax[i], rightMax[i]) - height[i])
+    for k in range(len(height)):
+      sol += min(left[k], right[k]) - height[k]
+    
+    return sol
+  
+    #Solution 2: O(n) / O(1)
+    l, r = 0, len(height) - 1
+    maxL, maxR = 0, 0
+    sol = 0
+    while l < r:
+      if height[l] < height[r]: #if height at l is smaller
+        if height[l] > maxL: maxL = height[l]
+        else: sol += maxL - height[l]
+        l += 1
+      else: #if height at r is smaller
+        if height[r] > maxR: maxR = height[r]
+        else: sol += maxR - height[r]
+        r -= 1
     return sol
