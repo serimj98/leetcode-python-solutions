@@ -1,0 +1,12 @@
+class Solution:
+  def maximumProduct(self, nums: List[int], k: int) -> int:
+    #Solution 1: O(k log n + n) / O(n)
+    heapify(nums)
+    for i in range(k):
+      minVal = heappop(nums)
+      minVal += 1
+      heappush(nums, minVal)
+    sol = 1
+    for num in nums:
+      sol = (sol * num) % (10**9 + 7) #modulo inside for loop, or TLE
+    return sol
