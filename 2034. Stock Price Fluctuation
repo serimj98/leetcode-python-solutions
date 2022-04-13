@@ -1,0 +1,39 @@
+class StockPrice:
+
+  def __init__(self):
+    #Solution 1: O(1) / O(n)
+    self.stockDict = defaultdict(int) #{timestamp: price}
+    self.latestTimestamp = None
+    self.maxPrice = [] #min-heap, add negative prices to make max-heap
+    self.minPrice = [] #min-heap
+
+  def update(self, timestamp: int, price: int) -> None:
+    #Solution 1: O(1) / O(1)
+    self.stockDict[timestamp] = price
+    if not self.latestTimestamp or timestamp > self.latestTimestamp:
+      self.latestTimestamp = timestamp
+    heappush(self.maxPrice, (-price, timestamp))
+    heappush(self.minPrice, (price, timestamp))
+
+  def current(self) -> int:
+    #Solution 1: O(1) / O(1)
+    return self.stockDict[self.latestTimestamp]
+
+  def maximum(self) -> int:
+    #Solution 1: O(n) / O(1)
+    #if current maximum price is not overwritten in self.stockDict
+    while -self.maxPrice[0][0] != self.stockDict[self.maxPrice[0][1]]: heappop(self.maxPrice)
+    return -self.maxPrice[0][0]
+
+  def minimum(self) -> int:
+    #Solution 1: O(n) / O(1)
+    while self.minPrice[0][0] != self.stockDict[self.minPrice[0][1]]: heappop(self.minPrice)
+    return self.minPrice[0][0]
+
+
+# Your StockPrice object will be instantiated and called as such:
+# obj = StockPrice()
+# obj.update(timestamp,price)
+# param_2 = obj.current()
+# param_3 = obj.maximum()
+# param_4 = obj.minimum()
