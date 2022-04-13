@@ -1,0 +1,32 @@
+class Solution:
+  def largestInteger(self, num: int) -> int:
+    #Solution 1: O(n log n) / O(n)
+    if not num: return 
+    oddIdx, evenIdx = deque([]), deque([])
+    oddNums, evenNums = [], []
+    for i, c in enumerate(str(num)):
+      if int(c) % 2 == 0:
+        oddIdx.append(i)
+        oddNums.append(c)
+      else:
+        evenIdx.append(i)
+        evenNums.append(c)
+    oddNums.sort()
+    evenNums.sort()
+    sol = []
+    while oddIdx and evenIdx:
+      if oddIdx[0] < evenIdx[0]:
+        sol.append(oddNums[-1])
+        oddNums.pop()
+        oddIdx.popleft()
+      elif oddIdx[0] > evenIdx[0]:
+        sol.append(evenNums[-1])
+        evenNums.pop()
+        evenIdx.popleft()
+    if oddNums:
+      for num in oddNums[::-1]:
+        sol.append(num)
+    if evenNums:
+      for num in evenNums[::-1]:
+        sol.append(num)
+    return "".join(sol)
