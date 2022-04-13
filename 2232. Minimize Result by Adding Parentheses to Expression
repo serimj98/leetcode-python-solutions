@@ -1,0 +1,20 @@
+class Solution:
+  def minimizeResult(self, expression: str) -> str:
+    #Solution 1: O(n^2) / O(n)
+    minVal = float('inf')
+    sol = ""
+    for i, c in enumerate(expression):
+      if c == "+": sumIdx = i
+    for l in range(sumIdx):
+      for r in range(sumIdx + 1, len(expression)):
+        left = expression[:l]
+        right = expression[r+1:]
+        leftAddition = expression[l:sumIdx]
+        rightAddition = expression[sumIdx+1:r+1]
+        leftVal = 1 if not left else int(left)
+        rightVal = 1 if not right else int(right)
+        curVal = leftVal * (int(leftAddition) + int(rightAddition)) * rightVal
+        if curVal < minVal:
+          sol = left + "(" + str(leftAddition) + "+" + str(rightAddition) + ")" + right
+          minVal = curVal
+    return sol
