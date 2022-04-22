@@ -1,0 +1,17 @@
+class Solution:
+  def minimumRounds(self, tasks: List[int]) -> int:
+    #Solution 1: O(n) / O(n)
+    sol = 0
+    taskCounter = Counter(tasks)
+    for task in taskCounter:
+      # 2, 3, 5, 7, 8, 9, 10, 12, 10, 11, 14, 16, 17, 12, 13, ...
+      taskValue = taskCounter[task]
+      if taskValue == 1: return -1
+      if taskValue >= 3:
+        sol += taskValue // 3
+        taskValue %= 3
+      if taskValue == 1:
+        sol -= 1
+        taskValue += 3
+      sol += taskValue // 2
+    return sol
