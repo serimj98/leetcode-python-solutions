@@ -1,0 +1,18 @@
+class Solution:
+  #Solution 1: O(k log n) / O(k)
+  def calculateSum(self, group: str) -> str:
+    groupSum = 0
+    for c in group: groupSum += int(c)
+    return str(groupSum)
+  def digitSum(self, s: str, k: int) -> str:
+    while len(s) > k:
+      nextS = []
+      while s:
+        if k < len(s):
+          nextS.append(self.calculateSum(s[:k]))
+          s = s[k:]
+        else:
+          nextS.append(self.calculateSum(s))
+          break
+      s = "".join(nextS)
+    return s
