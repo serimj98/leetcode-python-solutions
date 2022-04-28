@@ -1,24 +1,45 @@
 class LRUCache:
 
   def __init__(self, capacity: int):
+    #Solution 1: O(1) / O(capacity)
     self.capacity = capacity
-    self.lru = dict()
+    self.lru = {}
+    
+    #Solution 2: O(1) / O(capacity)
+    self.capacity = capacity
+    self.lru = OrderedDict()
 
   def get(self, key: int) -> int:
-    #O(1) / O(capacity)
+    #Solution 1: O(1) / O(1)
     if key in self.lru:
-      last_used = self.lru[key]
+      getValue = self.lru[key]
       del self.lru[key]
-      self.lru[key] = last_used #move to end of dict
-      return last_used
-    else: return -1
+      self.lru[key] = getValue
+      return getValue
+    return -1
+  
+    #Solution 2: O(1) / O(1)
+    if key in self.lru:
+      self.lru.move_to_end(key)
+      return self.lru[key]
+    return -1
 
   def put(self, key: int, value: int) -> None:
-    #O(1) / O(capacity)
-    if key not in self.lru:
-      if len(self.lru) >= self.capacity:
-        del self.lru[list(self.lru.keys())[0]]
-      self.lru[key] = value
-    else:
+    #Solution 1: O(1) / O(1)
+    if key in self.lru:
       del self.lru[key]
-      self.lru[key] = value
+    self.lru[key] = value
+    if len(self.lru) > self.capacity:
+      del self.lru[list(self.lru)[0]]
+    
+    #Solution 2: O(1) / O(1)
+    if key in self.lru:
+      self.lru.move_to_end(key)
+    self.lru[key] = value
+    if len(self.lru) > self.capacity:
+      self.lru.popitem(last=False)
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
