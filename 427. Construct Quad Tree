@@ -1,0 +1,26 @@
+"""
+# Definition for a QuadTree node.
+class Node:
+    def __init__(self, val, isLeaf, topLeft, topRight, bottomLeft, bottomRight):
+        self.val = val
+        self.isLeaf = isLeaf
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+"""
+
+class Solution:
+  def construct(self, grid: List[List[int]]) -> 'Node':
+    #Solution 1: O(n^2) / O(log n)
+    if not grid: return
+    def recursive(r1, r2, c1, c2):
+      if r1 > r2 or c1 > c2: return
+      if all(grid[r][c] == grid[r1][c1] for r in range(r1, r2+1) for c in range(c1, c2+1)):
+        return Node(grid[r1][c1], True, None, None, None, None)
+      rMid, cMid = (r1 + r2) // 2, (c1 + c2) // 2
+      return Node(None, False, recursive(r1, rMid, c1, cMid),     #top left
+                               recursive(r1, rMid, cMid+1, c2),   #top right
+                               recursive(rMid+1, r2, c1, cMid),   #bottom left
+                               recursive(rMid+1, r2, cMid+1, c2)) #bottom right
+    return recursive(0, len(grid)-1, 0, len(grid[0])-1)
