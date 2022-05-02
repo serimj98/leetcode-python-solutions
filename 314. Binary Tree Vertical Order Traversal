@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+    #Solution 1: O(n) / O(n)
+    if not root: return
+    columnDict = defaultdict(list) # {0: [3, 15], -1: [9], 1: [7]}
+    columnDict[0].append(root.val)
+    smallestColumn = 0
+    q = deque()
+    q.append([root, 0])
+    while q:
+      curNode, curColumn = q.popleft()
+      curLevel = []
+      if curNode.left:
+        q.append([curNode.left, curColumn - 1])
+        columnDict[curColumn - 1].append(curNode.left.val)
+        smallestColumn = min(smallestColumn, curColumn - 1)
+      if curNode.right:
+        q.append([curNode.right, curColumn + 1])
+        columnDict[curColumn + 1].append(curNode.right.val)
+    sol = []
+    for i in range(smallestColumn, smallestColumn + len(columnDict)):
+      sol.append(columnDict[i])
+    return sol
