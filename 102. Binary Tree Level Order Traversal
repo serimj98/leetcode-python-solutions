@@ -17,3 +17,24 @@ class Solution:
       recursive(node.right, depth + 1)
     recursive(root, 0)
     return sol
+  
+    #Solution 2: O(n) / O(n)
+    if not root: return
+    sol = [[root.val]]
+    q = deque()
+    q.append([root])
+    while q:
+      cur = q.popleft()
+      curLevel = []
+      curSol = []
+      for node in cur:
+        if node.left:
+          curLevel.append(node.left)
+          curSol.append(node.left.val)
+        if node.right:
+          curLevel.append(node.right)
+          curSol.append(node.right.val)
+      if curLevel:
+        q.append(curLevel)
+        sol.append(curSol)
+    return sol
