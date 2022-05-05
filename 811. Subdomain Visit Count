@@ -1,0 +1,17 @@
+class Solution:
+  def subdomainVisits(self, cpdomains: List[str]) -> List[str]:
+    #Solution 1: O(n*subdomain) / O(n)
+    domainHash = defaultdict(int)
+    for domain in cpdomains:
+      count, domain = domain.split()
+      domains = domain.split(".") #['google', 'mail', 'com']
+      newDomain = ""
+      for i in range(len(domains) -1, -1, -1):
+        newDomain = domains[i] + newDomain #'mail.com'
+        domainHash[newDomain] += int(count) #{'com': 900, 'mail.com': 900}
+        newDomain = "." + newDomain
+    sol = []
+    for domain in domainHash:
+      cpdomain = str(domainHash[domain]) + " " + domain
+      sol.append(cpdomain)
+    return sol
