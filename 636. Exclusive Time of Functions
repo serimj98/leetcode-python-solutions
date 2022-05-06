@@ -1,0 +1,16 @@
+class Solution:
+  def exclusiveTime(self, n: int, logs: List[str]) -> List[int]:
+    #Solution 1: O(n^2) / O(n)
+    stack = []
+    arr = [0] * n
+    for log in logs:
+      func, typ, idx = log.split(":")
+      if typ == "start":
+        stack.append(int(idx))
+      else: #typ == "end"
+        curIdx = stack.pop()
+        curLen = int(idx) - curIdx + 1
+        arr[int(func)] += curLen
+        for i in range(len(stack)):
+          stack[i] += curLen #move starting point of stack, penalizing middle function length
+    return arr
