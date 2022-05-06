@@ -1,0 +1,34 @@
+class WordDistance:
+
+  def __init__(self, wordsDict: List[str]):
+    #Solution 1: O(n) / O(n)
+    self.d = defaultdict(list)
+    for i, e in enumerate(wordsDict):
+      self.d[e].append(i)
+
+  def shortest(self, word1: str, word2: str) -> int:
+    #Solution 1: O(word1 indices * word2 indices) / O(word1 indices + word2 indices)
+    sol = float('inf')
+    list1, list2 = self.d[word1], self.d[word2]
+    for i in list1:
+      for j in list2:
+        sol = min(sol, abs(j - i))
+        if sol == 1: return sol
+    return sol
+    
+    #Solution 2: O(word1 indices + word2 indices) / O(word1 indices + word2 indices)
+    sol = float('inf')
+    idx1, idx2 = 0, 0
+    list1, list2 = self.d[word1], self.d[word2]
+    while idx1 < len(list1) and idx2 < len(list2):
+      sol = min(sol, abs(list1[idx1] - list2[idx2]))
+      if sol == 1: return sol
+      if list1[idx1] < list2[idx2]:
+        idx1 += 1
+      else:
+        idx2 += 1
+    return sol
+
+# Your WordDistance object will be instantiated and called as such:
+# obj = WordDistance(wordsDict)
+# param_1 = obj.shortest(word1,word2)
