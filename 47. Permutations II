@@ -1,6 +1,23 @@
 class Solution:
   def permuteUnique(self, nums: List[int]) -> List[List[int]]:
-    #Solution 1: O(n*n!), n for [:i] + [i+1:] / O(n^2), generating n-1, n-2... n times
+    #Solution 1: O(n * n!) / O(n)
+    sol = []
+    numsDict = Counter(nums) #use hashtable to keep track of how many values per each key
+    def backtrack(cur, remaining):
+      if len(cur) == len(nums):
+        sol.append(copy.copy(cur))
+        return
+      for key in remaining:
+        if not remaining[key]: continue
+        cur.append(key)
+        remaining[key] -= 1
+        backtrack(cur, remaining)
+        cur.pop()
+        remaining[key] += 1
+    backtrack([], numsDict)
+    return sol
+  
+    #Solution 2: O(n * n!), n for [:i] + [i+1:] / O(1)
     sol = []
     nums.sort()
     def backtrack(cur, remaining):
