@@ -1,0 +1,20 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def averageOfSubtree(self, root: Optional[TreeNode]) -> int:
+    #Solution 1: O(n) / O(h)
+    self.sol = 0
+    def recursive(node):
+      if not node: return (0, 0) #(sum of subtree, number of nodes in subtree)
+      leftSum, leftNodes = recursive(node.left)
+      rightSum, rightNodes = recursive(node.right)
+      curSum = leftSum + rightSum + node.val
+      curNodes = leftNodes + rightNodes + 1
+      if curSum // curNodes == node.val: self.sol += 1
+      return (curSum, curNodes)
+    recursive(root)
+    return self.sol
