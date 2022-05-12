@@ -1,0 +1,27 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def findFrequentTreeSum(self, root: Optional[TreeNode]) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    if not root: return
+    self.freqHash = defaultdict(int) #sum: frequency
+    self.maxFreq = 0
+    self.maxSum = []
+    def recursive(node):
+      if not node: return 0
+      left = recursive(node.left)
+      right = recursive(node.right)
+      curSum = left + right + node.val
+      self.freqHash[curSum] += 1
+      if self.freqHash[curSum] == self.maxFreq:
+        self.maxSum.append(curSum)
+      if self.freqHash[curSum] > self.maxFreq:
+        self.maxFreq = self.freqHash[curSum]
+        self.maxSum = [curSum]
+      return curSum
+    recursive(root)
+    return self.maxSum
