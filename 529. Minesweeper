@@ -1,26 +1,53 @@
 class Solution:
   def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
-    #Solution 1: O(board) / O(board)
-    def recursive(click):
-      if board[click[0]][click[1]] == 'E':
-        dirs = [[-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1]]
-        count = 0
-        for d in dirs:
-          if len(board) > click[0]+d[0] >= 0 and len(board[0]) > click[1]+d[1] >= 0:
-            if board[click[0]+d[0]][click[1]+d[1]] == 'M':
-              count += 1
-        if not count:
-          board[click[0]][click[1]] = 'B'
-        else:
-          board[click[0]][click[1]] = str(count)
-          return #return, so count doesn't get overwritten when entering recursive call
-        for d in dirs:
-          if len(board) > click[0]+d[0] >= 0 and len(board[0]) > click[1]+d[1] >= 0:
-            recursive([click[0]+d[0], click[1]+d[1]])
-          
-    if board[click[0]][click[1]] == 'M':
-      board[click[0]][click[1]] = 'X'
+    #Solution 1 Recursive: O(n) / O(n)
+    r, c = click
+    if board[r][c] == 'M':
+      board[r][c] = 'X'
       return board
     
-    recursive(click)
+    def recursive(r, c):
+      if board[r][c] == 'E':
+        dirs = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+        count = 0
+        for d in dirs: #check how many mines are surrounding r, c
+          x, y = d[0] + r, d[1] + c
+          if 0 <= x < len(board) and 0 <= y < len(board[0]):
+            if board[x][y] == 'M': count += 1
+        if not count:
+          board[r][c] = 'B' #if no mines near, replace r, c with 'B'
+          for d in dirs: #call recursion on all possible cells surrounding r, c
+            x, y = d[0] + r, d[1] + c
+            if 0 <= x < len(board) and 0 <= y < len(board[0]):
+              recursive(x, y)
+        else: #if mines, replace r, c with mine count
+          board[r][c] = str(count)
+
+    recursive(r, c)
+    return board
+  
+    #Solution 2 Iterative: O(n) / O(n)
+    clickR, clickC = click
+    if board[clickR][clickC] == 'M':
+      board[clickR][clickC] = 'X'
+      return board
+    
+    dirs = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+    q = deque([(clickR, clickC)])
+    while q:
+      r, c = q.popleft()
+      if board[r][c] != 'E': continue
+      count = 0
+      for d in dirs:
+        x, y = d[0] + r, d[1] + c
+        if 0 <= x < len(board) and 0 <= y < len(board[0]):
+          if board[x][y] == 'M': count += 1
+      if not count:
+        board[r][c] = 'B'
+        for d in dirs:
+          x, y = d[0] + r, d[1] + c
+          if 0 <= x < len(board) and 0 <= y < len(board[0]):
+            q.append((x, y))
+      else:
+        board[r][c] = str(count)
     return board
