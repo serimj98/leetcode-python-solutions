@@ -1,0 +1,52 @@
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Codec:
+  def serialize(self, root: 'Node') -> str:
+    """Encodes a tree to a single string.
+    :type root: Node
+    :rtype: str
+    """
+    #Solution 1: O(n) / O(n)
+    #preorder traversal used to create a copy of the tree
+    #root -> left subtree -> right subtree
+    sol = []
+    def preorder(node):
+      if not node: return
+      sol.append(str(node.val))
+      for child in node.children:
+        preorder(child)
+      sol.append('#') #no more children from current node
+    preorder(root)
+    """
+    ['1', '2', '#', '3', '6', '#', '7', '11', '14', '#', '#', '#', '#',  '4',
+    '8', '12', '#', '#', '#', '5', '9', '13', '#', '#', '10', '#', '#', '#']
+    """
+    return ",".join(sol)
+
+  def deserialize(self, data: str) -> 'Node':
+    """Decodes your encoded data to tree.
+    :type data: str
+    :rtype: Node
+    """
+    #Solution 1: O(n) / O(n)
+    if not data: return
+    q = deque(data.split(","))
+    def recursive():
+      if not q: return None
+      node = Node(int(q.popleft()), [])
+      while q[0] != '#':
+        node.children.append(recursive()) #traverses leftmost nodes downwards first
+      q.popleft() #pop when you meet '#', signifying no more children
+      return node
+    return recursive()
+    
+
+# Your Codec object will be instantiated and called as such:
+# codec = Codec()
+# codec.deserialize(codec.serialize(root))
