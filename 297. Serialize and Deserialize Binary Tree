@@ -8,40 +8,42 @@
 class Codec:
 
   def serialize(self, root):
-    #Solution 1: O(n) / O(n)
     """Encodes a tree to a single string.
-
     :type root: TreeNode
     :rtype: str
     """
-    self.strTree = ''
-    def recursive(node):
-      if not node:
-        self.strTree += '#,'
-        return
-      self.strTree += str(node.val) + ','
-      recursive(node.left)
-      recursive(node.right)
-    recursive(root)
-    return self.strTree
+    #Solution 1: O(n) / O(n)
+    if not root: return ""
+    sol = []
+    def preorder(node):
+      if not node: return
+      sol.append(str(node.val))
+      if node.left: preorder(node.left)
+      else: sol.append('#')
+      if node.right: preorder(node.right)
+      else: sol.append('#')
+    preorder(root)
+    return ",".join(sol)
 
   def deserialize(self, data):
-    #Solution 1: O(n) / O(n)
     """Decodes your encoded data to tree.
-
     :type data: str
     :rtype: TreeNode
     """
-    def recursive(listTree):
-      if listTree[0] == '#':
-        listTree.pop(0)
+    #Solution 1: O(n) / O(n)
+    if not data: return None
+    q = deque(data.split(","))
+    def recursive():
+      if not q: return None
+      if q[0] != '#':
+        node = TreeNode(q.popleft())
+        node.left = recursive()
+        node.right = recursive()
+        return node
+      else:
+        q.popleft()
         return None
-      node = TreeNode(listTree.pop(0))
-      node.left = recursive(listTree)
-      node.right = recursive(listTree)
-      return node
-    return recursive(data.split(','))
-        
+    return recursive()
 
 # Your Codec object will be instantiated and called as such:
 # ser = Codec()
