@@ -1,0 +1,14 @@
+class Solution:
+  def isHappy(self, n: int) -> bool:
+    #Solution 1: O(log n) / O(log n)
+    seen = set()
+    seen.add(n)
+    while n != 1:
+      strN = str(n)
+      curSum = 0
+      for i in strN:
+        curSum += int(i) * int(i)
+      if curSum not in seen: seen.add(curSum)
+      else: return False
+      n = curSum
+    return True
