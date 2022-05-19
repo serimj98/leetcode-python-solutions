@@ -1,0 +1,22 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+  def countUnivalSubtrees(self, root: Optional[TreeNode]) -> int:
+    #O(n) / O(h)
+    self.sol = 0
+    def recursive(node):
+      if not node: return True
+      left = recursive(node.left)
+      right = recursive(node.right)
+      if not left or not right: return
+      if (not node.left or node.val == node.left.val) and \
+         (not node.right or node.val == node.right.val):
+          self.sol += 1
+          return True
+      return False
+    recursive(root)
+    return self.sol
