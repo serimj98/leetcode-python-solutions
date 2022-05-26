@@ -1,0 +1,25 @@
+class Solution:
+  def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+    #Solution 1: O(n) / O(n)
+    graph = defaultdict(list)
+    for i in range(len(recipes)):
+      graph[recipes[i]] = ingredients[i]
+    suppliesSet = set(supplies)
+    
+    def dfs(recipe, visiting):
+      if recipe in suppliesSet: return True
+      if recipe not in graph: return False
+      for ingredient in graph[recipe]:
+        if ingredient in suppliesSet: continue
+        if ingredient in visiting: return False
+        visiting.add(ingredient)
+        if not dfs(ingredient, visiting): return False
+        visiting.remove(ingredient)
+      suppliesSet.add(ingredient)
+      return True
+    
+    sol = []
+    for recipe in recipes:
+      if recipe in suppliesSet: sol.append(recipe)
+      elif dfs(recipe, set()): sol.append(recipe)
+    return sol
