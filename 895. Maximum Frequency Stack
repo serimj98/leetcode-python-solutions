@@ -1,26 +1,28 @@
 class FreqStack:
 
   def __init__(self):
-    self.stack = []
-    self.freq = defaultdict(int)
+    #Solution 1: O(1) / O(n)
+    self.stack = Counter() #element: frequency of that element
+    self.freq = defaultdict(list) #freq: elements with that frequency
+    self.maxFreq = 0
 
-  def push(self, x: int) -> None:
-    self.stack.append(x)
-    self.freq[x] += 1
+  def push(self, val: int) -> None:
+    #Solution 1: O(1) / O(1)
+    self.stack[val] += 1
+    self.maxFreq = max(self.maxFreq, self.stack[val])
+    #all frequencies in self.freq until current frequency will hold val in its stack
+    self.freq[self.stack[val]].append(val)
 
   def pop(self) -> int:
-    #find most frequent element
-    freqEle, freqCount = None, 0
-    for i in self.freq:
-      if self.freq[i] > freqCount:
-        freqEle, freqCount = i, self.freq[i]
-    for i in range(len(self.stack)-1, -1, -1):
-      if self.stack[i] == freqEle:
-        self.stack = self.stack[:i] + self.stack[i+1:]
-    self.freq[freqEle] -= 1
-    return freqEle
+    #Solution 1: O(1) / O(1)
+    maxVal = self.freq[self.maxFreq].pop()
+    #element will exist in self.maxFreq -= 1, as we added element to all frequencies met
+    if not self.freq[self.maxFreq]: self.maxFreq -= 1
+    self.stack[maxVal] -= 1
+    return maxVal
+    
 
 # Your FreqStack object will be instantiated and called as such:
 # obj = FreqStack()
-# obj.push(x)
+# obj.push(val)
 # param_2 = obj.pop()
