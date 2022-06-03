@@ -1,0 +1,9 @@
+class Solution:
+  def rearrangeCharacters(self, s: str, target: str) -> int:
+    #Solution 1: O(n) / O(n)
+    if not s: return 0
+    sCounter = Counter(s)
+    sol = float('inf')
+    for key, value in Counter(target).items():
+      sol = min(sol, sCounter[key] // value) #how many times our target value can go in our counter
+    return sol
