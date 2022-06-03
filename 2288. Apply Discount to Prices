@@ -1,0 +1,11 @@
+class Solution:
+  def discountPrices(self, sentence: str, discount: int) -> str:
+    #Solution 1: O(n) / O(n)
+    idx = 0
+    sentence = sentence.split()
+    for i, word in enumerate(sentence):
+      if word[0] == "$" and word[1:].isnumeric():
+        price = int(word[1:])
+        discountPrice = "$" + "{:.2f}".format(price*(1 - (discount/100)))
+        sentence[i] = discountPrice
+    return " ".join(sentence)
