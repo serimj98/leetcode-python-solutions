@@ -1,0 +1,43 @@
+#Question 1
+import heapq
+
+allLocations = [[1,2], [3,4], [1,-1]]
+numDeliveries = 2
+def deliveryPlan(allLocations, numDeliveries):
+  #Solution 1: O(n) / O(n)
+  # heap = [(5, (1,2)), (25, (3,4)), (2, (1,-1))]
+  heap = []
+  for location in allLocations: #O(n)
+    distance = location[0]**2 + location[1]**2
+    heap.append((distance, location))
+  heapq.heapify(heap) #O(n)
+  sol = []
+  for n, l in heapq.nsmallest(numDeliveries, heap):
+    sol.append(l)
+  return sol
+print(deliveryPlan(allLocations, numDeliveries))
+
+#Question 2
+import collections
+
+area = [[1,1,1],
+        [1,1,0],
+        [0,9,1]]
+def minimumDistance(area):
+  #Solution 1: O(r*c) / O(r*c)
+  if not area: return -1
+  q = collections.deque([(0,0,0)])
+  visited = set()
+  visited.add((0,0))
+  dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+  while q:
+    r, c, steps = q.popleft()
+    for d in dirs:
+      curR, curC = r + d[0], c + d[1]
+      if 0 <= curR < len(area) and 0 <= curC < len(area[0]):
+        if area[curR][curC] == 9: return steps + 1
+        if (curR, curC) not in visited and area[curR][curC] == 1:
+          q.append((curR, curC, steps + 1))
+          visited.add((curR, curC))
+  return -1
+print(minimumDistance(area))
