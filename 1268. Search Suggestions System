@@ -1,0 +1,12 @@
+class Solution:
+  def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
+    #Solution 1: O(n log n + m), where n = len(products) and m = len(searchWord) / O(m)
+    products.sort()
+    sol = []
+    l, r = 0, len(products) - 1
+    for i in range(len(searchWord)):
+      while l <= r and (i >= len(products[l]) or products[l][i] < searchWord[i]): l += 1
+      while l <= r and (i >= len(products[r]) or products[r][i] > searchWord[i]): r -= 1
+      if l <= r: sol.append(products[l:min(l+3, r+1)])
+      else: sol.append([])
+    return sol
