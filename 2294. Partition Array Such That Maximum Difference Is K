@@ -1,0 +1,14 @@
+class Solution:
+  def partitionArray(self, nums: List[int], k: int) -> int:
+    #Solution 1: O(n log n) / O(1)
+    if len(nums) < 2: return len(nums)
+    nums.sort()
+    sol = 1
+    l, r = 0, 1
+    while l <= r and r < len(nums):
+      if nums[r] - nums[l] > k:
+        l = r
+        r = l + 1
+        sol += 1
+      else: r += 1
+    return sol
