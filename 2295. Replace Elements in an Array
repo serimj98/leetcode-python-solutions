@@ -1,0 +1,11 @@
+class Solution:
+  def arrayChange(self, nums: List[int], operations: List[List[int]]) -> List[int]:
+    #Solution 1: O(n + m), where n = len(nums), m = len(operations) / O(n)
+    numsDict = {}
+    for i, num in enumerate(nums):
+      numsDict[num] = i
+    for original, replacement in operations:
+      nums[numsDict[original]] = replacement
+      numsDict[replacement] = numsDict[original]
+      del numsDict[original]
+    return nums
