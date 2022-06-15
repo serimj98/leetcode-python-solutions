@@ -1,0 +1,45 @@
+class TextEditor:
+
+  def __init__(self):
+    #Solution 1: O(1) / O(n)
+    self.left = []
+    self.right = []
+
+  def addText(self, text: str) -> None:
+    #Solution 1: O(text) / O(1)
+    for c in text: self.left.append(c)
+
+  def deleteText(self, k: int) -> int:
+    #Solution 1: O(k) / O(1)
+    count = 0
+    while self.left and count < k:
+      self.left.pop()
+      count += 1
+    return count
+
+  def cursorLeft(self, k: int) -> str:
+    #Solution 1: O(k) / O(1)
+    count = 0
+    while self.left and count < k:
+      self.right.append(self.left.pop())
+      count += 1
+    if len(self.left) > 10: return "".join(self.left[len(self.left) - 10:])
+    return "".join(self.left)
+
+  def cursorRight(self, k: int) -> str:
+    #Solution 1: O(k) / O(1)
+    count = 0
+    while self.right and count < k:
+      self.left.append(self.right.pop())
+      count += 1
+    if len(self.left) > 10: return "".join(self.left[len(self.left) - 10:])
+    return "".join(self.left)
+        
+
+
+# Your TextEditor object will be instantiated and called as such:
+# obj = TextEditor()
+# obj.addText(text)
+# param_2 = obj.deleteText(k)
+# param_3 = obj.cursorLeft(k)
+# param_4 = obj.cursorRight(k)
