@@ -1,0 +1,16 @@
+class Solution:
+  def calculateTax(self, brackets: List[List[int]], income: int) -> float:
+    #Solution 1: O(n) / O(1)
+    sol = 0
+    prevUpper = None
+    for bracket in brackets:
+      upper, percent = bracket
+      if income < upper:
+        if not prevUpper: sol += income * (percent / 100)
+        else: sol += (income - prevUpper) * (percent / 100)
+        break
+      elif income >= upper:
+        if not prevUpper: sol += upper * (percent / 100)
+        else: sol += (upper - prevUpper) * (percent / 100)
+      prevUpper = upper
+    return sol
