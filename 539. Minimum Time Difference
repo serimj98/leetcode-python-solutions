@@ -1,0 +1,19 @@
+class Solution:
+  def findMinDifference(self, timePoints: List[str]) -> int:
+    #Solution 1: O(n log n) / O(1)
+    def findDifference(cur, prev):
+      curHour, curMinute = cur.split(":")
+      prevHour, prevMinute = prev.split(":")
+      curTime = int(curHour) * 60 + int(curMinute)
+      prevTime = int(prevHour) * 60 + int(prevMinute)
+      timeDiff = min(curTime - prevTime, prevTime - curTime + 1440)
+      return timeDiff
+    
+    timePoints.sort()
+    sol = float('inf')
+    for i in range(1, len(timePoints)):
+      timeDiff = findDifference(timePoints[i], timePoints[i-1])
+      sol = min(sol, timeDiff)
+    timeDiff = findDifference(timePoints[-1], timePoints[0])
+    sol = min(sol, timeDiff)
+    return sol
