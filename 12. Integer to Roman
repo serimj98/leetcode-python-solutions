@@ -1,0 +1,12 @@
+class Solution:
+  def intToRoman(self, num: int) -> str:
+    #Solution 1: O(1) / O(1)
+    d = {1000: "M", 900: "CM", 500: "D", 400: "CD", 100: "C", 90: "XC", 50: "L", \
+         40: "XL", 10: "X", 9: "IX", 5: "V", 4: "IV", 1: "I"}
+    sol = []
+    for val in d:
+      if not num: break
+      division = num // val
+      if division > 0: sol.append(d[val] * division)
+      num %= val
+    return "".join(sol)
