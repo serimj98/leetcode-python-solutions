@@ -1,0 +1,14 @@
+class Solution:
+  def minRemoveToMakeValid(self, s: str) -> str:
+    #Solution 1: O(n) / O(n)
+    stack = []
+    splitS = list(s)
+    for i, c in enumerate(splitS):
+      if c == "(":
+        stack.append(i)
+      elif c == ")":
+        if stack: stack.pop()
+        else: splitS[i] = ""
+    for i in stack:
+      splitS[i] = ""
+    return "".join(splitS)
