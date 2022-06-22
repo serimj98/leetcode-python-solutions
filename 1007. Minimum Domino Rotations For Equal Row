@@ -1,0 +1,12 @@
+class Solution:
+  def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
+    #Solution 1: O(tops + bottoms) / O(tops + bottoms)
+    topsDict = Counter(tops)
+    bottomsDict = Counter(bottoms)
+    sameDict = defaultdict(int)
+    for top, bottom in zip(tops, bottoms):
+      if top == bottom: sameDict[top] += 1
+    for i in range(1, 7):
+      if topsDict[i] + bottomsDict[i] - sameDict[i] == len(tops):
+        return min(topsDict[i], bottomsDict[i]) - sameDict[i] #A + B - (A & B)
+    return -1
