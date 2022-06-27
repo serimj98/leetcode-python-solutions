@@ -1,0 +1,13 @@
+class Solution:
+  def twoCitySchedCost(self, costs: List[List[int]]) -> int:
+    #Solution 1: O(n log n) / O(n)
+    diffs = []
+    for a, b in costs:
+      diffs.append(b - a)
+    minCost = 0
+    n = len(costs) // 2
+    for diff, cost in sorted(zip(diffs, costs), reverse = True):
+      if n > 0: minCost += cost[0]
+      else: minCost += cost[1]
+      n -= 1
+    return minCost
