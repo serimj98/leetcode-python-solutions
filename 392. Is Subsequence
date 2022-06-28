@@ -1,0 +1,9 @@
+class Solution:
+  def isSubsequence(self, s: str, t: str) -> bool:
+    #Solution 1: O(n) / O(1)
+    if not s: return True
+    sIdx = 0
+    for i in range(len(t)):
+      if s[sIdx] == t[i]: sIdx += 1
+      if sIdx == len(s): return True
+    return False
