@@ -1,0 +1,9 @@
+class Solution:
+  def checkXMatrix(self, grid: List[List[int]]) -> bool:
+    #Solution 1: O(r*c) / O(1)
+    for r in range(len(grid)):
+      for c in range(len(grid[0])):
+        if r == c or r + c == len(grid) - 1: #diagonal of matrix
+          if grid[r][c] == 0: return False
+        elif grid[r][c] != 0: return False
+    return True
