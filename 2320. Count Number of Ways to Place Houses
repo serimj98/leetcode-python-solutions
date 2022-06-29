@@ -1,0 +1,11 @@
+class Solution:
+  def countHousePlacements(self, n: int) -> int:
+    #Solution 1: O(n) / O(1) 
+    #number of ways to place houses on n plots
+    house = 1 #number of streets ending with house when n = 1
+    space = 1 #number of streets ending with space when n = 1
+    for i in range(n):
+      total = house + space
+      house = space
+      space = total
+    return (total**2) % (10**9 + 7)
