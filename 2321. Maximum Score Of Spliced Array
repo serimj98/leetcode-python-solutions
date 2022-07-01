@@ -1,0 +1,11 @@
+class Solution:
+  def maximumsSplicedArray(self, nums1: List[int], nums2: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    def kadane(a, b):
+      curDiff, maxDiff = 0, 0
+      for i in range(len(a)):
+        #valid swaps until this point + current swap of replacing a[i] with b[i]
+        curDiff = max(0, curDiff + a[i] - b[i])
+        maxDiff = max(curDiff, maxDiff)
+      return maxDiff + sum(b)
+    return max(kadane(nums1, nums2), kadane(nums2, nums1))
