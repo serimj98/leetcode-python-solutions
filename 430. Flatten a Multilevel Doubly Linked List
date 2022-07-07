@@ -1,0 +1,49 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val, prev, next, child):
+        self.val = val
+        self.prev = prev
+        self.next = next
+        self.child = child
+"""
+
+class Solution:
+  def flatten(self, head: 'Node') -> 'Node':
+    #Solution 1 Recursive: O(n) / O(n)
+    if not head: return
+    def recursive(node):
+      while node:
+        if not node.next: tail = node
+        if node.child:
+          nxt = node.next
+          #establish connection between node and child
+          node.next = node.child
+          node.child.prev = node
+          tail = recursive(node.child)
+          #establish connection between child level's tail and node.next
+          if nxt: nxt.prev = tail
+          tail.next = nxt
+          node.child = None
+        node = node.next #move to next node in current level or child node
+      return tail
+    recursive(head)
+    return head
+  
+    #Solution 2 Iterative: O(n) / O(n)
+    if not head: return
+    stack = [head] #append next nodes, priority to child nodes
+    prev = Node(0)
+    while stack:
+      cur = stack.pop()
+      #establish connection between two nodes of same level, or child and node of previous level
+      cur.prev = prev
+      prev.next = cur
+      prev = cur
+      if cur.next:
+        stack.append(cur.next)
+      if cur.child:
+        stack.append(cur.child)
+        cur.child = None
+    head.prev = None
+    return head
