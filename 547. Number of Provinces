@@ -1,0 +1,33 @@
+class Solution:
+  def findCircleNum(self, isConnected: List[List[int]]) -> int:
+    #Solution 1 DFS: O(r*c) / O(n)
+    if not isConnected: return
+    visited = [False] * len(isConnected)
+    self.sol = 0
+    def dfs(node):
+      for i in range(len(isConnected)):
+        if node != i and isConnected[node][i] and not visited[i]:
+          visited[i] = True
+          dfs(i)
+    for i in range(len(isConnected)):
+      if not visited[i]:
+        self.sol += 1
+        dfs(i)
+    return self.sol
+  
+    #Solution 2 BFS: O(r*c) / O(n)
+    if not isConnected: return
+    visited = [False] * len(isConnected)
+    q = deque([])
+    self.sol = 0
+    for node in range(len(visited)):
+      if not visited[node]:
+        q.append(node)
+        while q:
+          node = q.popleft()
+          for i in range(len(isConnected)):
+            if node != i and isConnected[node][i] and not visited[i]:
+              visited[i] = True
+              q.append(i) #will only get appended if part of province
+        self.sol += 1 #once while loop ends, we would have traversed one province
+    return self.sol
