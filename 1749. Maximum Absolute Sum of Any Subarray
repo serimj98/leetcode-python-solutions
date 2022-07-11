@@ -1,0 +1,9 @@
+class Solution:
+  def maxAbsoluteSum(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    curMax, curMin, sol = 0, 0, 0
+    for num in nums:
+      curMin = min(0, curMin + num)
+      curMax = max(0, curMax + num)
+      sol = max(curMax, abs(curMin), sol)
+    return sol
