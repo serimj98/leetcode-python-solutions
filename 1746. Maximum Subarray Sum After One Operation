@@ -1,0 +1,15 @@
+class Solution:
+  def maxSumAfterOperation(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    prevBeforeSquare, prevSquare, sol = 0, 0, 0
+    for num in nums:
+      #1. add to previous subsequence
+      #2. start new subsequence
+      beforeSquare = max(prevBeforeSquare + num, num)
+      #1. add to previous subsequence that is already squared
+      #2. add to previous subsequence without squared operation, then square current num
+      #3. start new subsequence and square new num
+      square = max(0, prevSquare + num, prevBeforeSquare + num * num, num * num)
+      sol = max(sol, square)
+      prevBeforeSquare, prevSquare = beforeSquare, square
+    return sol
