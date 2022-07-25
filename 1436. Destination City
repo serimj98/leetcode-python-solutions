@@ -1,6 +1,6 @@
 class Solution:
   def destCity(self, paths: List[List[str]]) -> str:
-    #Solution 1: O(n) / O(1)
+    #Solution 1: O(n) / O(n)
     citySet = set()
     for path in paths:
       citySet.add(path[0])
