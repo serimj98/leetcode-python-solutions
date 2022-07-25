@@ -4,26 +4,27 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-  def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-    #Solution 1: O(k*# of nodes) / O(1)
-    cur = dummy = ListNode(0)
-    while lists:
-      minVal, minValIdx = float('inf'), -1
-      for i in range(len(lists)):
-        if lists[i] and lists[i].val < minVal:
-          minVal = lists[i].val
-          minValIdx = i
-      if minValIdx != -1:
-        cur.next = lists[minValIdx]
-        cur = cur.next
-        lists[minValIdx] = lists[minValIdx].next
-      for i in range(len(lists)-1, -1, -1):
-        if not lists[i]: lists.pop(i)
+  def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+    #Solution 1 Heap: O(n log k), k = # of linked lists / O(n)
+    heap = []
+    count = 0 #heap will fail to heapify if there are identical elements in the heap
+    for node in lists:
+      if node:
+        heap.append((node.val, count, node))
+        count += 1
+    heapify(heap) #O(n)
+    dummy = cur = ListNode()
+    while heap:
+      val, _, node = heappop(heap) #O(log k)
+      cur.next = node
+      cur = cur.next
+      if node.next: heappush(heap, (node.next.val, count, node.next)) #O(log k)
+      count += 1
     return dummy.next
-    
-    #Solution 2: O(# of nodes*log k) / O(1)
-    def merge(l, r):
-      cur = dummy = ListNode(0)
+  
+    #Solution 2 Divide and Conquer Iterative: O(n log k) / O(1)
+    def mergeTwoLists(l, r):
+      dummy = cur = ListNode()
       while l and r:
         if l.val < r.val:
           cur.next = l
@@ -32,14 +33,43 @@ class Solution:
           cur.next = r
           r = r.next
         cur = cur.next
-      cur.next = l or r
+      if not l or not r: cur.next = l or r
       return dummy.next
-    
-    def divideAndConquer(lists):
+      
+    def mergeLists(lists):
       if not lists: return
       if len(lists) == 1: return lists[0]
       mid = len(lists) // 2
-      l, r = divideAndConquer(lists[:mid]), divideAndConquer(lists[mid:])
-      return merge(l, r)
+      l, r = mergeLists(lists[:mid]), mergeLists(lists[mid:])
+      return mergeTwoLists(l, r)
     
-    return divideAndConquer(lists)
+    return mergeLists(lists)
+  
+    #Solution 3 Divide and Conquer Recursive: O(n log k) / O(log k), recursive stack
+    """
+    [1,2]
+         l
+    [1,3]  1 (r) -> mergeTwoLists(1, 3), return 1 (r)
+       r            1 (l) -> mergeTwoLists(2, 3), return 1 (l)
+                             2 -> mergeTwoLists(None, 3), return 2
+                                  return 3
+    """
+    
+    def mergeTwoLists(l, r):
+      if not l: return r
+      if not r: return l
+      if l.val < r.val:
+        l.next = mergeTwoLists(l.next, r)
+        return l
+      else:
+        r.next = mergeTwoLists(l, r.next)
+        return r
+      
+    def mergeLists(lists):
+      if not lists: return
+      if len(lists) == 1: return lists[0]
+      mid = len(lists) // 2
+      l, r = mergeLists(lists[:mid]), mergeLists(lists[mid:])
+      return mergeTwoLists(l, r)
+    
+    return mergeLists(lists)
