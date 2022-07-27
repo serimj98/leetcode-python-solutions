@@ -1,0 +1,16 @@
+class Solution:
+  def amountPainted(self, paint: List[List[int]]) -> List[int]:
+    #Solution 1: O(paintAmount * n) / O(paintAmount)
+    sol = []
+    seen = {} #start: end
+    for start, end in paint:
+      curPaint = 0
+      while start < end:
+        if start in seen: #push starting point to uncovered point
+          seen[start], start = max(end, seen[start]), seen[start]
+        else:
+          seen[start] = end
+          start += 1
+          curPaint += 1
+      sol.append(curPaint)
+    return sol
