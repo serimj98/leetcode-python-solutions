@@ -1,0 +1,12 @@
+class Solution:
+  def removeOnes(self, grid: List[List[int]]) -> bool:
+    #Solution 1: O(n) / O(1)
+    #when we flip columns first from an all zero matrix, then flip rows,
+    #all rows should be either the same or completely flipped
+    firstRow = grid[0]
+    flippedRow = []
+    for i in firstRow:
+      flippedRow.append(abs(i-1))
+    for row in grid[1:]:
+      if row != firstRow and row != flippedRow: return False
+    return True
