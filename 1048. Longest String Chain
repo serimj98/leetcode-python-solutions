@@ -1,15 +1,44 @@
 class Solution:
-  def longestStrChain(self, words: List[str]) -> int:
-    #Solution 1: O(n log n + n*word^2) / O(n)
-    words.sort(key = len)
-    wordDict = {}
-    sol = 1
-    for word in words:
-      wordDict[word] = 1
-      for i in range(len(word)):
-        prevWord = word[:i] + word[i+1:]
-        if prevWord in wordDict:
-          #if there are several prevWords that are in wordDict, so there are multiple paths to word
-          wordDict[word] = max(wordDict[word], wordDict[prevWord] + 1)
-          sol = max(sol, wordDict[word])
+  def findTargetSumWays(self, nums: List[int], target: int) -> int:
+    #Solution 1 Bottom-up Iterative TLE: O(2^n) / O(2^n)
+    if not nums: return 0
+    stack = []
+    stack.append((nums[0], 0))
+    stack.append((-nums[0], 0))
+    sol = 0
+    memo = {}
+    while stack:
+      cur, idx = stack.pop()
+      if idx == len(nums) - 1:
+        if cur == target: sol += 1
+      else:
+        stack.append((cur + nums[idx + 1], idx + 1))
+        stack.append((cur - nums[idx + 1], idx + 1))
     return sol
+  
+    #Solution 2 Top-down Recursive TLE: O(2^n) / O(2^n)
+    if not nums: return 0
+    def recursive(cur, idx):
+      if idx == len(nums):
+        if cur == target: return 1
+        else: return 0
+      else:
+        add = recursive(cur + nums[idx], idx + 1)
+        subtract = recursive(cur - nums[idx], idx + 1)
+      return add + subtract
+    return recursive(0, 0)
+  
+    #Solution 3 Top-down Recursive with Memoization: O(memo * n) / O(memo * n)
+    if not nums: return 0
+    self.memo = {}
+    def recursive(cur, idx):
+      if (cur, idx) in self.memo: return self.memo[(cur, idx)]
+      if idx == len(nums):
+        if cur == target: return 1
+        else: return 0
+      else:
+        add = recursive(cur + nums[idx], idx + 1)
+        subtract = recursive(cur - nums[idx], idx + 1)
+        self.memo[(cur, idx)] = add + subtract
+      return add + subtract
+    return recursive(0, 0)
