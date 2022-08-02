@@ -1,0 +1,13 @@
+class Solution:
+  def nextGreaterElements(self, nums: List[int]) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    sol = [-1] * len(nums)
+    stack = []
+    for _ in range(2):
+      for i in range(len(nums)-1, -1, -1):
+        while stack and nums[i] >= stack[-1]:
+          stack.pop()
+        if stack:
+          sol[i] = stack[-1]
+        stack.append(nums[i])
+    return sol
