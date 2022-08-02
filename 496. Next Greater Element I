@@ -1,0 +1,33 @@
+class Solution:
+  def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+    #Solution 1: O(nums1 * nums2) / O(nums2)
+    numsDict = {}
+    sol = []
+    for i,e in enumerate(nums2):
+      numsDict[e] = i
+    for num in nums1:
+      idx = numsDict[num]
+      for j in range(idx, len(nums2)):
+        if nums2[j] > num:
+          sol.append(nums2[j])
+          break
+        elif j == len(nums2) - 1:
+          sol.append(-1)
+    return sol
+  
+    #Solution 2: O(nums2) / O(nums2)
+    #store the next greater element of all elements in nums2 in stack
+    stack = []
+    numsDict = {}
+    for i in range(len(nums2)-1, -1, -1):
+      while stack and stack[-1] < nums2[i]:
+        stack.pop()
+      if stack:
+        numsDict[nums2[i]] = stack[-1]
+      else:
+        numsDict[nums2[i]] = -1
+      stack.append(nums2[i])
+    sol = []
+    for num in nums1:
+      sol.append(numsDict[num])
+    return sol
