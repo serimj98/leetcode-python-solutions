@@ -36,3 +36,20 @@ class Solution:
       prev.next.next = cur
       prev, cur = cur, cur.next
     return dummy.next
+
+    #Solution 2: O(n) / O(1)
+    def swap(node1, node2):
+      if not node2: return node1
+      node2.next = node1
+      node1.next = None
+      return node2
+    if not head or not head.next: return head
+    dummy = head.next
+    cur = ListNode()
+    while head:
+      if head and head.next: temp = head.next.next
+      else: temp = None
+      cur.next = swap(head, head.next)
+      cur = cur.next.next
+      head = temp
+    return dummy
