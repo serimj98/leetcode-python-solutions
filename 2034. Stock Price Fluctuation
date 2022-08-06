@@ -2,34 +2,38 @@ class StockPrice:
 
   def __init__(self):
     #Solution 1: O(1) / O(n)
-    self.stockDict = defaultdict(int) #{timestamp: price}
-    self.latestTimestamp = None
-    self.maxPrice = [] #min-heap, add negative prices to make max-heap
-    self.minPrice = [] #min-heap
+    self.stockDict = defaultdict(int)
+    self.maxTimestamp = 0
+    self.maxHeap, self.minHeap = [], []
 
   def update(self, timestamp: int, price: int) -> None:
-    #Solution 1: O(1) / O(1)
+    #Solution 1: O(log n) / O(1)
     self.stockDict[timestamp] = price
-    if not self.latestTimestamp or timestamp > self.latestTimestamp:
-      self.latestTimestamp = timestamp
-    heappush(self.maxPrice, (-price, timestamp))
-    heappush(self.minPrice, (price, timestamp))
+    self.maxTimestamp = max(self.maxTimestamp, timestamp)
+    heappush(self.maxHeap, (-price, timestamp)) #O(log n)
+    heappush(self.minHeap, (price, timestamp)) #O(log n)
 
   def current(self) -> int:
     #Solution 1: O(1) / O(1)
-    return self.stockDict[self.latestTimestamp]
+    return self.stockDict[self.maxTimestamp]
 
   def maximum(self) -> int:
-    #Solution 1: O(n) / O(1)
-    #if current maximum price is not overwritten in self.stockDict
-    while -self.maxPrice[0][0] != self.stockDict[self.maxPrice[0][1]]: heappop(self.maxPrice)
-    return -self.maxPrice[0][0]
+    #Solution 1: O(n log n) / O(1)
+    price, timestamp = heappop(self.maxHeap)
+    while self.stockDict[timestamp] != -price: #O(n)
+      price, timestamp = heappop(self.maxHeap) #O(log n)
+    heappush(self.maxHeap, (price, timestamp))
+    return -price
 
   def minimum(self) -> int:
-    #Solution 1: O(n) / O(1)
-    while self.minPrice[0][0] != self.stockDict[self.minPrice[0][1]]: heappop(self.minPrice)
-    return self.minPrice[0][0]
-
+    #Solution 1: O(n log n) / O(1)
+    price, timestamp = heappop(self.minHeap)
+    while self.stockDict[timestamp] != price: #O(n)
+      price, timestamp = heappop(self.minHeap) #O(log n)
+    heappush(self.minHeap, (price, timestamp))
+    return price
+        
+ 
 
 # Your StockPrice object will be instantiated and called as such:
 # obj = StockPrice()
