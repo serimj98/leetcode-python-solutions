@@ -1,10 +1,16 @@
 class Solution:
   def subsets(self, nums: List[int]) -> List[List[int]]:
-    #Solution 1: O(2^n) / O(n)
+    #Solution 1: O(n * 2^n) / O(n)
     sol = []
     def backtrack(cur, index):
       sol.append(cur)
       for i in range(index, len(nums)):
-        backtrack(cur + [nums[i]], i + 1)
+        backtrack(cur + [nums[i]], i + 1) #only add indices after current index to avoid duplication
     backtrack([], 0)
+    return sol
+  
+    #Solution 2: O(n * 2^n) / O(n * 2^n)
+    sol = [[]]
+    for num in nums:
+      sol += [cur + [num] for cur in sol]
     return sol
