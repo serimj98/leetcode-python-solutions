@@ -27,16 +27,43 @@ class Solution:
     recursive(root)
     heapify(smallest)
     return nsmallest(k, smallest)[-1]
-  
+
     #Solution 3: O(n) / O(n)
-    #use the fact that the tree is a BST, hence is sorted in order when using inorder traversal
-    smallest = []
-    def inorder(node):
+    self.inorder = []
+    def recursive(node):
       if not node: return
-      inorder(node.left)
-      smallest.append(node.val)
-      inorder(node.right)
-    inorder(root)
-    return smallest[k-1]
-  
-  
+      recursive(node.left)
+      self.inorder.append(node.val)
+      recursive(node.right)
+    recursive(root)
+    return self.inorder[k-1]
+    
+    #Solution 4: O(h + k) / O(h + k)
+    self.inorder = []
+    self.sol = None
+    def recursive(node, k):
+      if not node: return
+      if node.left: recursive(node.left, k)
+      self.inorder.append(node.val)
+      if len(self.inorder) == k:
+        self.sol = self.inorder[-1]
+        return
+      if node.right: recursive(node.right, k)
+    recursive(root, k)
+    return self.sol
+
+    #Solution 5: O(h + k) / O(h)
+    self.sol = None
+    self.k = k
+    def recursive(node):
+      if not node: return
+      if self.sol: return #if self.k <= 0: return
+      recursive(node.left)
+      if self.k == 1:
+        self.sol = node.val
+        self.k -= 1
+        return
+      else: self.k -= 1
+      recursive(node.right)
+    recursive(root)
+    return self.sol
