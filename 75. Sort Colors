@@ -1,0 +1,33 @@
+class Solution:
+  def sortColors(self, nums: List[int]) -> None:
+    #Solution 1: O(n) / O(1)
+    red, white, blue = 0, 0, 0
+    for num in nums:
+      if num == 0: red += 1
+      if num == 1: white += 1
+      if num == 2: blue += 1
+    for i in range(len(nums)):
+      if red:
+        nums[i] = 0
+        red -= 1
+      elif white:
+        nums[i] = 1
+        white -= 1
+      elif blue:
+        nums[i] = 2
+        blue -= 1
+    return nums
+  
+    #Solution 2: O(n) / O(1)
+    l, r, p = 0, len(nums) - 1, 0 # l = right boundary of 0s, r = left boundary of 2s
+    while p <= r:
+      if nums[p] == 0:
+        nums[l], nums[p] = nums[p], nums[l]
+        l += 1
+        p += 1
+      elif nums[p] == 2:
+        nums[r], nums[p] = nums[p], nums[r]
+        r -= 1 #since nums[r] could already be r, don't increment p
+      elif nums[p] == 1:
+        p += 1
+    return nums
