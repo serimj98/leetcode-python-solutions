@@ -1,0 +1,17 @@
+class Solution:
+  def removeKdigits(self, num: str, k: int) -> str:
+    #Solution 1: O(n) / O(n)
+    #left-most digits determine bigger integer, so begin by eliminating when left digit is greater
+    if k >= len(num): return "0"
+    stack = []
+    for digit in num:
+      while k and stack and stack[-1] > digit: #continue to delete leftmost digits
+        stack.pop()
+        k -= 1
+      stack.append(digit)
+    while k:
+      stack.pop()
+      k -= 1
+    sol = "".join(stack).lstrip("0")
+    if not sol: return "0"
+    return sol
