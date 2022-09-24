@@ -1,6 +1,20 @@
 class Solution:
   def longestConsecutive(self, nums: List[int]) -> int:
-    #Solution 1: O(n log n) / O(1)
+    #Solution 1 TLE: O(n^2) / O(n)
+    if not nums: return 0
+    numsSet = set(nums)
+    sol = 0
+    curVal = min(nums)
+    while curVal <= max(nums):
+      curCount = 0
+      while curVal in numsSet:
+        curCount += 1
+        curVal += 1
+      else: curVal += 1
+      sol = max(sol, curCount)
+    return sol
+ 
+    #Solution 2: O(n log n) / O(1)
     if not nums: return 0
     nums.sort()
     max_count, cur_count = 0, 0
@@ -14,7 +28,7 @@ class Solution:
         cur_count = 0
     return max_count + 1
   
-    #Solution 2: O(n) / O(n)
+    #Solution 3: O(n) / O(n)
     nums = set(nums)
     count = 0
     while nums:
@@ -27,3 +41,16 @@ class Solution:
         nums.remove(last)
       count = max(count, last - first + 1)
     return count
+
+    #Solution 4: O(n) / O(n)
+    numsSet = set(nums)
+    sol = 0
+    for num in nums:
+      if num - 1 not in numsSet:
+        curVal = num
+        curCount = 1
+        while curVal + 1 in numsSet:
+          curVal += 1
+          curCount += 1
+        sol = max(sol, curCount)
+    return sol
