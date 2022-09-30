@@ -1,0 +1,30 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children if children is not None else []
+"""
+
+class Solution:
+  def diameter(self, root: 'Node') -> int:
+    """
+    :type root: 'Node'
+    :rtype: int
+    """
+    #Solution 1: O(n) / O(h)
+    self.sol = 0
+    def recursive(node):
+      if not node: return 0
+      first, second = 0, 0
+      for c in node.children:
+        curDepth = recursive(c)
+        if curDepth > first or curDepth > second:
+          if first > second: second = curDepth
+          else: first = curDepth
+      depth = max(first, second) + 1
+      diameter = first + second + 1
+      self.sol = max(self.sol, diameter)
+      return depth
+    recursive(root)
+    return self.sol - 1
