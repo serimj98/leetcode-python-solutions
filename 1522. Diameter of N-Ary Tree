@@ -23,8 +23,8 @@ class Solution:
           if first > second: second = curDepth
           else: first = curDepth
       depth = max(first, second) + 1
-      diameter = first + second + 1
+      diameter = first + second
       self.sol = max(self.sol, diameter)
       return depth
     recursive(root)
-    return self.sol - 1
+    return self.sol
