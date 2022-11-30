@@ -1,0 +1,49 @@
+class Solution:
+  def palindromePairs(self, words: List[str]) -> List[List[int]]:
+    #Solution 1: O(word * n^2) / O(word * n + n^2)
+    sol = []
+    for i in range(len(words)):
+      for j in range(len(words)):
+        if i == j: continue
+        pal = words[i] + words[j] #SC: O(2* word * n)
+        if pal == pal[::-1]: sol.append([i, j])
+    return sol #SC: O(n^2)
+  
+    #Solution 2: O(word^2 * n) / O(word^2 + n^2 + word * n) = O((word + n)^2)
+    wordDict = {} #SC: O(word * n), treating each character as 'space'
+    for i, word in enumerate(words):
+      wordDict[word] = i
+    
+    def suffixPalindrome(word2): #SC: O(word^2)
+      suffixList = []
+      for i in range(len(word2)):
+        prefix = word2[:i+1]
+        if prefix == prefix[::-1]: suffixList.append(word2[i+1:])
+      return suffixList
+    
+    def prefixPalindrome(word1): #SC: O(word^2)
+      prefixList = []
+      for i in range(len(word1)):
+        suffix = word1[i:]
+        if suffix == suffix[::-1]: prefixList.append(word1[:i])
+      return prefixList
+    
+    sol = []
+    for i, word in enumerate(words):
+      #Case 1: if the other word is the reverse of the current word (i.e. "abcd", "dcba")
+      reverse = word[::-1]
+      if reverse in wordDict and i != wordDict[reverse]:
+        sol.append([i, wordDict[reverse]])
+      #Case 2: if prefix of second (longer) word is a palindrome
+      #(i.e. "ab", "cdcba", prefix of word2 = "cdc")
+      for suffix in suffixPalindrome(word):
+        reverse = suffix[::-1]
+        if reverse in wordDict:
+          sol.append([wordDict[reverse], i])
+      #Case 3: if suffix of first (longer) word is a palindrome
+      #(i.e. "abcdc", "ba", suffix of word1 = "cdc")
+      for prefix in prefixPalindrome(word):
+        reverse = prefix[::-1]
+        if reverse in wordDict:
+          sol.append([i, wordDict[reverse]])
+    return sol #SC: O(n^2)
