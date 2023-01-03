@@ -1,0 +1,19 @@
+class Solution:
+  def wordPattern(self, pattern: str, s: str) -> bool:
+    #Solution 1: O(n) / O(n)
+    patternDict = dict()
+    characterDict = dict()
+    sList = s.split()
+    if len(pattern) != len(sList): return False
+    for i, word in enumerate(sList):
+      if word not in patternDict and pattern[i] not in characterDict:
+        patternDict[word] = pattern[i] #{'dog': 'a'}
+        characterDict[pattern[i]] = word #{'a': 'dog'}
+      elif word not in patternDict and pattern[i] in characterDict:
+        return False
+      elif word in patternDict and pattern[i] not in characterDict:
+        return False
+      elif word in patternDict and pattern[i] in characterDict:
+        if patternDict[word] != pattern[i] or characterDict[pattern[i]] != word:
+          return False
+    return True
