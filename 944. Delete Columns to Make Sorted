@@ -1,0 +1,14 @@
+class Solution:
+  def minDeletionSize(self, strs: List[str]) -> int:
+    #Solution 1: O(n*len(strs[0])) / O(1) 
+    sol, idx = 0, 0
+    while idx < len(strs[0]):
+      temp = strs[0][idx]
+      for s in strs[1:]:
+        if temp > s[idx]:
+          sol += 1
+          break
+        else:
+          temp = s[idx]
+      idx += 1
+    return sol
