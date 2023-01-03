@@ -3,6 +3,7 @@ class Solution:
     #Solution 1: O(n) / O(n)
     if word.isupper(): return True #all words capital
     if word.islower(): return True #all words not capital
-    #only first letter is capital
-    if word[0].islower() and word[1:].isupper(): return False
+    if word[0].islower(): return False
+    for c in word[1:]:
+      if c.isupper(): return False
     return True
