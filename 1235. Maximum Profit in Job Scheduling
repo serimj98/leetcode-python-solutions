@@ -1,0 +1,42 @@
+class Solution:
+  def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:
+    #Solution 1: O(n^2) / O(n)
+    jobs = sorted(zip(startTime, endTime, profit))
+    memo = dict()
+    def dp(i): #don't pick ith job / pick ith job and earn profit[i]
+      if i == len(jobs): return 0
+      if i in memo: return memo[i]
+      sol = dp(i+1) #don't pick ith job
+      for j in range(i+1, len(jobs)+1):
+        if j == len(jobs) or jobs[j][0] >= jobs[i][1]: #cur start time >= prev end time
+          sol = max(sol, dp(j) + jobs[i][2]) #pick ith job
+          break
+      memo[i] = sol
+      return sol
+    return dp(0)
+
+    #Solution 2: O(n log n) / O(n)
+    jobs = sorted(zip(startTime, endTime, profit))
+    startTime = sorted(startTime)
+    memo = dict()
+
+    def binarySearch(prevEnd):
+      l, r = 0, len(startTime) - 1
+      sol = len(startTime) #trying to move to next non-conflicting job
+      while l <= r:
+        m = (l + r) // 2
+        if startTime[m] >= prevEnd: #cur start time >= prev end time
+          sol = m
+          r = m - 1
+        else: l = m + 1
+      return sol
+
+    def dp(i): #don't pick ith job / pick ith job and earn profit[i]
+      if i == len(jobs): return 0
+      if i in memo: return memo[i]
+      sol = dp(i+1) #don't pick ith job
+      j = binarySearch(jobs[i][1]) #find closest starting time after current end time
+      sol = max(sol, dp(j) + jobs[i][2]) #pick ith job
+      memo[i] = sol
+      return sol
+    return dp(0)
