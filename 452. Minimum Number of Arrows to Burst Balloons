@@ -1,22 +1,25 @@
 class Solution:
   def findMinArrowShots(self, points: List[List[int]]) -> int:
-    #Solution 1: O(n log n) / O(1)
+    #Solution 1: O(n log n) / O(n)
     if not points: return 0
-    sol = 0
-    points.sort(key = lambda x: x[0])
-    for i in range(len(points)):
-      if i > 0 and points[i][0] <= points[i-1][1]:
-        points[i] = [max(points[i-1][0], points[i][0]), min(points[i-1][1], points[i][1])]
-      else: sol += 1
-    return sol
-    
-    #Solution 2: O(n log n) / O(1)
+    if len(points) == 1: return 1
+    points.sort()
+    intervals = [points[0]]
+    for start, end in points[1:]:
+      lastStart, lastEnd = intervals[-1]
+      if start <= lastEnd:
+        intervals[-1] = [max(start, lastStart), min(end, lastEnd)]
+      else:
+        intervals.append([start, end])
+    return len(intervals)
+
+    #Solution 2: O(n log n) / O(n), sorting
     if not points: return 0
-    sol = 0
-    points.sort(key = lambda x: x[1]) #by endpoint
-    lastEnd = float('-inf')
-    for point in points:
-      if point[0] > lastEnd:
+    points.sort(key = lambda x: x[1]) #sort by end
+    sol = 1
+    endInterval = points[0][1]
+    for start, end in points:
+      if endInterval < start: #if current balloon starts after end of previous balloon
         sol += 1
-        lastEnd = point[1]
+        endInterval = end
     return sol
