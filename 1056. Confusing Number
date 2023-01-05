@@ -1,0 +1,24 @@
+class Solution:
+  def confusingNumber(self, n: int) -> bool:
+    #Solution 1: O(n) / O(n)
+    confDict = {"0": "0", "1": "1", "6": "9", "8": "8", "9": "6"}
+    if n == 0: return False
+    n = str(n)
+    sol = deque()
+    for d in n:
+      if d not in confDict: return False
+      sol.appendleft(confDict[d])
+    startIdx = 0
+    for i in range(len(sol)):
+      if sol[i] != "0": break
+      startIdx += 1
+    return "".join(list(sol)[startIdx:]) != n
+
+    #Solution 2: O(n) / O(n)
+    confDict = {"0": "0", "1": "1", "6": "9", "8": "8", "9": "6"}
+    strN = str(n)[::-1]
+    sol = []
+    for d in strN:
+      if d not in confDict: return False
+      sol.append(confDict[d])
+    return int("".join(sol)) != n
