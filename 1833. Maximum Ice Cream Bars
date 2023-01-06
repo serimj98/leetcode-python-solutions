@@ -1,0 +1,13 @@
+class Solution:
+  def maxIceCream(self, costs: List[int], coins: int) -> int:
+    #Solution 1: O(n log n) / O(n), sort
+    costs.sort()
+    idx = 0
+    sol = 0
+    while idx < len(costs) and coins > 0:
+      if costs[idx] <= coins:
+        coins -= costs[idx]
+        sol += 1
+        idx += 1
+      else: break
+    return sol
