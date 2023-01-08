@@ -1,0 +1,11 @@
+class Solution:
+  def minimumHealth(self, damage: List[int], armor: int) -> int:
+    #Solution 1: O(n) / O(1)
+    health = 1
+    maxDamage = max(damage)
+    for i in range(len(damage)-1, -1, -1):
+      if damage[i] == maxDamage:
+        health -= min(armor, damage[i])
+        maxDamage = -1
+      health += damage[i]
+    return health
