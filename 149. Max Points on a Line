@@ -1,0 +1,19 @@
+class Solution:
+  def maxPoints(self, points: List[List[int]]) -> int:
+    #Solution 1: O(n^2) / O(n)
+    if len(points) <= 2: return len(points)
+
+    def slope(p1, p2):
+      if p2[0] - p1[0] == 0: return inf #divide by zero
+      return (p2[1] - p1[1]) / (p2[0] - p1[0])
+    
+    sol = 0
+    for i in range(len(points)):
+      slopeDict = defaultdict(int) #create slopeDict for every point i
+      #if slope of point i with each point j is equivalent, on the same line
+      for j in range(i+1, len(points)):
+        s = slope(points[i], points[j])
+        slopeDict[s] += 1
+      if slopeDict:
+        sol = max(sol, max(slopeDict.values()))
+    return sol + 1
