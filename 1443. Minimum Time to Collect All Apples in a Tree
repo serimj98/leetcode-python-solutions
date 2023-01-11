@@ -1,0 +1,23 @@
+class Solution:
+  def minTime(self, n: int, edges: List[List[int]], hasApple: List[bool]) -> int:
+    #Solution 1: O(n) / O(n)
+    adjList = defaultdict(list)
+    for s, e in edges:
+      adjList[s].append(e)
+      adjList[e].append(s)
+
+    def dfs(node, parent):
+      sol = 0
+      for neighbor in adjList[node]:
+        if neighbor != parent:
+          sol += dfs(neighbor, node)
+      #if sol: bottom-up DFS, means we have found apples in child nodes
+      #hasApple[node]: the current node we are on has an apple
+      if sol or hasApple[node]:
+        return sol + 2 #one to get to node, one to go up to parent node
+      #means apple isn't found in current node or in child nodes
+      return sol
+    
+    #added extra 2 when starting from root, so subtract 2 when returning
+    #tree could have no apples which would = 0, in that case return 0 instead of -2
+    return max(dfs(0, -1) - 2, 0)
