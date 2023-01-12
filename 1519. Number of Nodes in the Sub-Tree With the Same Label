@@ -1,0 +1,19 @@
+class Solution:
+  def countSubTrees(self, n: int, edges: List[List[int]], labels: str) -> List[int]:
+    #Solution 1: O(n) / O(n)
+    sol = [0] * len(labels)
+    adjList = defaultdict(list)
+    for s, e in edges:
+      adjList[s].append(e)
+      adjList[e].append(s)
+
+    def dfs(node, parent):
+      nodeDict = Counter(labels[node])
+      for nei in adjList[node]:
+        if nei != parent:
+          nodeDict += dfs(nei, node) #adds node count of child nodes
+      sol[node] = nodeDict[labels[node]]
+      return nodeDict
+    
+    dfs(0, -1)
+    return sol
