@@ -1,0 +1,18 @@
+class Solution:
+  def smallestEquivalentString(self, s1: str, s2: str, baseStr: str) -> str:
+    #Solution 1: O(n) / O(n)
+    charDict = defaultdict(set)
+    for c1, c2 in zip(s1, s2):
+      charDict[c1].add(c2)
+      charDict[c2].add(c1)
+    
+    #finding smallest lexicographical character for one char in baseStr
+    def dfs(c, minC, visited):
+      visited.add(c)
+      sol = minC
+      for nei in charDict[c]:
+        if nei not in visited:
+          sol = min(sol, dfs(nei, min(minC, nei), visited))
+      return sol
+
+    return ''.join([dfs(c, c, set()) for c in baseStr])
