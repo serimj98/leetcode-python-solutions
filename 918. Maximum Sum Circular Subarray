@@ -1,0 +1,20 @@
+class Solution:
+  def maxSubarraySumCircular(self, nums: List[int]) -> int:
+    #Solution 1: O(n) / O(1)
+    """
+    Case 1: maximum subarray is contained within nums
+    Case 2: maximum subarray contains the head and tail of nums: total sum - min subarray
+    """
+    arraySum = 0
+    maxSum, curMax = nums[0], 0
+    minSum, curMin = nums[0], 0
+    for num in nums:
+      curMax = max(num, curMax + num) #continue from previous sum or start over
+      maxSum = max(maxSum, curMax)
+      curMin = min(num, curMin + num)
+      minSum = min(minSum, curMin)
+      arraySum += num
+    sol = max(maxSum, arraySum - minSum)
+    #if all numbers are negative, maxSum = max(nums) and minSum = sum(nums)
+    if sol <= 0: return maxSum #subarray must include at least one number
+    return sol
