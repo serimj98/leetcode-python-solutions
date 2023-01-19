@@ -1,0 +1,14 @@
+class Solution:
+  def subarraysDivByK(self, nums: List[int], k: int) -> int:
+    #Solution 1: O(n) / O(n)
+    #sum(i, j) = sum(0, j) - sum(0, i)
+    #if two prefix sums have the same remainder, their difference must be k
+    remainderDict = defaultdict(int)
+    remainderDict[0] = 1
+    sol = prefixSum = 0
+    for num in nums:
+      prefixSum += num #prefix sum until the current num
+      remainder = prefixSum % k
+      sol += remainderDict[remainder]
+      remainderDict[remainder] += 1
+    return sol
