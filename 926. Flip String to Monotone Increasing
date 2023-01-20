@@ -1,0 +1,14 @@
+class Solution:
+  def minFlipsMonoIncr(self, s: str) -> int:
+    #Solution 1: O(n) / O(1)
+    count0 = s.count('0') #number of 0s after i, starting from i = 0
+    count1 = 0 #number of 1s before i, starting from i = 0
+    sol = len(s) - count0 #when you need to flip all 1s to 0s
+    #find the dividing line where we flip all 1s to 0s left of the line, 0s to 1s right of the line
+    for c in s:
+      if c == '0':
+        count0 -= 1 #one less 0 to count after i
+      else:
+        sol = min(sol, count0 + count1)
+        count1 += 1 #one more 1 to count after i
+    return sol
