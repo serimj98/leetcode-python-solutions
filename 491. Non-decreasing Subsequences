@@ -1,0 +1,16 @@
+class Solution:
+  def findSubsequences(self, nums: List[int]) -> List[List[int]]:
+    #Solution 1: O(2^n * n) / O(2^n * n)
+    self.sol = []
+    self.set = set()
+    def backtrack(cur, remaining):
+      if len(cur) >= 2 and tuple(cur) not in self.set:
+          self.sol.append(cur)
+          self.set.add(tuple(cur))
+      for i, num in enumerate(remaining):
+        if not cur:
+          backtrack([num], remaining[i+1:])
+        elif cur[-1] <= num:
+          backtrack(cur + [num], remaining[i+1:])
+    backtrack([], nums)
+    return self.sol
