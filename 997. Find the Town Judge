@@ -1,0 +1,22 @@
+class Solution:
+  def findJudge(self, n: int, trust: List[List[int]]) -> int:
+    #Solution 1: O(n) / O(n)
+    trustDict = defaultdict(set)
+    trustedDict = defaultdict(set)
+    for a, b in trust:
+      trustDict[a].add(b) #all people that a trusts
+      trustedDict[b].add(a) #all the people that trust b
+    for i in range(1, n+1):
+      if i not in trustDict and len(trustedDict[i]) == n - 1:
+        return i
+    return -1
+
+    #Solution 2: O(n) / O(n)
+    if len(trust) < n - 1: return -1 #not enough people trust the town judge
+    trusted = [-1] + [0] * n #how many people trust person i
+    for a, b in trust:
+      trusted[a] -= 1
+      trusted[b] += 1
+    for i, e in enumerate(trusted):
+      if e == n - 1: return i #if everyone trusts person i
+    return -1
