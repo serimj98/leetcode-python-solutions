@@ -1,0 +1,24 @@
+class Solution:
+  def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
+    #Solution 1: O(n) / O(n)
+    minDist = float('inf')
+    sol = -1
+    seen1, seen2 = [False] * len(edges), [False] * len(edges)
+    dist1, dist2 = [0] * len(edges), [0] * len(edges)
+    
+    def dfs(node, seen, dist):
+      seen[node] = True
+      nei = edges[node]
+      if not seen[nei] and not nei == -1: #if not seen and path from node to neighbor
+         dist[nei] = dist[node] + 1
+         dfs(nei, seen, dist)
+
+    #populate seen and distance arrays by iterating through paths from node1 and node2
+    dfs(node1, seen1, dist1)
+    dfs(node2, seen2, dist2)
+
+    for i in range(len(edges)):
+      if seen1[i] and seen2[i] and minDist > max(dist1[i], dist2[i]):
+        minDist = max(dist1[i], dist2[i])
+        sol = i
+    return sol
