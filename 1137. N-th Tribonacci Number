@@ -1,0 +1,10 @@
+class Solution:
+  def tribonacci(self, n: int) -> int:
+    #Solution 1: O(n) / O(n)
+    @lru_cache()
+    def recursive(tn):
+      if tn == 0: return 0
+      if tn == 1: return 1
+      if tn == 2: return 1
+      return recursive(tn - 1) + recursive(tn - 2) + recursive(tn - 3)
+    return recursive(n)
