@@ -1,0 +1,16 @@
+class Solution:
+  def isAlienSorted(self, words: List[str], order: str) -> bool:
+    #Solution 1: O(n * m), m = length of word / O(n)
+    wordDict = defaultdict(int)
+    for i, e in enumerate(order):
+      wordDict[e] = i
+    
+    for a, b in zip(words, words[1:]): #compare i and i+1 words, zip takes shorter length list
+      if len(a) > len(b) and a[:len(b)] == b: # i.e. apple, app would be out of order
+        return False
+      for c1, c2 in zip(a, b):
+        if wordDict[c1] < wordDict[c2]:
+          break #no need to check rest of the word if first letter is lexicographically smaller
+        elif wordDict[c1] > wordDict[c2]:
+          return False
+    return True
