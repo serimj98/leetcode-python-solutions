@@ -1,0 +1,24 @@
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        #Solution 1: O(n) / O(n*p)
+        sol = []
+        pCounter = Counter(p)
+        for i in range(len(s) - len(p) + 1):
+            sCounter = Counter(s[i:i+len(p)])
+            if pCounter == sCounter:
+                sol.append(i)
+        return sol
+
+        #Solution 2: O(n) / O(n)
+        sol = []
+        pCounter = Counter(p)
+        sCounter = Counter(s[:len(p)])
+        l, r = 0, len(p) - 1
+        while r < len(s):
+            if pCounter == sCounter: sol.append(l)
+            sCounter[s[l]] -= 1
+            if sCounter[s[l]] == 0: del sCounter[s[l]]
+            r += 1
+            if r < len(s): sCounter[s[r]] += 1
+            l += 1
+        return sol
