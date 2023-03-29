@@ -1,0 +1,31 @@
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        #Solution 1 Prefix Sum: O(n) / O(n)
+        prefixCounter = defaultdict(int)
+        prefixCounter[0] = 1 #holds prefix sums from the beginning of the array
+        sol, curSum = 0, 0
+        for num in nums:
+            curSum += num
+            #if we can subtract a prefix sum to make the goal
+            sol += prefixCounter[curSum - goal]
+            prefixCounter[curSum] += 1
+        return sol
+
+        #Solution 2 Sliding Window: O(n) / O(1)
+        def atMostSubarray(g):
+            #add number of subarrays with sum less than equal to the goal
+            if g < 0: return 0 #sum can't be negative in binary subarray
+            curSum = 0
+            sol = 0
+            i, j = 0, 0
+            while j < len(nums):
+                curSum += nums[j]
+                while curSum > g: #shrink window if current sum exceeds goal
+                    curSum -= nums[i]
+                    i += 1
+                sol += (j - i + 1) #length of current subarray
+                j += 1
+            return sol
+        #(# of subarrays with sum <= goal) - (# of subarrays with sum <= goal - 1)
+        # = (# of subarrays with sum == goal)
+        return atMostSubarray(goal) - atMostSubarray(goal - 1)
