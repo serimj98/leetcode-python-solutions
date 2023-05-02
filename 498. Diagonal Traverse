@@ -1,0 +1,14 @@
+class Solution:
+    def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
+        #Solution 1: O(n) / O(n)
+        if not mat: return
+        matDict = defaultdict(list)
+        #all elements in the same diagonal have the same r + c value
+        for r in range(len(mat)):
+            for c in range(len(mat[0])): #will read in order (1, 2, 3, ... 9)
+                matDict[r+c].append(mat[r][c])
+        sol = []
+        for i, e in matDict.items(): #{[(0, [1]), (1, [2, 4]), (2, [3, 5, 7]), ...}
+            if i % 2 == 1: sol.extend(e)
+            else: sol.extend(e[::-1])
+        return sol
