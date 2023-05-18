@@ -1,0 +1,19 @@
+class Solution:
+    def beautifulArray(self, n: int) -> List[int]:
+        #Solution 1: O(n), with memoization / O(n)
+        @lru_cache(None)
+        def dfs(n):
+            if n == 1: return [1]
+            """
+            case 1: between odd/even group
+            - if we divide into odd and even numbers, will never have issue of
+              2 * nums[k] == nums[i] + nums[j], as odd + even != even
+            case 2: within same odd or even group
+            - for n = 12, odd = [1, 3, 5, 7, 9, 11] -> [1, 2, 3, 4, 5]
+              if we apply linear transformation of (n + 1) // 2,
+              meaning that it will not have 2 * nums[k] == nums[i] + nums[j] pattern
+            """
+            t1 = dfs((n+1)//2)
+            t2 = dfs(n//2)
+            return [i*2-1 for i in t1] + [i*2 for i in t2]
+        return dfs(n)
