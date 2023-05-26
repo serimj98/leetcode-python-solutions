@@ -1,0 +1,9 @@
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        #Solution 1: O(n * part) / O(n)
+        sol = ""
+        for c in s:
+            sol += c
+            if len(sol) >= len(part) and part in sol:
+                sol = sol.replace(part, "")
+        return sol
