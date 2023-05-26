@@ -1,0 +1,11 @@
+class Solution:
+    def minSwaps(self, s: str) -> int:
+        #Solution 1: O(n) / O(1)
+        openBracket = 0
+        sol = 0
+        for c in s:
+            if c == "[": openBracket += 1
+            elif c == "]":
+                if openBracket: openBracket -= 1
+                else: sol += 1
+        return (sol + 1) // 2 #two brackets in the wrong position can be fixed by one swap
