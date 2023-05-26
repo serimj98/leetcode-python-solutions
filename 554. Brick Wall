@@ -1,0 +1,12 @@
+class Solution:
+    def leastBricks(self, wall: List[List[int]]) -> int:
+        #Solution 1: O(n*m), m = wall[i] / O(m)
+        edgeDict = defaultdict(int) #{brick edge width: frequency}
+        maxEdges = 0 #maximum number of brick edges = minimum brick intersections
+        for row in wall:
+            curIdx = 0
+            for brick in row[:-1]: #don't need to consider far right edge
+                curIdx += brick
+                edgeDict[curIdx] += 1
+                maxEdges = max(maxEdges, edgeDict[curIdx])
+        return len(wall) - maxEdges #number of rows (maximum possible edges) - edges crossed
