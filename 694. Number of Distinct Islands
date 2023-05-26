@@ -1,0 +1,24 @@
+class Solution:
+    def numDistinctIslands(self, grid: List[List[int]]) -> int:
+        #Solution 1: O(r*c) / O(r*c)
+        self.sol = set()
+        self.seen = set()
+        self.moves = ['L', 'R', 'D', 'U']
+        self.dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        def dfs(r, c):
+            pattern = ""
+            if 0 <= r < len(grid) and 0 <= c < len(grid[0]) \
+                and (r, c) not in self.seen and grid[r][c] == 1:
+                self.seen.add((r, c))
+                for d, (x, y) in zip(self.moves, self.dirs):
+                    x += r
+                    y += c
+                    pattern += (d + dfs(x, y))
+            return pattern
+            
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 1 and (r, c) not in self.seen:
+                    self.sol.add(dfs(r, c))
+        return len(self.sol)
