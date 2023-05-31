@@ -1,0 +1,15 @@
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        #Solution 1 Hashmap: O(n) / O(n)
+        numsDict = defaultdict(int)
+        for i, e in enumerate(numbers):
+            if target - e in numsDict:
+                return [numsDict[target - e] + 1, i + 1]
+            numsDict[e] = i
+
+        #Solution 2 Two pointers: O(n) / O(1)
+        l, r = 0, len(numbers) - 1
+        while l < r:
+            if numbers[l] + numbers[r] == target: return [l + 1, r + 1]
+            elif numbers[l] + numbers[r] < target: l += 1
+            else: r -= 1
