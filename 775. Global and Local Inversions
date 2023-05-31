@@ -1,0 +1,14 @@
+class Solution:
+    def isIdealPermutation(self, nums: List[int]) -> bool:
+        #Solution 1: O(n) / O(1)
+        """
+        - inversion = when the next value decreases
+        - since a local inversion is also a global inversion,
+          any non-local global inversions would mean global inversions != local inversions
+        - check if any value nums[i] is greater than nums[i+2+a], where i+2+a < len(nums)
+        """
+        maxVal = 0 #maximum value until current index
+        for i in range(len(nums) - 2):
+            maxVal = max(maxVal, nums[i])
+            if maxVal > nums[i + 2]: return False
+        return True
