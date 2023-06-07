@@ -1,23 +1,23 @@
 class Solution:
-  def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-    #Solution 1: O(n*word) / O(n)
-    q = deque([[beginWord]])
-    wordSet = set(wordList)
-    if endWord not in wordSet: return 0
-    seen = set()
-    sol = 0
-    while q:
-      cur = q.popleft()
-      sol += 1
-      nextLevel = []
-      for word in cur:
-        for c in range(len(word)):
-          for a in string.ascii_lowercase:
-            newWord = word[:c] + a + word[c+1:]
-            if newWord in wordSet:
-              if newWord == endWord: return sol + 1
-              if newWord not in seen:
-                nextLevel.append(newWord)
-                seen.add(newWord)
-      if nextLevel: q.append(nextLevel)
-    return 0
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        #Solution 1: O(words ^ 2 * word length) / O(words * word length)
+        wordSet = set(wordList)
+        if endWord not in wordSet: return 0
+        q = [beginWord]
+        seen = set()
+        sol = 0
+        while q:
+            sol += 1
+            nextLevel = []
+            for word in q:
+                for c in range(len(word)):
+                    for a in string.ascii_lowercase:
+                        newWord = word[:c] + a + word[c+1:]
+                        if newWord in wordSet:
+                            if newWord == endWord: return sol + 1
+                            if newWord not in seen:
+                                nextLevel.append(newWord)
+                                seen.add(newWord)
+            if nextLevel: q = nextLevel
+            else: q = []
+        return 0
