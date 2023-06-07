@@ -7,14 +7,13 @@ class Solution:
     return sorted(sol)
   
     #Solution 2: O(n) / O(n)
-    sortList = deque() #use queue so we don't have to reverse at the end
+    sol = [0] * len(nums)
     l, r = 0, len(nums) - 1
-    while l <= r: #each sides have the biggest numbers, so append greater number first
-      left, right = abs(nums[l]), abs(nums[r])
-      if left < right:
-        sortList.appendleft(right*right)
+    for i in range(len(nums)-1, -1, -1):
+      if abs(nums[l]) < abs(nums[r]):
+        sol[i] = nums[r] * nums[r]
         r -= 1
       else:
-        sortList.appendleft(left*left)
+        sol[i] = nums[l] * nums[l]
         l += 1
-    return sortList
+    return sol
