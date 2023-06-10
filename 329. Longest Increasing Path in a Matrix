@@ -1,0 +1,39 @@
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        #Solution 1 DFS TLE: O(r*c) / O(r*c)
+        self.sol = 0
+        self.dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        @lru_cache(None)
+        def dfs(r, c, prev, length):
+            if r < 0 or r >= len(matrix) or c < 0 or c >= len(matrix[0]): return
+            if matrix[r][c] <= prev: return
+            self.sol = max(self.sol, length + 1)
+            for i, j in self.dirs:
+                dfs(r+i, c+j, matrix[r][c], length + 1)
+
+        for r in range(len(matrix)):
+            for c in range(len(matrix[0])):
+                dfs(r, c, float('-inf'), 0)
+        return self.sol
+    
+        # #Solution 2 DFS + DP: O(r*c) / O(r*c)
+        self.dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        self.dp = [[0] * len(matrix[0]) for _ in range(len(matrix))]
+
+        def dfs(r, c, prev):
+            if r < 0 or r >= len(matrix) or c < 0 or c >= len(matrix[0]):
+                return 0
+            if matrix[r][c] <= prev: return 0
+            if self.dp[r][c] != 0: return self.dp[r][c] #already calculated
+            curMax = 0
+            for i, j in self.dirs:
+                curMax = max(curMax, dfs(r+i, c+j, matrix[r][c]))
+            self.dp[r][c] = curMax + 1
+            return self.dp[r][c]
+        
+        self.sol = 0
+        for r in range(len(matrix)):
+            for c in range(len(matrix[0])):
+                self.sol = max(self.sol, dfs(r, c, float('-inf')))
+        return self.sol
