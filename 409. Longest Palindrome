@@ -1,0 +1,14 @@
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        #Solution 1: O(n) / O(n)
+        sol = 0
+        sCounter = Counter(s)
+        odd = False
+        for c in sCounter:
+            if sCounter[c] % 2 == 0:
+                sol += sCounter[c]
+            else:
+                sol += sCounter[c] - 1
+                odd = True
+        if odd: return sol + 1
+        return sol
