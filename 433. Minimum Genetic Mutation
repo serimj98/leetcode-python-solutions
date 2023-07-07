@@ -1,0 +1,18 @@
+class Solution:
+    def minMutation(self, startGene: str, endGene: str, bank: List[str]) -> int:
+        #Solution 1: O(bank) / O(bank)
+        bankSet = set(bank)
+        #needed for iterative BFS: queue using deque(), seen set
+        q = deque([(startGene, 0)])
+        seen = set(startGene)
+
+        while q:
+            node, steps = q.popleft()
+            if node == endGene: return steps
+            for c in ['A', 'C', 'G', 'T']:
+                for i in range(len(node)):
+                    nei = node[:i] + c + node[i+1:]
+                    if nei not in seen and nei in bank:
+                        q.append((nei, steps + 1))
+                        seen.add(nei)
+        return -1
