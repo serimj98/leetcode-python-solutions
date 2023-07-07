@@ -1,13 +1,16 @@
 class Solution:
-  def characterReplacement(self, s: str, k: int) -> int:
-    #Solution 1: O(n) / O(26)
-    count = {}
-    sol = 0
-    l = 0
-    for r in range(len(s)):
-      count[s[r]] = 1 + count.get(s[r], 0)
-      while (r - l + 1) - max(count.values()) > k: #number of replacements exceed k
-        count[s[l]] -= 1
-        l += 1
-      sol = max(sol, r - l + 1)
-    return sol
+    def characterReplacement(self, s: str, k: int) -> int:
+        #Solution 1: O(n) / O(n)
+        l = 0
+        sol = 0
+        freq = defaultdict(int)
+        for r in range(len(s)):
+            freq[s[r]] += 1
+            windowLength = r - l + 1
+            #maximum of the frequency counter would be chosen repeating character
+            if windowLength - max(freq.values()) <= k: #remaining characters in window
+                sol = max(sol, windowLength)
+            else:
+                freq[s[l]] -= 1
+                l += 1 #we aren't interested in window size less than maximum found
+        return sol
