@@ -1,0 +1,9 @@
+class Solution:
+    def minMoves(self, nums: List[int]) -> int:
+        #Solution 1: O(n log n) / O(n), sorting algorithm
+        nums.sort()
+        sol = 0
+        #increasing all elements by 1 = decreasing diff between max and min by 1
+        for num in nums[::-1]:
+            sol += num - nums[0]
+        return sol
