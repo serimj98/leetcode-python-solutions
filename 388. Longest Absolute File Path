@@ -1,0 +1,17 @@
+class Solution:
+    def lengthLongestPath(self, input: str) -> int:
+        #Solution 1: O(n) / O(n)
+        sol = 0
+        pathDict = {0: 0} #having no path will have length of 0
+        for line in input.splitlines(): #split by line
+            name = line.lstrip('\t')
+            depth = len(line) - len(name) #= number of tabs = depth
+            if '.' in name: #if current line is a file
+                #length until previous depth + current file name length
+                sol = max(sol, pathDict[depth] + len(name))
+            else:
+                #update current depth with previous depth + one slash
+                #since we look at input in order,
+                #level will be overwritten if previous level's length was recorded
+                pathDict[depth + 1] = pathDict[depth] + len(name) + 1
+        return sol
