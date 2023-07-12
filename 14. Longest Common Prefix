@@ -18,3 +18,12 @@ class Solution:
     for i in range(len(s1)):
       if s1[i] != s2[i]: return s1[:i]
     return s1
+
+    #Solution 3: O(n*c), c = length of shortest string / O(n)
+    sol = ""
+    #["dog","racecar","car"] -> [('d', 'r', 'c'), ('o', 'a', 'a'), ('g', 'c', 'r')]
+    for c in zip(*strs):
+      if len(set(c)) == 1: #same character
+        sol += c[0]
+      else: return sol
+    return sol
