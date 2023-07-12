@@ -1,0 +1,9 @@
+class Solution:
+    def countVowelStrings(self, n: int) -> int:
+        #Solution 1 Combinations : O(1) / O(1)
+        """
+        combination with repetition: (k + n - 1)! / (k - 1)! * n!
+        k = number of vowels we can choose from, n = length of string
+        since k is always 5, we can reduce equation
+        """
+        return (n + 4) * (n + 3) * (n + 2) * (n + 1) // 24
