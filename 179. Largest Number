@@ -1,0 +1,14 @@
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        #Solution 1: O(n log n) / O(n)
+        def compare(x, y):
+            if x + y > y + x: return -1
+            elif x + y < y + x: return 1
+            else: return 0
+        if not any(nums): return '0'
+        #1. change all values in nums to string format by using map
+        #2. compares elements:
+            #a. when -1 is returned, x is before y
+            #b. when 1 is returned, y is before x
+            #c. when 0 is returned, x is equivalent to y
+        return "".join(sorted(map(str, nums), key = cmp_to_key(compare)))
