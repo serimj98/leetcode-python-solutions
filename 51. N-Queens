@@ -1,0 +1,44 @@
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        #Solution 1: O(n!) / O(n^2)
+        sol = []
+        
+        def boardFormat(board):
+            formatted = []
+            for row in board:
+                formatted.append("".join(row))
+            return formatted
+
+        """
+        check if column, diagonal, or antidiagonal is occupied and add queen,
+        then try to add new queen on the next row after placing the current queen
+        """
+        def backtrack(row, cols, diagonals, antidiagonals, board):
+            if row == n:
+                sol.append(boardFormat(board))
+                return
+
+            for col in range(n):
+                curDiagonal = row - col #all values on diagonal are same when row - col
+                curAntidiagonal = row + col
+                if col in cols or curDiagonal in diagonals \
+                   or curAntidiagonal in antidiagonals:
+                   continue
+                
+                cols.add(col)
+                diagonals.add(curDiagonal)
+                antidiagonals.add(curAntidiagonal)
+                board[row][col] = "Q"
+
+                #explore next row to place new queen with current queen added
+                backtrack(row + 1, cols, diagonals, antidiagonals, board)
+
+                #remove queen, we have checked all possible moves with previous call
+                cols.remove(col)
+                diagonals.remove(curDiagonal)
+                antidiagonals.remove(curAntidiagonal)
+                board[row][col] = "."
+        
+        empty = [["."] * n for i in range(n)]
+        backtrack(0, set(), set(), set(), empty)
+        return sol
