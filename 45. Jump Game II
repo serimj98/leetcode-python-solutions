@@ -1,11 +1,22 @@
 class Solution:
-  def jump(self, nums: List[int]) -> int:
-    #Solution 1 DP: O(n*average(nums)) / O(n)
-    dp = [float('inf')] * len(nums)
-    dp[0] = 0
-    for i in range(len(nums)):
-      for j in range(1, nums[i]+1):
-        if i+j < len(dp):
-          dp[i+j] = min(dp[i+j], dp[i]+1)
-    return dp[-1]
-        
+    def jump(self, nums: List[int]) -> int:
+        #Solution 1: O(n^2) / O(n)
+        dp = [float('inf')] * len(nums)
+        dp[0] = 0
+        for i in range(len(nums)):
+            for j in range(nums[i] + 1):
+                if i + j < len(nums):
+                    dp[i+j] = min(dp[i+j], dp[i] + 1)
+        return dp[-1]
+
+        #Solution 2: O(n) / O(1)
+        sol = 0
+        #maxJump = farthest reachable index of current index encountered
+        #jumpCount = how many jumps, tracked by starting new jump when we reach maxJump
+        maxJump, curJump = 0, 0
+        for i in range(len(nums) - 1):
+            maxJump = max(maxJump, i + nums[i])
+            if i == curJump: #looked at range of all possible indices for last jump
+                sol += 1
+                curJump = maxJump
+        return sol
