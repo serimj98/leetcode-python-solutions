@@ -1,15 +1,12 @@
 class Solution:
   def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
     #Solution 1: O(n log n) / O(n)
-    speed = [x for _, x in sorted(zip(position, speed))][::-1]
-    position.sort(reverse=True)
+    posSpeed = sorted(zip(position, speed), reverse = True) #sort based on position
     stack = []
-    for i in range(len(position)):
-      curSpeed, curPosition = speed[i], position[i]
-      dist = target - curPosition #distance left to target
-      #dist/curSpeed = how many steps until arrival
-      if not stack or dist/curSpeed > stack[-1]: #car cannot meet previous fleet
-        stack.append(dist/curSpeed)
+    for p, s in posSpeed:
+      #distance left to target / speed = how many steps until arrival
+      if not stack or (target - p) / s > stack[-1]: #car cannot meet previous fleet
+        stack.append((target - p) / s)
       #if # of steps until arrival is the same, will be part of the same fleet - don't append
     return len(stack)
   
@@ -19,7 +16,7 @@ class Solution:
     for p, s in posSpeed:
       time.append((target-p) / s)
     sol = cur = 0
-    for t in time[::-1]:
+    for t in time[::-1]: #check from smallest number of steps to target
       if not cur or t > cur: #if car cannot meet previous fleet
         sol += 1
         cur = t
