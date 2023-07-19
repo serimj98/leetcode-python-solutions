@@ -1,0 +1,33 @@
+class Solution:
+    def getBiggestThree(self, grid: List[List[int]]) -> List[int]:
+        #Solution 1: O(r * c * min(r, c)) / O(r*c)
+        sol = []
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                topSum = grid[r][c] #add top point
+                sol.append(topSum) #rhombus with area 0
+                distance = 1
+                while r + distance < len(grid) and c - distance >= 0 \
+                      and c + distance < len(grid[0]):
+                    row = r + distance
+                    left = c - distance
+                    right = c + distance
+                    topSum += grid[row][left] + grid[row][right]
+
+                    bottomSum = 0
+                    while left <= right:
+                        row += 1
+                        left += 1
+                        right -= 1
+                        if row == len(grid) or left == len(grid[0]) or right == 0:
+                            break
+                        if left == right:
+                            bottomSum += grid[row][left] #add bottom point
+                            sol.append(topSum + bottomSum)
+                            break
+                        bottomSum += grid[row][left] + grid[row][right]
+                    distance += 1
+        
+        sol = list(set(sol)) #remove duplicates
+        sol.sort(reverse = True)
+        return sol[:3]
