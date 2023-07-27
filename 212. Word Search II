@@ -1,51 +1,57 @@
 class TrieNode:
-  def __init__(self):
-    self.children = {}
-    self.endOfWord = False
+    def __init__(self):
+        self.children = {}
+        self.endOfWord = False
 
-class Trie:
+class Trie: #n-ary tree structure
+    def __init__(self):
+        self.root = TrieNode()
 
-  def __init__(self):
-    self.root = TrieNode()
-
-  def insert(self, word: str) -> None:
-    cur = self.root
-    for i in word:
-      if i not in cur.children:
-        cur.children[i] = TrieNode()
-      cur = cur.children[i]
-    cur.endOfWord = True
+    def insert(self, word: str) -> None:
+        cur = self.root
+        for i in word:
+            #move along existing children or create new TrieNode if no character
+            if i not in cur.children:
+                cur.children[i] = TrieNode()
+            cur = cur.children[i]
+        #mark endOfWord as True at the last character TrieNode of the word
+        cur.endOfWord = True
 
 class Solution:
-  def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-    #Solution 1: O(r*c*3^len of longest word) / O(r*c)
-    self.numWords = len(words)
-    def dfs(r, c, node, cur):
-      if self.numWords == 0: return
-      #check if the current character is end of the word
-      if node.endOfWord:
-        sol.append(cur)
-        node.endOfWord = False
-        self.numWords -= 1
-      if r < 0 or c < 0 or r > len(board) - 1 or c > len(board[0]) - 1: return
-      temp = board[r][c]
-      node = node.children.get(temp) #find next child amongst children dictionary
-      if not node: return
-      #in order to avoid going back and forth between two nodes
-      board[r][c] = '#'
-      dfs(r-1, c, node, cur+temp)
-      dfs(r+1, c, node, cur+temp)
-      dfs(r, c-1, node, cur+temp)
-      dfs(r, c+1, node, cur+temp)
-      board[r][c] = temp
-      
-    sol = []
-    trie = Trie()
-    node = trie.root
-    #create the trie node to search with DFS
-    for w in words:
-      trie.insert(w)
-    for r in range(len(board)):
-      for c in range(len(board[0])):
-        dfs(r, c, node, "")
-    return sol
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        """
+        Solution 1: O(board * (4 * 3^(word length-1))) / O(n)
+        time complexity explanation: 4 directions in the first cell,
+        3 directions (excluding the direction we come from) for all other cells
+        """
+        self.foundWords = 0
+
+        def backtrack(r, c, node, cur):
+            if self.foundWords == len(words): return
+            
+            if node.endOfWord:
+                sol.append(cur)
+                node.endOfWord = False
+                self.foundWords += 1
+            
+            if r < 0 or r >= len(board) or c < 0 or c >= len(board[0]): return
+            node = node.children.get(board[r][c]) #find next child in children dict
+            if not node: return #if character not found amongst children dict
+            curChar = board[r][c]
+            board[r][c] = '#' #avoid going back and forth between two nodes
+            backtrack(r-1, c, node, cur + curChar)
+            backtrack(r+1, c, node, cur + curChar)
+            backtrack(r, c-1, node, cur + curChar)
+            backtrack(r, c+1, node, cur + curChar)
+            board[r][c] = curChar
+        
+        trie = Trie()
+        for w in words:
+            trie.insert(w)
+
+        sol = []
+        node = trie.root
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                backtrack(i, j, node, "")
+        return sol
