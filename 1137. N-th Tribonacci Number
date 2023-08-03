@@ -1,10 +1,36 @@
 class Solution:
-  def tribonacci(self, n: int) -> int:
-    #Solution 1: O(n) / O(n)
-    @lru_cache()
-    def recursive(tn):
-      if tn == 0: return 0
-      if tn == 1: return 1
-      if tn == 2: return 1
-      return recursive(tn - 1) + recursive(tn - 2) + recursive(tn - 3)
-    return recursive(n)
+    def tribonacci(self, n: int) -> int:
+        #Solution 1: O(n) / O(n)
+        @lru_cache()
+        def recursive(tn):
+            if tn == 0: return 0
+            if tn == 1: return 1
+            if tn == 2: return 1
+            return recursive(tn - 1) + recursive(tn - 2) + recursive(tn - 3)
+        
+        return recursive(n)
+
+        #Solution 2: O(n) / O(n)
+        if n == 0: return 0
+        if n == 1 or n == 2: return 1
+
+        dp = [0] * (n + 1)
+        dp[0] = 0
+        dp[1], dp[2] = 1, 1
+        for i in range(3, n + 1):
+            dp[i] = dp[i-1] + dp[i-2] + dp[i-3]
+        
+        return dp[-1]
+
+        #Solution 3: O(n) / O(1)
+        if n == 0: return 0
+        if n == 1 or n == 2: return 1
+
+        t0, t1, t2 = 0, 1, 1
+        for i in range(3, n + 1):
+            newT0 = t1
+            newT1 = t2
+            newT2 = t2 + t1 + t0
+            t0, t1, t2 = newT0, newT1, newT2
+        
+        return t2
