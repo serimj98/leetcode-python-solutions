@@ -1,0 +1,17 @@
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        #Solution 1: O(m*n), m = subsetSum / O(m*n)
+        totalSum = sum(nums)
+        if totalSum %2 != 0: return False
+        subsetSum = totalSum // 2 #find subset that is equal to subsetSum
+
+        #Case 1: x in nums array is included in subset sum
+        #Case 2: x in nums array is not included in subset sum
+        @lru_cache(maxsize=None)
+        def dfs(n, subsetSum): #n = number of elements used, #subsetSum = sum left to use
+            if subsetSum == 0: return True
+            if n == 0 or subsetSum < 0: return False
+            sol = dfs(n-1, subsetSum - nums[n-1]) or dfs(n-1, subsetSum)
+            return sol
+        
+        return dfs(len(nums), subsetSum)
