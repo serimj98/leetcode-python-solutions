@@ -1,0 +1,9 @@
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        #Solution 1: O(n) / O(n)
+        arrCounter = Counter(arr)
+        seen = set()
+        for val in arrCounter:
+            if arrCounter[val] in seen: return False
+            seen.add(arrCounter[val])
+        return True
