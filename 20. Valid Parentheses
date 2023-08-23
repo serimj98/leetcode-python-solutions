@@ -1,0 +1,13 @@
+class Solution:
+    def isValid(self, s: str) -> bool:
+        #Solution 1: O(n) / O(n)
+        stack = []
+        brackets = {')': '(', '}': '{', ']': '['}
+        for c in s:
+            if c not in brackets:
+                stack.append(c)
+            else:
+                if not stack: return False
+                if stack[-1] == brackets[c]: stack.pop()
+                else: return False
+        return not stack
