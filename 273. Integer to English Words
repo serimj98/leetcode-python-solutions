@@ -1,0 +1,41 @@
+class Solution:
+    def numberToWords(self, num: int) -> str:
+        #Solution 1: O(n) / O(n)
+        #1.234.567.890 -> 1 Billion 234 Million 567 Thousand 890
+        split = []
+        idx = len(str(num))
+        while idx > 0:
+            if idx-3 >= 0: split.append(str(num)[idx-3:idx])
+            else: split.append(str(num)[0:idx])
+            idx -= 3
+        
+        if num == 0: return "Zero"
+        OneDigitDict = {0:"", 1:"One", 2:"Two", 3:"Three", 4:"Four", 5:"Five", \
+                        6:"Six", 7:"Seven", 8:"Eight", 9:"Nine"}
+        TenDigitDict = {10:"Ten", 11:"Eleven", 12:"Twelve", 13:"Thirteen", 14:"Fourteen", \
+                        15:"Fifteen", 16:"Sixteen", 17:"Seventeen", 18:"Eighteen", \
+                        19:"Nineteen", 20:"Twenty", 30:"Thirty", 40:"Forty", 50:"Fifty", \
+                        60:"Sixty", 70:"Seventy", 80:"Eighty", 90:"Ninety"}
+        posDigitDict = {0:"", 1:"Thousand", 2:"Million", 3:"Billion"}
+
+        def threeDigit(s: str) -> str:
+            eng = ""
+            if len(s) == 1:
+                eng = OneDigitDict[int(s)]
+            if len(s) == 2:
+                if int(s) in TenDigitDict: eng = TenDigitDict[int(s)]
+                else: eng = TenDigitDict[int(s[0])*10] + " " + OneDigitDict[int(s[1])]
+            if len(s) == 3:
+                if int(s) == 0: return eng
+                if int(s[1:]) in TenDigitDict: eng = TenDigitDict[int(s[1:])]
+                else:
+                    if int(s[1:]) in OneDigitDict: eng = OneDigitDict[int(s[1:])]
+                    else: eng = TenDigitDict[int(s[1])*10] + " " + OneDigitDict[int(s[2])]
+                if int(s[0]) != 0: eng = OneDigitDict[int(s[0])] + " Hundred " + eng
+            return eng.strip()
+
+        sol = ""
+        for i in range(len(split)):
+            rep = threeDigit(split[i])
+            if rep: sol = rep + " " + posDigitDict[i] + " " + sol
+        return sol.strip()
