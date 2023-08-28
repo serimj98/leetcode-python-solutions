@@ -1,0 +1,8 @@
+class Solution:
+    def minimizeArrayValue(self, nums: List[int]) -> int:
+        #Solution 1: O(n) / O(1)
+        prefixSum, sol = 0, 0
+        for i, num in enumerate(nums):
+            prefixSum += num #check if we can distribute prefixSum into i+1 integers
+            sol = max(sol, math.ceil(prefixSum / (i + 1)))
+        return sol
