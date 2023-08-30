@@ -1,46 +1,99 @@
 class MedianFinder:
 
-  #Solution 1 TLE: O(n log n) / O(n)
-  def __init__(self):
-    self.medianList = []
+    #Solution 1 One Heap TLE: O(n log n) / O(n)
+    def __init__(self):
+        self.heap = []
 
-  def addNum(self, num: int) -> None:
-    self.medianList.append(num)
-    self.medianList.sort()
+    def addNum(self, num: int) -> None: #O(n) / O(n)
+        heappush(self.heap, num)
 
-  def findMedian(self) -> float:
-    if len(self.medianList) == 1: return self.medianList[0]
-    mid = len(self.medianList) // 2
-    if len(self.medianList) % 2 == 1: #odd
-      return self.medianList[mid]
-    else:
-      return (self.medianList[mid] + self.medianList[mid - 1]) / 2
-  
-  #Solution 2 Heap: O(log n) / O(n)
-  def __init__(self):
-    #two heaps that are balanced (or one off)
-    #max heap contains smaller numbers and min heap contains bigger numbers
-      #allows you to pop two elements closest to the middle
-    self.minHeap = []
-    self.maxHeap = []
+    def findMedian(self) -> float: #O(n log n) / O(n)
+        idx = len(self.heap)//2
+        popList = []
+        for i in range(idx+1): #O(n)
+            popList.append(heappop(self.heap)) #O(log n)
+        median = popList[-1]
+        for i in range(idx+1): #O(n)
+            heappush(self.heap, popList[i]) #O(log n)
+        if len(self.heap) % 2 == 1:
+            median = popList[-1]
+        else:
+            median = sum(popList[-2:])/2
+        return median
 
-  def addNum(self, num: int) -> None:
-    #add new num to minHeap, then remove largest element from minHeap and add to maxHeap
-    #if minHeap is smaller, remove smallest element from maxHeap and add add to minHeap
-    heappush(self.minHeap, num)
-    larger = heappop(self.minHeap)
-    heappush(self.maxHeap, -larger) #always add one element to maxHeap while balancing
-    if len(self.minHeap) < len(self.maxHeap):
-      smaller = -heappop(self.maxHeap)
-      heappush(self.minHeap, smaller) #if unbalanced, add back to minHeap
+    #Solution 2 Sort: O(n log n) / O(n)
+    def __init__(self):
+        self.arr = []
+        
+    def addNum(self, num: int) -> None:
+        self.arr.append(num)
 
-  def findMedian(self) -> float:
-    if not self.maxHeap: return self.minHeap[0]
-    if len(self.minHeap) == len(self.maxHeap):
-      return (self.minHeap[0] + -self.maxHeap[0]) / 2
-    else: #minHeap will always be larger if unbalanced
-      return self.minHeap[0]
+    def findMedian(self) -> float:
+        self.arr.sort()
+        idx = len(self.arr)//2
+        if len(self.arr) % 2 == 1: return self.arr[idx]
+        else: return sum(self.arr[idx-1:idx+1])/2
+
+   #Solution 3 Binary Search: O(n) / O(n)
+    def __init__(self):
+        self.arr = []
+        
+    def addNum(self, num: int) -> None: #O(n) / O(n)
+        if not self.arr:
+            self.arr.append(num)
+            return
+        l, r = 0, len(self.arr)
+        idx = 0
+        while l < r: #O(log n)
+            m = l + (r - l) // 2
+            if self.arr[m] == num:
+                idx = m
+                break
+            if self.arr[m] > num: r = m
+            else: l = m + 1
+            idx = l
+        self.arr = self.arr[:idx] + [num] + self.arr[idx:] #O(n)
+
+    def findMedian(self) -> float: #O(1) / O(1)
+        idx = len(self.arr)//2
+        if len(self.arr) % 2 == 1: return self.arr[idx]
+        else: return sum(self.arr[idx-1:idx+1])/2
+
+    #Solution 4 Two Heaps: O(log n) / O(n)
+    def __init__(self):
+        self.minHeap = [] #keep track of larger half of data stream
+        self.maxHeap = [] #kep track of smaller half of data stream
+        
+    def addNum(self, num: int) -> None:
+        if not self.minHeap:
+            heappush(self.minHeap, num)
+        else:
+            if len(self.minHeap) > len(self.maxHeap):
+                val = heappop(self.minHeap)
+            else: val = -heappop(self.maxHeap)
+            if val > num:
+                heappush(self.minHeap, val)
+                heappush(self.maxHeap, -num)
+            else:
+                heappush(self.maxHeap, -val)
+                heappush(self.minHeap, num)
     
+    def addNum(self, num: int) -> None: #second method of addNum(num)
+        #add new num to minHeap, then remove largest element from minHeap and add to maxHeap
+        #if minHeap is smaller, remove smallest element from maxHeap and add add to minHeap
+        heappush(self.minHeap, num)
+        larger = heappop(self.minHeap)
+        heappush(self.maxHeap, -larger) #always add one element to maxHeap while balancing
+        if len(self.minHeap) < len(self.maxHeap):
+            smaller = -heappop(self.maxHeap)
+            heappush(self.minHeap, smaller) #if unbalanced, add back to minHeap
+
+    def findMedian(self) -> float:
+        if not self.maxHeap: return self.minHeap[0]
+        if (len(self.maxHeap) + len(self.minHeap)) % 2 == 0:
+            return (self.minHeap[0] - self.maxHeap[0]) / 2
+        else: return self.minHeap[0] #minHeap will always be larger if unbalanced
+
 
 # Your MedianFinder object will be instantiated and called as such:
 # obj = MedianFinder()
