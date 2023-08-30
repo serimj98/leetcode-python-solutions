@@ -1,0 +1,50 @@
+class Solution:
+    def maxValue(self, n: int, index: int, maxSum: int) -> int:
+        #Solution 1 TLE: O(maxSum * n) / O(n)
+        if maxSum < n: return
+        sol = [1] * n
+        maxSum -= n
+        l, r = index, index
+        while maxSum > 0:
+            sol[index] += 1
+            maxSum -= 1
+            while l-1 >= 0 and abs(sol[l]-sol[l-1]) > 1:
+                l -= 1
+                sol[l] += 1
+                maxSum -= 1
+            while r+1 < n  and abs(sol[r]-sol[r+1]) > 1:
+                r += 1
+                sol[r] += 1
+                maxSum -= 1
+            l, r = index, index
+        if maxSum < 0: return sol[index] - 1
+        return sol[index]
+
+        #Solution 2: O(log(maxSum)) / O(1)
+        """
+        find arithmetic sequence of:
+        1. increasing elements on the left of A[index] with difference of 1
+        2. decreasing elements on the right of A[index] with difference of -1
+        - A[0] = max(a) - idx
+        - A[idx] = a
+        - A[n-1] = max(a - ((n-1) - idx))
+
+        -> sum of {b, b+1, ...a} = (a + b) * (a - b + 1) / 2
+        """
+        def checkMax(a): #O(1)
+            bStart = max(a - index, 0) #A[0]
+            aSum = (a + bStart) * (a - bStart + 1) / 2
+            bEnd = max(a - ((n-1) - index), 0) #A[n-1]
+            aSum += (a + bEnd) * (a - bEnd + 1) / 2
+            return aSum - a #counted a twice
+        
+        maxSum -= n #initialize all of array to 1
+        l, r = 0, maxSum
+        #find the maximum value of a that would result in less than maxSum
+        while l <= r:
+            m = l + (r - l) // 2
+            if checkMax(m) <= maxSum:
+                l = m + 1
+            else:
+                r = m - 1
+        return l
