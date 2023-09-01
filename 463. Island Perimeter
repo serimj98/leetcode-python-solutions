@@ -1,0 +1,36 @@
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        #Solution 1: O(r*c) / O(r*c)
+        self.sol = 0
+        self.dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        self.seen = set()
+
+        def dfs(r, c):
+            if 0 <= r < len(grid) and 0 <= c < len(grid[0]):
+                if grid[r][c] == 1:
+                    if (r, c) not in self.seen:
+                        self.seen.add((r, c))
+                        island = 0
+                        for i, j in self.dirs:
+                            island += dfs(r+i, c+j)
+                        self.sol += (4 - island)
+                    return 1
+            return 0
+        
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 1: dfs(r, c)
+        
+        return self.sol
+
+        #Solution 2: O(r*c) / O(1)
+        sol = 0
+        dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 1:
+                    sol += 4
+                    for i, j in dirs:
+                        if 0 <= r+i < len(grid) and 0 <= c+j < len(grid[0]) and grid[r+i][c+j] == 1:
+                            sol -= 1
+        return sol
