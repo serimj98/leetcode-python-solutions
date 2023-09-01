@@ -11,8 +11,29 @@ class Solution:
     elif nums2: merged += nums2
     if len(merged) % 2 == 1: return merged[len(merged)//2]
     return (merged[len(merged)//2 - 1] + merged[len(merged)//2]) / 2
-  
-    #Solution 2 Binary Search: O(log(m+n)) / O(1)
+
+    #Solution 2: O(nums1 + nums2) / O(1)
+      idx, idx1, idx2 = 0, 0, 0
+      prev, cur = 0, 0
+      while idx <= (len(nums1) + len(nums2)) // 2:
+        prev = cur
+        if idx1 == len(nums1):
+          cur = nums2[idx2]
+          idx2 += 1
+        elif idx2 == len(nums2):
+          cur = nums1[idx1]
+          idx1 += 1
+        elif nums1[idx1] < nums2[idx2]:
+          cur = nums1[idx1]
+          idx1 += 1
+        else:
+          cur = nums2[idx2]
+          idx2 += 1
+        idx += 1
+      if (len(nums1) + len(nums2)) % 2 == 1: return cur
+      else: return (prev + cur) / 2
+
+    #Solution 3 Binary Search: O(log(nums1 + nums2)) / O(1)
     #https://www.youtube.com/watch?v=LPFhl65R7ww
     if len(nums1) > len(nums2): #nums1 is shorter
       nums1, nums2 = nums2, nums1
