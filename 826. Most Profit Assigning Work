@@ -1,0 +1,12 @@
+class Solution:
+    def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+        #Solution 1: O(n log n) / O(n), where n = max(len(difficulty), len(worker))
+        jobs = sorted(zip(difficulty, profit))
+        sol, maxProfit, idx = 0, 0, 0
+        worker.sort()
+        for w in worker:
+            while idx < len(jobs) and w >= jobs[idx][0]:
+                maxProfit = max(maxProfit, jobs[idx][1])
+                idx += 1
+            sol += maxProfit
+        return sol
