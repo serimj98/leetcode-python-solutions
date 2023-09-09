@@ -1,0 +1,24 @@
+class FileSystem:
+
+    #Solution 1: O(path) / O(# of paths)
+    def __init__(self):
+        self.fileDict = {}
+        
+    def createPath(self, path: str, value: int) -> bool: #O(path) / O(1)
+        if path == '' or path == '/' or path in self.fileDict: return False
+        #rfind: finds the last occurrence of the specified value
+        parent = path[:path.rfind('/')] #O(path)
+        if len(parent) > 1 and parent not in self.fileDict: return False
+        self.fileDict[path] = value
+        return True
+
+    def get(self, path: str) -> int: #O(1) / O(1)
+        if path in self.fileDict: return self.fileDict[path]
+        return -1
+        
+
+
+# Your FileSystem object will be instantiated and called as such:
+# obj = FileSystem()
+# param_1 = obj.createPath(path,value)
+# param_2 = obj.get(path)
