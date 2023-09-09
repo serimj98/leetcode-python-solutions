@@ -1,0 +1,12 @@
+class Solution:
+    def nearestValidPoint(self, x: int, y: int, points: List[List[int]]) -> int:
+        #Solution 1: O(n) / O(1)
+        sol = None
+        minDistance = float('inf')
+        for idx, (i, j) in enumerate(points):
+            if i == x or j == y:
+                if abs(x - i) + abs(y - j) < minDistance:
+                    minDistance = abs(x - i) + abs(y - j)
+                    sol = idx
+        if sol == None: return -1
+        else: return sol
