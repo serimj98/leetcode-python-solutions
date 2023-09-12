@@ -1,0 +1,24 @@
+class Solution:
+    def wallsAndGates(self, rooms: List[List[int]]) -> None:
+        """
+        Do not return anything, modify rooms in-place instead.
+        """
+        #Solution 1 BFS: O(r*c) / O(r*c)
+        sol = rooms[:]
+        gates = deque([])
+        for r in range(len(rooms)):
+            for c in range(len(rooms[0])):
+                if rooms[r][c] == 0:
+                    gates.append([r,c,0])
+        
+        dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        seen = set()
+        while gates:
+            r, c, dist = gates.popleft()
+            for i, j in dirs:
+                if 0 <= r+i < len(rooms) and 0 <= c+j < len(rooms[0]):
+                    if rooms[r+i][c+j] != -1 and (r+i, c+j) not in seen:
+                        sol[r+i][c+j] = min(sol[r+i][c+j], dist+1)
+                        gates.append([r+i, c+j, dist+1])
+                        seen.add((r+i, c+j))        
+        return sol
