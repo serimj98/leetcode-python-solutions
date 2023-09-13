@@ -1,0 +1,15 @@
+class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        #Solution 1: O(n log(max(piles))) / O(1)
+        def eatBananas(k, hours):
+            for p in piles:
+                hours -= ceil(p/k) #number of hours taken for pile p
+                if hours < 0: return False
+            return True
+        
+        l, r = 1, max(piles)
+        while l < r:
+            m = l + (r - l) // 2
+            if eatBananas(m, h): r = m
+            else: l = m + 1
+        return l
