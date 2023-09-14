@@ -1,0 +1,18 @@
+https://www.pramp.com/challenge/XdMZJgZoAnFXqwjJwnBZ
+
+import heapq
+
+def sort_k_messed_array(arr, k):
+  heap = []
+  for i in range(k+1):
+    heap.append(arr[i])
+  heapq.heapify(heap)
+  
+  for i in range(k+1, len(arr)):
+    arr[i - (k+1)] = heapq.heappop(heap)
+    heapq.heappush(heap, arr[i])
+
+  for i in range(len(heap)):
+    arr[len(arr)-(k+1) + i] = heapq.heappop(heap)
+  
+  return arr
