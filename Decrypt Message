@@ -1,0 +1,16 @@
+https://www.pramp.com/challenge/8noLWxLP6JUZJ2bA2rnx
+
+def decrypt(word):
+  #Solution 1: O(n) / O(n)
+  arr = []
+  for c in word:
+    arr.append(ord(c)) #word -> step 3
+  #range of lowercase letters: 97 to 122
+  subt = 1
+  for i in range(len(arr)): #order doesn't matter for subtraction and addition
+    arr[i] -= subt #step 2 -> step 1
+    subt += arr[i]
+    while arr[i] < 97:
+      arr[i] += 26 #step 3 -> step 2
+    arr[i] = chr(arr[i]) #step 1 -> sol
+  return "".join(arr)
