@@ -1,37 +1,29 @@
 class Solution:
-  def isToeplitzMatrix(self, matrix: List[List[int]]) -> bool:
-    #Solution 1: O(r*c) / O(1)
-    for r in range(len(matrix)):
-      curRow = r
-      curCol = 0
-      first = matrix[curRow][curCol]
-      while curRow + 1 < len(matrix) and curCol + 1 < len(matrix[0]):
-        if matrix[curRow + 1][curCol + 1] != first:
-          return False
-        curRow += 1
-        curCol += 1
-    for c in range(1, len(matrix[0])):
-      curCol = c
-      curRow = 0
-      first = matrix[curRow][curCol]
-      while curRow + 1 < len(matrix) and curCol + 1 < len(matrix[0]):
-        if matrix[curRow + 1][curCol + 1] != first:
-          return False
-        curRow += 1
-        curCol += 1
-    return True
-    
-    #Solution 2: O(r*c) / O(1)
-    for r in range(len(matrix)):
-      for c in range(len(matrix[0])):
-        if r + 1 < len(matrix) and c + 1 < len(matrix[0]):
-          if matrix[r][c] != matrix[r+1][c+1]: return False
-    return True
-    
-    #Solution 3 Load one row at a time: O(r*c) / O(r+c)
-    h = dict()
-    for r in range(len(matrix)):
-      for c in range(len(matrix[0])):
-        if r-c not in h: h[r-c] = matrix[r][c]
-        elif matrix[r][c] != h[r-c]: return False
-    return True
+    def isToeplitzMatrix(self, matrix: List[List[int]]) -> bool:
+        #Solution 1: O(r*c) / O(1)
+        for i in range(len(matrix[0])):
+            r, c = 0, i
+            e = matrix[r][c]
+            while 0 <= r < len(matrix) and 0 <= c < len(matrix[0]):
+                if matrix[r][c] != e: return False
+                r += 1
+                c += 1
+
+        for j in range(1, len(matrix)):
+            r, c = j, 0
+            e = matrix[r][c]
+            while 0 <= r < len(matrix) and 0 <= c < len(matrix[0]):
+                if matrix[r][c] != e: return False
+                r += 1
+                c += 1
+
+        return True
+
+        #Solution 2: O(r*c) / O(r+c)
+        #constraint: if we can only load one row at a time
+        diagHash = dict()
+        for r in range(len(matrix)):
+            for c in range(len(matrix[0])):
+                if r-c not in diagHash: diagHash[r-c] = matrix[r][c]
+                elif matrix[r][c] != diagHash[r-c]: return False
+        return True
