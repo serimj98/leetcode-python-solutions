@@ -3,6 +3,7 @@ https://www.pramp.com/challenge/XdMZJgZoAnFXqwjJwnBZ
 import heapq
 
 def sort_k_messed_array(arr, k):
+  #Solution 1: O(n log k) / O(k)
   heap = []
   for i in range(k+1):
     heap.append(arr[i])
