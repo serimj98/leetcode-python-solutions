@@ -1,0 +1,20 @@
+class Solution:
+    def buddyStrings(self, s: str, goal: str) -> bool:
+        #Solution 1: O(n) / O(n)
+        if len(s) != len(goal): return False
+        if s == goal:
+            #if same string, an element of freq == 2 can swap
+            freq = Counter(s).values()
+            for f in freq:
+                if f > 1: return True
+            return False
+        idx1, idx2 = None, None #exactly two indices have to be different to swap
+        for i in range(len(s)):
+            if s[i] == goal[i]: continue
+            if idx1 == None: idx1 = i
+            elif idx2 == None: idx2 = i
+            #more than two indices have differences
+            else: return False
+        if idx2 == None: return False #only one index is different
+        #string must be same after the swap
+        return s[idx1] == goal[idx2] and s[idx2] == goal[idx1]
