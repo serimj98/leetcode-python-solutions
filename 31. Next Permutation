@@ -1,0 +1,31 @@
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        #Solution 1: O(n) / O(1)
+        """
+        1. find the point k where the array stops decreasing consecutively
+        2. swap:
+            a. the element immediately before the decrease
+            b. the rightmost element greater than k
+        3. reverse all elements after the swapped index k
+        """
+        def reverse(start, end):
+            while start < end:
+                nums[start], nums[end] = nums[end], nums[start]
+                start += 1
+                end -= 1
+
+        i = len(nums)-1
+        while i > 0 and nums[i-1] >= nums[i]: #decreasing order
+            i -= 1
+        if i == 0:
+            reverse(0, len(nums)-1)
+            return
+        j = len(nums)-1
+        k = i - 1 #element before increase
+        while nums[j] <= nums[k]: #find most latter element greater than k
+            j -= 1
+        nums[k], nums[j] = nums[j], nums[k]
+        reverse(k+1, len(nums)-1) #reverse descending elements after k
