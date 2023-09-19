@@ -1,0 +1,28 @@
+class Solution:
+    def nextGreaterElement(self, n: int) -> int:
+        #Solution 1: O(n) / O(n)
+        n = str(n)
+        if len(n) == 1: return -1
+        
+        def reverse(l):
+            start, end = 0, len(l) - 1
+            while start < end:
+                l[start], l[end] = l[end], l[start]
+                start += 1
+                end -= 1
+            return l
+        
+        i = len(n) - 1
+        while i > 0 and int(n[i-1]) >= int(n[i]):
+            i -= 1
+        if i == 0: return -1
+        j = len(n) - 1
+        k = i - 1
+        while j > 0 and int(n[k]) >= int(n[j]):
+            j -= 1
+        
+        nList = list(n)
+        nList[j], nList[k] = nList[k], nList[j]
+        swapped = nList[:k+1] + reverse(nList[k+1:])
+        if int("".join(swapped)) > 2**31 - 1: return -1
+        return int("".join(swapped))
