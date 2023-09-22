@@ -2,10 +2,10 @@ class Solution:
     def minSteps(self, s: str, t: str) -> int:
         #Solution 1: O(n) / O(n)
         sCounter, tCounter = Counter(s), Counter(t)
-        sol = len(s) + len(t)
+        sol = len(s)
         for i in sCounter:
-            sol -= 2 * min(sCounter[i], tCounter[i])
-        return sol // 2
+            sol -= min(sCounter[i], tCounter[i])
+        return sol
 
         #Solution 2: O(n) / O(n)
         sCounter = Counter(s)
