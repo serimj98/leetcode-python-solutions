@@ -4,6 +4,7 @@ class Solution:
         sCounter, tCounter = Counter(s), Counter(t)
         sol = len(t)
         for i in sCounter:
+            #subtract minimum elements that can stay the same
             sol -= min(sCounter[i], tCounter[i])
         return sol
 
