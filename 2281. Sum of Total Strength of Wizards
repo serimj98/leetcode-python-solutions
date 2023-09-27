@@ -1,0 +1,58 @@
+class Solution:
+    def totalStrength(self, strength: List[int]) -> int:
+        #Solution 1 TLE: O(n^2) / O(1)
+        if len(strength) == 1: return strength[0] * strength[0]
+        sol = 0
+        for i in range(len(strength)):
+            curSum = 0
+            curMin = float('inf')
+            for j in range(i, len(strength)):
+                curSum += strength[j]
+                curMin = min(curMin, strength[j])
+                curStrength = curMin * curSum
+                sol += curStrength
+        return sol % (10**9 + 7)
+
+        #Solution 2: O(n) / O(n)
+        #need to get number of subarrays that have strength[i] as minimum
+        """
+        1. record boundary indices of each index
+        - get first index of smaller or equal value to strength[i]'s right
+        - initialize to one index greater than last value if no element
+          smaller than equal to strength[i] in the right
+        ex) strength = [1,3,1,2] -> rightIdx = [2,2,4,4]
+        """
+        rightIdx = [len(strength)] * len(strength)
+        stack = []
+        for i in range(len(strength)):
+            while stack and strength[stack[-1]] >= strength[i]:
+                rightIdx[stack.pop()] = i
+            stack.append(i)
+        
+        """
+        - get first index of smaller value to strength[i]'s left
+        - initialize to -1 if no element smaller than strength[i] in the left
+        ex) strength = [1,3,1,2] -> leftIdx = [-1,0,-1,2]
+        """
+        leftIdx = [-1] * len(strength)
+        stack = []
+        for i in range(len(strength)-1, -1, -1):
+            while stack and strength[stack[-1]] > strength[i]:
+                leftIdx[stack.pop()] = i
+            stack.append(i)
+        
+        """
+        2. for each strength[i] as minimum, calculate sum
+        - find prefix sum of prefix sum of strength
+        ex) strength = [1,3,1,2] -> prefixSum = [1,4,5,7]
+                                 -> prePrefixSum = [1,5,10,17]
+        """
+        sol = 0
+        acc = list(accumulate(accumulate(strength), initial = 0))
+        for i in range(len(strength)):
+            l, r = leftIdx[i], rightIdx[i]
+            lacc = acc[i] - acc[max(l, 0)]
+            racc = acc[r] - acc[i]
+            lCount, rCount = i - l, r - i
+            sol += strength[i] * (racc*lCount - lacc*rCount)
+        return sol % (10**9 + 7)
