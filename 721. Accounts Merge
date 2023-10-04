@@ -1,0 +1,55 @@
+class UnionFind:
+    def __init__(self, n):
+        self.root = list(range(n))
+    def union(self, x, y): #unions two vertices and makes their root nodes the same
+        xRoot = self.find(x)
+        yRoot = self.find(y)
+        if xRoot != yRoot: self.root[yRoot] = xRoot
+    def find(self, x): #finds the root node of a given vertex
+        while x != self.root[x]:
+            x = self.root[x]
+        return x
+
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        #Solution 1 DFS: O(n*k log n*k) / O(nk), n = # of accounts, k = max length of account
+        #create graph with email as node and add emails of same person as edges
+        adj = defaultdict(list)
+        for account in accounts:
+            for i in range(2, len(account)):
+                adj[account[i]].append(account[i-1])
+                adj[account[i-1]].append(account[i])
+
+        #add to component by running DFS on every email connected by same account
+        def dfs(email):
+            seen.add(email)
+            curList = [email]
+            for e in adj[email]:
+                if e not in seen:
+                    curList.extend(dfs(e))
+            return curList
+        
+        sol = []
+        seen = set()
+        for account in accounts:
+            if account[1] not in seen:
+                sol.append([account[0]] + sorted(dfs(account[1])))
+        return sol
+
+        #Solution 2 Union Find: O(n*k log n*k) / O(nk)
+        uf = UnionFind(len(accounts)) #[0,1,2,3]
+        group = {} #{email: index of email in accounts}
+        for i, account in enumerate(accounts):
+            for email in account[1:]:
+                if email in group:
+                    uf.union(i, group[email]) #change root node of group[email] to match i
+                group[email] = i #update to latest index of email
+        
+        index = defaultdict(list)
+        for email, owner in group.items():
+            index[uf.find(owner)].append(email) #append email to root node of owner
+        
+        sol = []
+        for i, emails in index.items():
+            sol.append([accounts[i][0]] + sorted(emails))
+        return sol
