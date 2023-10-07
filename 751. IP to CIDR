@@ -1,0 +1,40 @@
+class Solution:
+    def ipToCIDR(self, ip: str, n: int) -> List[str]:
+        #Solution 1: O(log n) / O(n)
+        def ipToNumber(ip): #ex) "255.0.0.7" -> 4278190087
+            vals = []
+            for val in ip.split("."):
+                vals.append(int(val))
+            num = (vals[0]<<24) + (vals[1]<<16) + (vals[2]<<8) + (vals[3])
+            return num
+
+        def numberToIp(num): #ex) 4278190087 -> "255.0.0.7"
+            #val&255 keeps the last eight binary bits of num
+            vals = [str(num>>24&255), str(num>>16&255), str(num>>8&255), str(num&255)]
+            ip = ".".join(vals)
+            return ip
+
+        def rightmostBit(num): #find # of 0s before rightmost index of 1 of num in binary form
+            #to make sure we're not covering addresses outside of range
+            for i in range(32):
+                if (num & (1<<i)):
+                    return i
+            return 32 #to account for "0.0.0.0" case, where 1 does not exist
+
+        def ipCoveredInBlock(num):
+            #x<<y returns x with the bits shifted to the left by y places
+            # = 2^i, where i is defined in lowestBit(num)
+            # = how many IPs have the same address before the ith index from the right
+            return 1<<rightmostBit(num)
+
+        num = ipToNumber(ip)
+        sol = []
+        while n > 0:
+            coveredIp = ipCoveredInBlock(num)
+            while coveredIp > n: #can't cover more than allocated IP, decreasing block range
+                coveredIp //= 2
+            n -= coveredIp
+            cidr = str(32 - rightmostBit(coveredIp)) #k value except bits we cover in coveredIp
+            sol.append(numberToIp(num) + "/" + cidr)
+            num += coveredIp #increment num according to how many IP addresses covered
+        return sol
