@@ -1,0 +1,40 @@
+class HitCounter:
+    #Solution 1:
+    def __init__(self): #O(1) / O(1)
+        self.q = deque() #append(), appendleft(), pop(), popleft()
+        
+    def hit(self, timestamp: int) -> None: #O(1) / O(n)
+        #add timestamp to queue
+        self.q.append(timestamp)
+        
+    def getHits(self, timestamp: int) -> int: #O(n) / O(1)
+        #remove all timestamps with difference >= 300
+        while self.q:
+            if self.q[0] <= timestamp - 300: self.q.popleft()
+            else: break
+        return len(self.q)
+
+    #Solution 2: follow-up, if # of hits per second is huge
+    def __init__(self): #O(1) / O(1)
+        self.q = deque()
+        self.sol = 0
+        
+    def hit(self, timestamp: int) -> None: #O(1) / O(n)
+        self.sol += 1 #keep track by incrementing every time we hit
+        if self.q and self.q[-1][0] == timestamp:
+            self.q[-1] = (timestamp, self.q[-1][1] + 1)
+        else: self.q.append((timestamp, 1))
+        
+    def getHits(self, timestamp: int) -> int: #O(n) / O(1)
+        while self.q:
+            if self.q[0][0] <= timestamp - 300:
+                cur = self.q.popleft()
+                self.sol -= cur[1] #decrement when we pop from queue
+            else: break
+        return self.sol
+        
+
+# Your HitCounter object will be instantiated and called as such:
+# obj = HitCounter()
+# obj.hit(timestamp)
+# param_2 = obj.getHits(timestamp)
