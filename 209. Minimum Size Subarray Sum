@@ -1,0 +1,16 @@
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        #Solution 1: O(n) / O(1)
+        sol = float('inf')
+        l, r = 0, 0
+        curSum = 0
+        while l <= r and r < len(nums):
+            if curSum < target:
+                curSum += nums[r]
+            while curSum >= target:
+                sol = min(sol, r - l + 1)
+                curSum -= nums[l]
+                l += 1
+            r += 1
+        if sol == float('inf'): return 0
+        return sol
