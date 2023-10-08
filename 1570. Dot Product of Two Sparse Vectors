@@ -1,28 +1,45 @@
 class SparseVector:
-  #Solution 1: O(n) / O(n)
-  def __init__(self, nums: List[int]):
-    self.nums = nums
+    #Solution 1: O(n) / O(n)
+    def __init__(self, nums: List[int]):
+        self.nums = nums
 
-  # Return the dotProduct of two sparse vectors
-  def dotProduct(self, vec: 'SparseVector') -> int:
-    sol = 0
-    for i, j in zip(self.nums, vec.nums):
-      sol += i*j
-    return sol
+    # Return the dotProduct of two sparse vectors
+    def dotProduct(self, vec: 'SparseVector') -> int:
+        sol = 0
+        for n1, n2 in zip(self.nums, vec.nums):
+            sol += n1*n2
+        return sol
 
-  #Solution 2: O(n) / O(non-zero elements)
-  def __init__(self, nums: List[int]):
-    self.dict = {}
-    for i in range(len(nums)):
-      if nums[i]: self.dict[i] = nums[i]
+    #Solution 2: O(n) / O(n), if only one of the vector is sparse
+    def __init__(self, nums: List[int]):
+        self.numHash = defaultdict(int)
+        for i, e in enumerate(nums):
+            self.numHash[i] = e
 
-  # Return the dotProduct of two sparse vectors
-  def dotProduct(self, vec: 'SparseVector') -> int:
-    sol = 0
-    for i, n in self.dict.items():
-      if i in vec.dict:
-        sol += n * vec.dict[i]
-    return sol
+    def dotProduct(self, vec: 'SparseVector') -> int:
+        sol = 0
+        for v in vec.numHash:
+            if v in self.numHash:
+                sol += vec.numHash[v]*self.numHash[v]
+        return sol
+
+    #Solution 3: O(n) / O(n), if only one of the vector is sparse and can't use hashmap
+    def __init__(self, nums: List[int]):
+        self.pairs = []
+        for i, e in enumerate(nums):
+            self.pairs.append([i, e])
+
+    def dotProduct(self, vec: 'SparseVector') -> int:
+        sol = 0
+        i, j = 0, 0
+        while i < len(self.pairs) and j < len(vec.pairs):
+            if self.pairs[i][0] == vec.pairs[j][0]:
+                sol += self.pairs[i][1] * vec.pairs[j][1]
+                i += 1
+                j += 1
+            elif self.pairs[i][0] < vec.pairs[j][0]: i += 1
+            else: j += 1
+        return sol
 
 # Your SparseVector object will be instantiated and called as such:
 # v1 = SparseVector(nums1)
