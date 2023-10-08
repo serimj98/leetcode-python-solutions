@@ -1,19 +1,18 @@
 class Solution:
-  def validWordAbbreviation(self, word: str, abbr: str) -> bool:
-    #Solution 1: O(abbr) / O(abbr)
-    wordIdx, abIdx = 0, 0
-    while abIdx < len(abbr) and wordIdx < len(word):
-      if abbr[abIdx].isalpha():
-        if abbr[abIdx] == word[wordIdx]:
-          wordIdx += 1
-          abIdx += 1
-        else: return False
-      elif abbr[abIdx].isdigit():
-        curNum = ''
-        if abbr[abIdx] == '0': return False
-        while abIdx < len(abbr) and abbr[abIdx].isnumeric():
-          curNum += abbr[abIdx]
-          abIdx += 1
-        curNum = int(curNum)
-        wordIdx += curNum
-    return wordIdx == len(word) and abIdx == len(abbr)
+    def validWordAbbreviation(self, word: str, abbr: str) -> bool:
+        #Solution 1: O(word + abbr) / O(1)
+        aIdx, wIdx = 0, 0
+        while wIdx < len(word) and aIdx < len(abbr):
+            if abbr[aIdx] == word[wIdx]:
+                wIdx += 1
+                aIdx += 1
+            elif abbr[aIdx] == "0":
+                return False
+            elif abbr[aIdx].isnumeric():
+                numAbbr = 0
+                while aIdx < len(abbr) and abbr[aIdx].isnumeric():
+                    numAbbr = numAbbr*10 + int(abbr[aIdx])
+                    aIdx += 1
+                wIdx += int(numAbbr)
+            else: return False
+        return wIdx == len(word) and aIdx == len(abbr)
