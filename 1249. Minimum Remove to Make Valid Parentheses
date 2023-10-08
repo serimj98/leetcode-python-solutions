@@ -1,14 +1,32 @@
 class Solution:
-  def minRemoveToMakeValid(self, s: str) -> str:
-    #Solution 1: O(n) / O(n)
-    stack = []
-    splitS = list(s)
-    for i, c in enumerate(splitS):
-      if c == "(":
-        stack.append(i)
-      elif c == ")":
-        if stack: stack.pop()
-        else: splitS[i] = ""
-    for i in stack:
-      splitS[i] = ""
-    return "".join(splitS)
+    def minRemoveToMakeValid(self, s: str) -> str:
+        #Solution 1: O(n) / O(n)
+        openPar = []
+        closedPar = []
+        for i, c in enumerate(s):
+            if c == "(":
+                openPar.append(i)
+            elif openPar and c == ")":
+                openPar.pop()
+            elif c == ")":
+                closedPar.append(i)
+
+        pop = set(openPar + closedPar)
+        sol = []
+        for i in range(len(s)):
+            if i not in pop:
+                sol.append(s[i])
+        return "".join(sol)
+
+        #Solution 2: O(n) / O(n)
+        sList = list(s)
+        stack = []
+        for i, c in enumerate(s):
+            if c.isalpha(): continue
+            elif c == "(": stack.append(i)
+            else:
+                if stack: stack.pop()
+                else: sList[i] = ""
+        for i in stack:
+            sList[i] = ""
+        return "".join(sList)
