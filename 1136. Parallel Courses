@@ -1,0 +1,64 @@
+class Solution:
+    def minimumSemesters(self, n: int, relations: List[List[int]]) -> int:
+        #topological sort algorithm: takes a directed graph and returns an array
+        #of the nodes where each node appears before all the nodes it points to
+
+        #Solution 1 BFS: O(n + e) / O(n + e), where n is # of vertices and e is # of edges
+        preDict = {i: set() for i in range(1, n+1)} #empty courses mean indegree = 0
+        nxtDict = defaultdict(set)
+        for pre, nxt in relations: 
+            nxtDict[pre].add(nxt) #next courses compared to a course
+            preDict[nxt].add(pre) #previous courses compared to a course
+
+        q = deque()
+        for nxt in preDict:
+            if not preDict[nxt]: q.append((nxt, 1)) #only added when no indegrees
+        seen = len(q)
+
+        while q:
+            for i in range(len(q)): #look through courses with same indegree before moving on
+                cur, semesters = q.popleft()
+                for nxt in nxtDict[cur]:
+                    preDict[nxt].remove(cur)
+                    if len(preDict[nxt]) == 0: #when indegree = 0 after removing previous layer
+                        q.append((nxt, semesters + 1))
+                        seen += 1
+        if seen == n: return semesters
+        return -1
+
+        #Solution 2 DFS: O(n + e) / O(n + e)
+        #1. check if graph has cycle
+        adjList = {i: [] for i in range(1, n+1)}
+        for pre, nxt in relations:
+            adjList[pre].append(nxt)
+
+        visitedCycle = {} #visiting: True, visited: False
+        def cycleCheck(node):
+            if node in visitedCycle:
+                return visitedCycle[node] #if already visited, return False
+            visitedCycle[node] = True
+            for nxt in adjList[node]:
+                if cycleCheck(nxt): return True
+            visitedCycle[node] = False #mark visited after looking for cycles starting with node
+            return False
+
+        for i in range(1, n+1):
+            if cycleCheck(i):
+                return -1
+        
+        #2. return longest path if there is no cycle
+        visitedLength = defaultdict(int)
+        def dfs(node):
+            if node in visitedLength: return visitedLength[node]
+            maxPath = 1
+            for nxt in adjList[node]:
+                path = dfs(nxt)
+                maxPath = max(maxPath, path+1)
+            visitedLength[node] = maxPath
+            return maxPath
+        
+        sol = 0
+        for i in range(1, n+1):
+            sol = max(sol, dfs(i))
+
+        return sol
