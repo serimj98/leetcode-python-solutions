@@ -1,0 +1,29 @@
+class Solution:
+    def minAbsoluteDifference(self, nums: List[int], x: int) -> int:
+        #Solution 1 TLE: O(n^2) / O(1)
+        if x == 0: return 0
+        sol = float('inf')
+        for i in range(len(nums)-x):
+            for j in range(i+x, len(nums)):
+                    sol = min(sol, abs(nums[i] - nums[j]))
+        return sol
+
+        #Solution 2 Heap: O(n log n) / O(n)
+        if x == 0: return 0
+        sortedNums = sorted((val, idx) for idx, val in enumerate(nums))
+
+        minHeap, maxHeap = [], []
+        sol = float('inf')
+        for val, idx in sortedNums:
+            #store all elements that are at least x indices rightward/leftward of val
+            heappush(minHeap, (idx + x, val))
+            heappush(maxHeap, (-(idx - x), val)) #set as negative to make max heap
+
+            #numbers stored in two heaps must be <= current number, as we sorted nums
+            #heap's top value must be the shortest distance from current val
+            while minHeap and minHeap[0][0] <= idx: #check if index diff requirement is met
+                sol = min(sol, val - heappop(minHeap)[1])
+            while maxHeap and maxHeap[0][0] <= -idx:
+                sol = min(sol, val - heappop(maxHeap)[1])
+
+        return sol
