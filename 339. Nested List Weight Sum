@@ -41,28 +41,13 @@
 #        :rtype List[NestedInteger]
 #        """
 
-# class Solution:
-#     def depthSum(self, nestedList: List[NestedInteger]) -> int:
-#         self.total = 0
-#         def dfs(nested_list, depth):
-#             for nested in nested_list:
-#                 if nested.isInteger():
-#                     self.total += nested.getInteger() * depth
-#                 else:
-#                     self.total += dfs(nested.getList(), depth + 1)
-#             return total
-
-#         return dfs(nestedList, 1)
-
-
 class Solution:
-  def depthSum(self, nestedList: List[NestedInteger]) -> int:
-    def recursive(nested_list, depth):
-      cur = 0
-      for nested in nested_list:
-        if nested.isInteger():
-          cur += nested.getInteger() * depth
-        else:
-          cur += recursive(nested.getList(), depth + 1)
-      return cur
-    return recursive(nestedList, 1)
+    def depthSum(self, nestedList: List[NestedInteger]) -> int:
+        #Solution 1: O(n) / O(depth)
+        self.sol = 0
+        def dfs(nested, depth):
+            for l in nested:
+                if l.isInteger(): self.sol += l.getInteger() * depth
+                else: dfs(l.getList(), depth + 1)
+        dfs(nestedList, 1)
+        return self.sol
