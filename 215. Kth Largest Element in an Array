@@ -1,16 +1,30 @@
 class Solution:
-  def findKthLargest(self, nums: List[int], k: int) -> int:
-    #Solution 1: O(n log n) / O(1)
-    nums.sort()
-    return nums[-k]
-  
-    #Solution 2: O(n + k log n) / O(1)
-    for i in range(len(nums)): #O(n)
-      nums[i] *= -1
-    heapify(nums) #O(n)
-    for i in range(k): #O(k)
-      kth = heappop(nums) #O(log n)
-    return kth * -1
-  
-    #Solution 3: O(n + k log n) / O(1)
-    return nlargest(k, nums)[-1]
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        #Solution 1: O(n log n) / O(n)
+        return sorted(nums, reverse = True)[k-1]
+
+        #Solution 2: O(n log k) / O(k)
+        heap = []
+        for num in nums: #O(n)
+            if len(heap) < k: heappush(heap, num)
+            else: heappushpop(heap, num) #O(log k)
+        return heap[0]
+
+        #Solution 3 Quickselect: O(n), average case / O(n)
+        def recursive(l, curK):
+            if not l: return
+            pivot = random.choice(l)
+            left = [x for x in l if x > pivot]
+            mid = [x for x in l if x == pivot]
+            right = [x for x in l if x < pivot]
+
+            l, m = len(left), len(mid)
+
+            if curK <= l: #k less than size of left
+                return recursive(left, curK)
+            elif curK > l + m: #k greater than size of left + mid
+                return recursive(right, curK - l - m)
+            else: #k in mid, but since all elements are equal, return any element
+                return mid[0]
+            
+        return recursive(nums, k)
