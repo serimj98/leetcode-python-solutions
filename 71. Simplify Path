@@ -1,0 +1,10 @@
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        #Solution 1: O(n) / O(n)
+        stack = []
+        splitPath = path.split("/")
+        for p in splitPath:
+            if p == "" or p == ".": continue
+            if stack and p == "..": stack.pop()
+            elif p != "..": stack.append(p)
+        return "/" + "/".join(stack)
