@@ -1,0 +1,38 @@
+# """
+# This is HtmlParser's API interface.
+# You should not implement it, or speculate about its implementation
+# """
+#class HtmlParser(object):
+#    def getUrls(self, url):
+#        """
+#        :type url: str
+#        :rtype List[str]
+#        """
+
+from concurrent import futures
+
+class Solution:
+    def crawl(self, startUrl: str, htmlParser: 'HtmlParser') -> List[str]:
+        #Solution 1: O(n) / O(n), n = # of URLs
+        def hostname(url):
+            return url.split('/')[2]
+
+        sol = set()
+        sol.add(startUrl)
+        """
+        concurrent.futures module
+        - ThreadPoolExecutor(): uses a pool of threads to execute calls asynchronously
+        - executor.submit(): schedules the callable, and returns a Future object
+                            representing the execution of the callable
+        - executor.result(): result of the executor.submit() object,
+                            blocks other threads until task is completed
+        """
+        with futures.ThreadPoolExecutor() as executor:
+            tasks = deque([executor.submit(htmlParser.getUrls, startUrl)])
+            while tasks:
+                curTasks = tasks.popleft().result()
+                for url in curTasks:
+                    if url not in sol and hostname(startUrl) == hostname(url):
+                        sol.add(url)
+                        tasks.append(executor.submit(htmlParser.getUrls, url))
+        return list(sol)
