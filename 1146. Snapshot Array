@@ -1,27 +1,59 @@
 class SnapshotArray:
 
-  def __init__(self, length: int):
-    self.snapshot = dict()
-    self.cur = dict()
-    self.id = 0
+    #Solution 1:
+    def __init__(self, length: int):
+        #O(1) / O(snap*length)
+        self.snapshot = [dict() for i in range(length)]
+        self.id = 0
 
-  def set(self, index: int, val: int) -> None:
-    self.cur[index] = val
+    def set(self, index: int, val: int) -> None:
+        #O(1) / O(1)
+        self.snapshot[index][self.id] = val
 
-  def snap(self) -> int:
-    self.snapshot[self.id] = self.cur.copy()
-    self.id += 1
-    return self.id - 1
+    def snap(self) -> int:
+        #O(1) / O(1)
+        self.id += 1
+        return self.id - 1
 
-  def get(self, index: int, snap_id: int) -> int:
-    if snap_id in self.snapshot:
-      if index in self.snapshot[snap_id]:
-        return self.snapshot[snap_id][index]
-    return 0
-        
+    def get(self, index: int, snap_id: int) -> int:
+        #O(snap_id) / O(1)
+        while snap_id >= 0 and snap_id not in self.snapshot[index]:
+            snap_id -= 1
+        if snap_id == -1: return 0
+        return self.snapshot[index][snap_id]
 
-# Your SnapshotArray object will be instantiated and called as such:
-# obj = SnapshotArray(length)
-# obj.set(index,val)
-# param_2 = obj.snap()
-# param_3 = obj.get(index,snap_id)
+    #Solution 2:
+    def __init__(self, length: int):
+        #O(1) / O(snap*length)
+        self.snapshot = defaultdict(list) #{index: [[snap id (sorted), val]]}
+        self.id = 0
+
+    def set(self, index: int, val: int) -> None:
+        #O(1) / O(1)
+        #if we already set a value for current snap and index, replace existing data
+        if self.snapshot[index] and self.snapshot[index][-1][0] == self.id:
+            self.snapshot[index][-1][1] = val
+        else:
+            self.snapshot[index].append([self.id, val])
+
+    def snap(self) -> int:
+        #O(1) / O(1)
+        self.id += 1
+        return self.id - 1
+
+    def get(self, index: int, snap_id: int) -> int:
+        #O(log(snap_id)) / O(1)
+        cur = self.snapshot[index] #has info of all [snap_id (sorted), val] of that index
+        l, r = 0, len(cur) - 1
+        sol = -1
+        while l <= r:
+            m = l + (r - l) // 2
+            if cur[m][0] == snap_id: return cur[m][1]
+            #find id less than but closest to snap_id, if no change with increased snap_id
+            if cur[m][0] < snap_id:
+                sol = m
+                l = m + 1
+            else:
+                r = m - 1
+        if sol == -1: return 0
+        return cur[sol][1]
