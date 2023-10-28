@@ -1,0 +1,31 @@
+class Solution:
+    def isNumber(self, s: str) -> bool:
+        #Solution 1: O(n) / O(n)
+        def isInteger(integer):
+            if len(integer) == 0: return False
+            if integer[0] == "+" or integer[0] == "-": integer = integer[1:]
+            if integer.isnumeric(): return True
+            return False
+        
+        def isDecimal(decimal):
+            if len(decimal) == 0: return False
+            if decimal[0] == "+" or decimal[0] == "-": decimal = decimal[1:]
+            decList = decimal.split(".")
+            if len(decList) > 2: return False
+            for d in decList:
+                if d == "": continue
+                if not d.isnumeric(): return False
+            if not decList[-1].isnumeric() and not decList[0].isnumeric(): return False
+            return True
+        
+        def isNumber(s):
+            s = s.replace('E', 'e')
+            sList = s.split("e")
+            if len(sList) == 1:
+                if isInteger(s) or isDecimal(s): return True
+            elif len(sList) == 2:
+                if (isInteger(sList[0]) or isDecimal(sList[0])) and isInteger(sList[1]):
+                    return True
+            return False
+        
+        return isNumber(s)
