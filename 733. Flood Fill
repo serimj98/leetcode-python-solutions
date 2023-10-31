@@ -1,18 +1,38 @@
 class Solution:
-  def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
-    #Solution 1: O(row*col) / O(row*col), recursive stack
-    sp = image[sr][sc]
-    if sp == newColor: return image
-    rows = len(image)
-    cols = len(image[0])
-    
-    def dfs(row, col):
-      if row >= 0 and row < rows and col >= 0 and col < cols and image[row][col] == sp:
-        image[row][col] = newColor
-        dfs(row+1, col)
-        dfs(row-1, col)
-        dfs(row, col+1)
-        dfs(row, col-1)
-      
-    dfs(sr, sc)
-    return image
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
+        #Solution 1 BFS: O(n) / O(n)
+        q = deque()
+        q.append((sr, sc))
+        originalColor = image[sr][sc]
+        image[sr][sc] = color
+        
+        dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        seen = set()
+        while q:
+            r, c = q.popleft()
+            seen.add((r, c))
+            image[r][c] = color
+            for i, j in dirs:
+                newR, newC = r + i, c + j
+                if (newR, newC) not in seen:
+                    if 0 <= newR < len(image) and 0 <= newC < len(image[0]):
+                        if image[newR][newC] == originalColor:
+                            q.append((newR, newC))
+        return image
+
+        #Solution 2 DFS: O(n) / O(n), recursive stack
+        sp = image[sr][sc]
+        if sp == newColor: return image
+        rows = len(image)
+        cols = len(image[0])
+        
+        def dfs(row, col):
+        if row >= 0 and row < rows and col >= 0 and col < cols and image[row][col] == sp:
+            image[row][col] = newColor
+            dfs(row+1, col)
+            dfs(row-1, col)
+            dfs(row, col+1)
+            dfs(row, col-1)
+        
+        dfs(sr, sc)
+        return image
