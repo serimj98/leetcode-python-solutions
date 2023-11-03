@@ -1,0 +1,27 @@
+class Solution:
+    def maximumDetonation(self, bombs: List[List[int]]) -> int:
+        #Solution 1: O(n^3) / O(n^2)
+        def findDistance(p1, p2):
+            x1, y1, _ = p1
+            x2, y2, _ = p2
+            return sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        
+        adjList = defaultdict(list)
+        for i in range(len(bombs)): #O(n^2)
+            for j in range(len(bombs)):
+                if i == j: continue
+                if findDistance(bombs[i], bombs[j]) <= bombs[i][2]:
+                    adjList[i].append(j)
+        
+        def dfs(cur, seen): #O(v+e) = O(n^2), v = n, e = n^2
+            seen.add(cur)
+            for node in adjList[cur]:
+                if node not in seen:
+                    dfs(node, seen)
+                    seen.add(node)
+            return len(seen)
+        
+        self.sol = 1
+        for i in range(len(bombs)): #O(n)
+            self.sol = max(self.sol, dfs(i, set()))
+        return self.sol
