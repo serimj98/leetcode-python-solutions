@@ -5,18 +5,68 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-  def delNodes(self, root: TreeNode, to_delete: List[int]) -> List[TreeNode]:
-    #Solution 1: O(n) / O(n)
-    sol = []
-    delete = set(to_delete)
-    def recursive(node):
-      if not node: return
-      node.left, node.right = recursive(node.left), recursive(node.right)
-      if node.val in delete:
-        if node.left: sol.append(node.left)
-        if node.right: sol.append(node.right)
-        return None
-      return node
-    recursive(root)
-    if root.val not in delete: sol.append(root)
-    return sol
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        #Solution 1 BFS: O(n) / O(n)
+        deleteSet = set(to_delete)
+        sol = set()
+        sol.add(root)
+        q = deque()
+        q.append((root, None, None))
+        while q:
+            cur, parent, left = q.popleft()
+            if not cur: continue
+            if parent and cur.val in deleteSet:
+                if cur in sol: sol.remove(cur)
+                if left: parent.left = None
+                else: parent.right = None
+                if cur.left: sol.add(cur.left)
+                if cur.right: sol.add(cur.right)
+            q.append((cur.left, cur, True))
+            q.append((cur.right, cur, False))
+
+        if root.val in deleteSet:
+            sol.remove(root)
+            if root.left: sol.add(root.left)
+            if root.right: sol.add(root.right)
+        return list(sol)
+
+        #Solution 2 DFS: O(n) / O(n)
+        deleteSet = set(to_delete)
+        self.sol = set()
+        self.sol.add(root)
+        def recursive(node, parent, left):
+            if not node: return
+            if parent and node.val in deleteSet:
+                if node in self.sol: self.sol.remove(node)
+                if left: parent.left = None
+                else: parent.right = None
+                if node.left: self.sol.add(node.left)
+                if node.right: self.sol.add(node.right)
+            recursive(node.left, node, True)
+            recursive(node.right, node, False)
+        
+        recursive(root, None, None)
+
+        if root.val in deleteSet:
+            self.sol.remove(root)
+            if root.left: self.sol.add(root.left)
+            if root.right: self.sol.add(root.right)
+
+        return list(self.sol)
+
+        #Solution 2 Cleaner DFS: O(n) / O(n)
+        deleteSet = set(to_delete)
+        self.sol = []
+        def recursive(node):
+            if not node: return
+            node.left = recursive(node.left)
+            node.right = recursive(node.right)
+            if node.val in deleteSet:
+                if node.left: self.sol.append(node.left)
+                if node.right: self.sol.append(node.right)
+                return None
+            return node
+        recursive(root)
+        if root.val not in deleteSet: self.sol.append(root)
+        return self.sol
+        
