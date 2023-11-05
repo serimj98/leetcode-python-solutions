@@ -1,0 +1,22 @@
+class Solution:
+    def earliestAcq(self, logs: List[List[int]], n: int) -> int:
+        #Solution 1 Union Find: O(n + m log m + mn), m = logs / O(n + m)
+        uf = {x: x for x in range(n)} #O(n)
+        self.groups = n
+
+        def find(x):
+            if uf[x] != x:
+                uf[x] = find(uf[x])
+            return uf[x]
+        
+        def merge(x, y):
+            x, y = find(x), find(y)
+            if x != y:
+                self.groups -= 1
+                uf[x] = y
+        
+        logs.sort(key = lambda x: x[0]) #O(m log m)
+        for t, x, y in logs: #O(mn)
+            merge(x, y)
+            if self.groups == 1: return t
+        return -1
