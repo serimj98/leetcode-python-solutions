@@ -1,0 +1,15 @@
+class Solution:
+    def findOriginalArray(self, changed: List[int]) -> List[int]:
+        #Solution 1: O(n log n) / O(n)
+        if len(changed) % 2 != 0: return []
+        changed.sort()
+        changedSet = Counter(changed)
+        sol = []
+        for val in changed:
+            if changedSet[val] == 0: continue
+            changedSet[val] -= 1
+            sol.append(val)
+            if changedSet[val*2] == 0: return []
+            changedSet[val*2] -= 1
+        if len(sol) == len(changed) // 2: return sol
+        else: return []
