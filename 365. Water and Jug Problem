@@ -1,0 +1,23 @@
+class Solution:
+    def canMeasureWater(self, jug1Capacity: int, jug2Capacity: int, targetCapacity: int) -> bool:
+        #Solution 1: O(jug1Capacity*jug2Capacity) / O(jug1Capacity + jug2Capacity)
+        q = deque()
+        q.append((0, 0))
+        seen = set()
+        while q:
+            a, b = q.popleft()
+            seen.add((a, b))
+            if a == targetCapacity or b == targetCapacity or a + b == targetCapacity: return True
+            if (0, b) not in seen: #empty a
+                q.append((0, b))
+            if (a, 0) not in seen: #empty b
+                q.append((a, 0))
+            if (jug1Capacity, b) not in seen: #fill a
+                q.append((jug1Capacity, b))
+            if (a, jug2Capacity) not in seen: #fill b
+                q.append((a, jug2Capacity))
+            if (min(jug1Capacity, a + b), max(0, b - (jug1Capacity - a))) not in seen: #pour b into a
+                q.append((min(jug1Capacity, a + b), max(0, b - (jug1Capacity - a))))
+            if (max(0, a - (jug2Capacity - b)), min(jug2Capacity, a + b)) not in seen: #pour a into b
+                q.append((max(0, a - (jug2Capacity - b)), min(jug2Capacity, a + b)))
+        return False
