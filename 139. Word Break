@@ -1,11 +1,43 @@
+class TrieNode:
+    def __init__(self):
+        self.isWord = False
+        self.children = {}
+
 class Solution:
-  def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-    #Solution 1: O(n^3) / O(n)
-    dp = [0] * (len(s) + 1) #1 means that you can start at this position
-    dp[0] = 1
-    wordDict = set(wordDict)
-    for i in range(len(s)):
-      for j in range(i, len(s)):
-        if dp[i] and s[i:j+1] in wordDict:
-          dp[j+1] = 1
-    return dp[-1]
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        #Solution 1: O(s*wordDict*word) / O(s)
+        dp = [False for i in range(len(s) + 1)]
+        dp[0] = True
+        for i in range(len(s)):
+            if dp[i] == False: continue
+            if dp[i] == True:
+                for word in wordDict:
+                    if s[i:i+len(word)] == word:
+                        dp[i+len(word)] = True
+        return dp[-1]
+
+        #Solution 2 Trie: O(wordDict*word + s^2) / O(wordDict*word + s)
+        #1. Build trie with s.
+        root = TrieNode()
+        for word in wordDict:
+            cur = root
+            for c in word:
+                if c not in cur.children:
+                    cur.children[c] = TrieNode()
+                cur = cur.children[c]
+            cur.isWord = True
+        
+        #2. Start to traverse trie whenever dp[i] is True.
+        # Modify isWord to True when a word is successfully found in s.
+        dp = [False for i in range(len(s) + 1)]
+        dp[0] = True
+        for i in range(len(s)):
+            if dp[i] == True:
+                cur = root
+                for j in range(i, len(s)):
+                    c = s[j]
+                    if c not in cur.children:
+                        break
+                    cur = cur.children[c]
+                    if cur.isWord: dp[j+1] = True
+        return dp[-1]
