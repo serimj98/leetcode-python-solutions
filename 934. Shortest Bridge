@@ -1,0 +1,76 @@
+class Solution:
+    def shortestBridge(self, grid: List[List[int]]) -> int:
+        #Solution 1: O(grid^2) / O(grid)
+        islandFound = False
+        dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        self.island = set()
+        def dfs(r, c, seen):
+            self.island.add((r, c))
+            seen.add((r, c))
+            for i, j in dirs:
+                newX, newY = r+i, c+j
+                if 0 <= newX < len(grid) and 0 <= newY < len(grid[0]):
+                    if grid[newX][newY] == 1 and (newX, newY) not in seen:
+                        dfs(newX, newY, seen)
+                        grid[newX][newY] = -1
+        
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 1:
+                    if not islandFound:
+                        dfs(r, c, set())
+                        islandFound = True
+                        island1 = self.island
+                        self.island = set()
+                    else:
+                        dfs(r, c, set())
+                        island2 = self.island
+        
+        sol = float('inf')
+        for x1, y1 in island1:
+            for x2, y2 in island2:
+                sol = min(sol, abs(x2 - x1) + abs(y2 - y1))
+        return sol - 1
+
+        #Solution 2: O(grid) / O(grid)
+        #1. Find one cell that has a 1 so we can find the first island using that cell.
+        def findCell():
+            for r in range(len(grid)):
+                for c in range(len(grid[0])):
+                    if grid[r][c] == 1:
+                        grid[r][c] = 2
+                        self.seen.add((r, c))
+                        return r, c
+        
+        #2. Run DFS from that cell and mark all cells in that island as 2, so we can differentiate:
+        # 0 - water / 1 - island 2 / 2 - island 1
+        self.dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        self.seen = set()
+        def dfs(r, c):
+            for i, j in self.dirs:
+                newX, newY = r+i, c+j
+                if 0 <= newX < len(grid) and 0 <= newY < len(grid[0]):
+                    if (newX, newY) not in self.seen and grid[newX][newY] == 1:
+                        grid[newX][newY] = 2
+                        self.seen.add((newX, newY))
+                        dfs(newX, newY)
+
+        firstX, firstY = findCell()
+        dfs(firstX, firstY)
+        
+        #3. Run BFS from all points in island 1 to find first cell in island 2.
+        q = deque()
+        for r, c in list(self.seen):
+            q.append((r, c, 0))
+        
+        self.seen = set()
+        while q:
+            r, c, steps = q.popleft()
+            for i, j in self.dirs:
+                newX, newY = r+i, c+j
+                if 0 <= newX < len(grid) and 0 <= newY < len(grid[0]):
+                    if (newX, newY) not in self.seen:
+                        if grid[newX][newY] == 0:
+                            q.append((newX, newY, steps + 1))
+                            self.seen.add((newX, newY))
+                        if grid[newX][newY] == 1: return steps #found second island
