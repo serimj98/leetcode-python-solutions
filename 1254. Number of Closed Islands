@@ -1,0 +1,54 @@
+class Solution:
+    def closedIsland(self, grid: List[List[int]]) -> int:
+        #Solution 1: O(r*c) / O(r*c)
+        def dfs(r, c):
+            if r < 0 or c < 0 or r >= len(grid) or c >= len(grid[0]): return False
+            if grid[r][c] == 1: return True
+            grid[r][c] = 1 #mark land (0) as water (1) to mark visited
+            up = dfs(r-1, c)
+            down = dfs(r+1, c)
+            left = dfs(r, c-1)
+            right = dfs(r, c+1)
+            return up and down and left and right
+            
+        sol = 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 0 and dfs(r, c):
+                    sol += 1
+        
+        return sol
+
+        #Solution 2: O(r*c) / O(r*c)
+        #1. Run DFS on the islands that start from the edges of the grid and mark them.
+        self.dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        def edgeDfs(r, c):
+            grid[r][c] = 2
+            for i, j in self.dirs:
+                newX, newY = r+i, c+j
+                if 0 <= newX < len(grid) and 0 <= newY < len(grid[0]):
+                    if grid[newX][newY] == 0:
+                        edgeDfs(newX, newY)
+        
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if r == 0 or r == len(grid)-1 or c == 0 or c == len(grid[0])-1:
+                    if grid[r][c] == 0:
+                        edgeDfs(r, c)
+        
+        #2. Run DFS on the remaining cells that start with 0 and find number of islands.
+        def dfs(r, c):
+            for i, j in self.dirs:
+                newX, newY = r+i, c+j
+                if 0 <= newX < len(grid) and 0 <= newY < len(grid[0]):
+                    if grid[newX][newY] == 0:
+                        grid[newX][newY] = 1
+                        edgeDfs(newX, newY)
+
+        sol = 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 0:
+                    dfs(r, c)
+                    sol += 1
+        return sol
