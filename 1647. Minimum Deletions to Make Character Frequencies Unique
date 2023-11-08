@@ -1,0 +1,13 @@
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        #Solution 1: O(n+k^2), k = unique characters in s / O(k)
+        sCounter = Counter(s)
+        seen = set()
+        sol = 0
+        for c in sCounter:
+            if sCounter[c] in seen:
+                while sCounter[c] > 0 and sCounter[c] in seen:
+                    sol += 1
+                    sCounter[c] -= 1
+            seen.add(sCounter[c])
+        return sol
