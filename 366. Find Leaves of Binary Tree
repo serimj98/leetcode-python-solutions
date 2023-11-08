@@ -5,43 +5,33 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-  def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
-    #Solution 1 DFS: O(h log n) / O(n)
-    self.sol = []
-    self.curLeaves = []
-    def recursive(node):
-      if not node: return
-      if not node.left and not node.right:
-        self.curLeaves.append(node.val)
-        return
-      node.left = recursive(node.left) #will get pruned by getting assigned to None if leaf
-      node.right = recursive(node.right)
-      return node
-    while root:
-      root = recursive(root)
-      self.sol.append(self.curLeaves)
-      self.curLeaves = []
-    return self.sol
-  
-    #Solution 2: O(n) / O(n)
-    """
-    The leaves of the tree would start with height 0, then +1 as you go up the tree.
-    h(1) = max(recursive(2), recursive(3)) + 1 = 2
-               h(2) = max(recursive(4), recursive(5)) + 1 = 1
-                          h(4) = max(recursive(None), recursive(None)) + 1 = 0
-                                     -1               -1
-                          h(5) = max(recursive(None), recursive(None)) + 1 = 0
-                                     -1               -1
-               h(3) = max(recursive(None), recursive(None)) + 1 = 0
-                          -1               -1
-    """
-    self.sol = []
-    def recursive(node):
-      if not node: return -1
-      h = max(recursive(node.left), recursive(node.right)) + 1
-      if len(self.sol) <= h:
-        self.sol.append([])
-      self.sol[h].append(node.val)
-      return h
-    recursive(root)
-    return self.sol
+    def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
+        #Solution 1: O(n) / O(n)
+        sol = []
+        def recursive(node):
+            if not node: return -1
+            left = recursive(node.left)
+            right = recursive(node.right)
+            level = max(left, right) + 1 #height from leaf of tree to current node
+            if level >= len(sol): sol.append([])
+            sol[level].append(node.val)
+            return level
+        
+        recursive(root)
+        return sol
+
+        #Solution 2: O(n) / O(n)
+        self.leafDict = defaultdict(list)
+        def recursive(node):
+            if not node: return 0
+            left = recursive(node.left)
+            right = recursive(node.right)
+            level = max(left, right) + 1
+            self.leafDict[level].append(node.val)
+            return level
+        recursive(root)
+        
+        sol = []
+        for level in self.leafDict:
+            sol.append(self.leafDict[level])
+        return sol
