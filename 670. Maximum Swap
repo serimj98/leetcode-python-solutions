@@ -1,0 +1,34 @@
+class Solution:
+    def maximumSwap(self, num: int) -> int:
+        #Solution 1: O(n^2) / O(n)
+        maxVal = num
+        numList = [x for x in str(num)]
+        for i in range(len(numList)):
+            for j in range(i, len(numList)):
+                numList[i], numList[j] = numList[j], numList[i]
+                maxVal = max(maxVal, int("".join(numList)))
+                numList[i], numList[j] = numList[j], numList[i]
+        return maxVal
+
+        #Solution 2: O(n) / O(n)
+        numList = [x for x in str(num)]
+        for i in range(len(numList) - 1): #find index where next value is increasing
+            if int(numList[i]) < int(numList[i+1]): break
+        #enters else statement when break statement not encountered
+        else: return num #if always decreasing, means maximum value
+        maxIdx, maxVal = i+1, int(numList[i+1])
+
+        #search if any other value on right is greater than maxVal
+        for j in range(i+1, len(numList)):
+            if maxVal <= int(numList[j]):
+                maxIdx, maxVal = j, int(numList[j])
+        
+        #find leftmost value that is smaller than maxVal
+        leftIdx = i
+        for k in range(i):
+            if int(numList[k]) < maxVal:
+                leftIdx = k
+                break
+        
+        numList[maxIdx], numList[leftIdx] = numList[leftIdx], numList[maxIdx]
+        return int("".join(numList))
