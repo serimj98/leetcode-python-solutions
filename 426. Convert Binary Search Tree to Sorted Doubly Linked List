@@ -8,19 +8,37 @@ class Node:
 """
 
 class Solution:
-  def treeToDoublyList(self, root: 'Node') -> 'Node':
-    #Solution 1: O(n) / O(1)
-    if not root: return
-    self.head, self.prev = None, None
-    def dfs(node):
-      if not node: return
-      dfs(node.left)
-      if not self.head: self.head = node
-      if self.prev: self.prev.right = node
-      node.left = self.prev
-      self.prev = node
-      dfs(node.right)
-    dfs(root)
-    self.head.left = self.prev
-    self.prev.right = self.head
-    return self.head
+    def treeToDoublyList(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        #Solution 1 Recursive: O(n) / O(n)
+        self.first, self.last = None, None
+        def recursive(node):
+            if not node: return
+            recursive(node.left)
+            if self.last: #last keeps track of previous node in inorder traversal
+                self.last.right = node
+                node.left = self.last
+            else: #only when we find smallest node
+                self.first = node
+            self.last = node
+            recursive(node.right)
+        
+        if not root: return
+        recursive(root)
+        self.last.right = self.first
+        self.first.left = self.last
+        return self.first
+
+        #Solution 2 Iterative: O(n) / O(n)
+        if not root: return
+        dummy = Node(0)
+        last = dummy
+        stack, node = [], root
+        while stack or node:
+            while node:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            node.left, last.right, last = last, node, node
+            node = node.right
+        dummy.right.left, last.right = last, dummy.right #dummy.right holds first node
+        return dummy.right
