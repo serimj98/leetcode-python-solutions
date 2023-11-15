@@ -6,18 +6,34 @@ class Node:
         self.neighbors = neighbors if neighbors is not None else []
 """
 
+from typing import Optional
 class Solution:
-  def cloneGraph(self, node: 'Node') -> 'Node':
-    #Solution 1 DFS: O(E+V) / O(V)
-    if not node: return
-    sol = Node(node.val, [])
-    seen = {node: sol}
-    stack = [node]
-    while stack:
-      cur = stack.pop()
-      for neigh in cur.neighbors:
-        if neigh not in seen:
-          stack.append(neigh)
-          seen[neigh] = Node(neigh.val, [])
-        seen[cur].neighbors.append(seen[neigh])
-    return sol
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        #Solution 1 BFS: O(v + e) / O(v)
+        if not node: return
+        visited = dict()
+        visited[node] = Node(node.val)
+        head = visited[node]
+        q = deque()
+        q.append(node)
+        while q:
+            cur = q.popleft()
+            for nei in cur.neighbors:
+                if nei not in visited:
+                    copy = Node(nei.val)
+                    visited[nei] = copy
+                    q.append(nei) #visit if we haven't seen before
+                visited[cur].neighbors.append(visited[nei])
+        return head
+
+        #Solution 2 DFS: O(v + e) / O(v)
+        self.visited = dict()
+        def dfs(node):
+            if not node: return
+            if node in self.visited: return self.visited[node]
+            copy = Node(node.val)
+            self.visited[node] = copy
+            if node.neighbors:
+                copy.neighbors = [dfs(nei) for nei in node.neighbors]
+            return copy
+        return dfs(node)
