@@ -1,0 +1,24 @@
+class TicTacToe:
+
+    #Solution 1:
+    def __init__(self, n: int): #O(1) / O(n)
+        self.n = n
+        self.rows = {row: [0, 0] for row in range(n)}
+        self.cols = {col: [0, 0] for col in range(n)}
+        self.diag = {0:[0, 0], 1:[0, 0]} #0: diagonal from top left, 1: from top right
+
+    def move(self, row: int, col: int, player: int) -> int: #O(1) / O(1)
+        self.rows[row][player-1] += 1
+        self.cols[col][player-1] += 1
+        if row == col: self.diag[0][player-1] += 1
+        if row + col == self.n - 1: self.diag[1][player-1] += 1
+        if self.rows[row][player-1] == self.n: return player
+        if self.cols[col][player-1] == self.n: return player
+        if self.diag[0][player-1] == self.n or self.diag[1][player-1] == self.n:
+            return player
+        return 0
+
+
+# Your TicTacToe object will be instantiated and called as such:
+# obj = TicTacToe(n)
+# param_1 = obj.move(row,col,player)
