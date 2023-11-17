@@ -1,0 +1,30 @@
+class Solution:
+    def fullBloomFlowers(self, flowers: List[List[int]], people: List[int]) -> List[int]:
+        #Solution 1 MLE: O(max value in flowers^2) / O(max value in flowers)
+        flowersDict = defaultdict(int)
+        for flower in flowers:
+            for i in range(flower[0], flower[1]+1):
+                flowersDict[i] += 1
+        sol = []
+        for p in people:
+            sol.append(flowersDict[p])
+        return sol
+
+        #Solution 2 Heap: O(n log n + m log m + m log n) n = flowers, m = people / O(n + m)
+        flowers.sort() #O(n log n)
+        sortedPeople = sorted(people) #O(m log m)
+        flowersDict = dict()
+        heap = []
+
+        idx = 0
+        for person in sortedPeople: #O(m)
+            #flower at idx already started blooming
+            while idx < len(flowers) and flowers[idx][0] <= person:
+                #add when the flower finishes blooming
+                heappush(heap, flowers[idx][1]) #O(log n)
+                idx += 1
+            while heap and heap[0] < person:
+                #remove all flowers that finished blooming
+                heappop(heap) #O(log n)
+            flowersDict[person] = len(heap)
+        return [flowersDict[person] for person in people]
