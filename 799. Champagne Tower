@@ -1,0 +1,13 @@
+class Solution:
+    def champagneTower(self, poured: int, query_row: int, query_glass: int) -> float:
+        #Solution 1: O(query_row^2) / O(query_row)
+        layer = [poured]
+        for i in range(query_row):
+            nextLayer = [0] * (len(layer) + 1)
+            for j in range(len(layer)):
+                pour = (layer[j] - 1) / 2 #keep 1 cup in layer[j] and divide remaining
+                if pour > 0:
+                    nextLayer[j] += pour #left champagne in next row
+                    nextLayer[j+1] += pour #right champagne in next row
+            layer = nextLayer
+        return min(1, layer[query_glass]) #if > 1, means it will fall to next level
