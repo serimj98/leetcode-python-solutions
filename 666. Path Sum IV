@@ -1,0 +1,29 @@
+class Solution:
+    def pathSum(self, nums: List[int]) -> int:
+        #Solution 1: O(n) / O(n), recursive stack
+        depthLimit, positionLimit = 5, 9
+        g = [[-1] * positionLimit for i in range(depthLimit)]
+        for num in nums:
+            d, p, v = str(num)
+            g[int(d)][int(p)] = int(v) #g[d][p] = value of node in depth and position
+        
+        self.sol = 0
+        def recursive(d, p, curSum):
+            if g[d][p] == -1: return #no root
+            curSum += g[d][p]
+            """
+            [3] d = 1, p = 1
+            [5, 1] d = 2, p = 1, 2
+            [2, 4, 7, 9] d = 3, p = 1, 2, 3, 4
+            get position of left (3) and right (4) from position of node (2)
+            node = 2 / left = 2 * 2 - 1 = 3 / right = 2 * 2 = 4
+            """
+            l, r = p*2 - 1, p*2 #position of left and right node in next depth
+            if d+1 == 5 or (g[d+1][l] == -1 and g[d+1][r] == -1): #exceed depth or leaf node
+                self.sol += curSum
+            else:
+                recursive(d+1, l, curSum)
+                recursive(d+1, r, curSum)
+        
+        recursive(1, 1, 0)
+        return self.sol
