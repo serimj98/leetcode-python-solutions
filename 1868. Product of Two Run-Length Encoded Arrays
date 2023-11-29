@@ -1,0 +1,26 @@
+class Solution:
+    def findRLEArray(self, encoded1: List[List[int]], encoded2: List[List[int]]) -> List[List[int]]:
+        #Solution 1: O(encoded) / O(encoded)
+        encode = []
+        idx1, idx2 = 0, 0
+        prev = None
+        
+        while idx1 < len(encoded1) and idx2 < len(encoded2):
+            if encoded1[idx1][1] == 0:
+                idx1 += 1
+                continue
+            if encoded2[idx2][1] == 0:
+                idx2 += 1
+                continue
+            prod = encoded1[idx1][0] * encoded2[idx2][0]
+            reps = min(encoded1[idx1][1], encoded2[idx2][1])
+            encoded1[idx1][1] -= reps
+            encoded2[idx2][1] -= reps
+            
+            if prev == None or prod != prev:
+                encode.append([prod, reps])
+                prev = prod
+            elif prod == prev:
+                encode[-1][1] += reps
+
+        return encode
