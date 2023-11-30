@@ -1,0 +1,28 @@
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        #Solution 1: O(n + e) / O(n + e)
+        #1. create adjacency list and compute indegree for every node
+        g = defaultdict(list)
+        indegree = [0 for i in range(numCourses)]
+        sol = []
+        for nxt, prev in prerequisites:
+            g[prev].append(nxt)
+            indegree[nxt] += 1 #number of incoming edges for node nxt
+        
+        #2. find all courses with indegree == 0 as starting points for BFS
+        q = deque()
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                q.append(i)
+        
+        #3. decrement indegree for courses that have prerequisites with indegree == 0
+        while q:
+            cur = q.popleft()
+            sol.append(cur) #indegree == 0, no prerequisites
+            for nxt in g[cur]:
+                indegree[nxt] -= 1
+                if indegree[nxt] == 0: q.append(nxt)
+        
+        #4. if all courses are added, return sol - if not, impossible to finish all courses
+        if len(sol) == numCourses: return sol
+        return []
