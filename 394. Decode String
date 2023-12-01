@@ -1,20 +1,20 @@
 class Solution:
-  def decodeString(self, s: str) -> str:
-    #Solution 1: O(n) / O(n)
-    stack = []
-    i = 0
-    curNum, curStr = 0, []
-    for c in s:
-      if c == "[":
-        stack.append(curStr)
-        stack.append(curNum)
-        curNum = 0
-        curStr = []
-      elif c == "]":
-        num = stack.pop()
-        prevStr = stack.pop()
-        curStr = prevStr + num*curStr
-      elif c.isnumeric():
-        curNum = curNum*10 + int(c)
-      else: curStr.append(c)
-    return "".join(curStr)
+    def decodeString(self, s: str) -> str:
+        #Solution 1: O(n) / O(n)
+        stack = []
+        curNum, curStr = 0, ""
+        for c in s:
+            if c == "[":
+                stack.append(curStr)
+                stack.append(curNum)
+                curStr = ""
+                curNum = 0
+            elif c == "]": #decode innermost pattern first
+                num = stack.pop()
+                prevStr = stack.pop()
+                curStr = prevStr + num*curStr
+            elif c.isdigit():
+                curNum = curNum*10 + int(c)
+            else: #c.isalpha()
+                curStr += c
+        return curStr
