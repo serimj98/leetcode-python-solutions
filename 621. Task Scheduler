@@ -1,0 +1,27 @@
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        #Solution 1: O(tasks*n) / O(tasks)
+        taskCount = Counter(tasks)
+        heap = [] #change min heap into max heap
+        for task in taskCount:
+            heap.append((-taskCount[task], task)) #[(3, "B"), (3, "A")]
+        heapify(heap)
+
+        sol = 0
+        while heap:
+            temp = []
+            for i in range(n+1):
+                sol += 1
+                if heap:
+                    #remove task from heap and into temp, as we cannot use in current n range
+                    curCount, curTask = heappop(heap)
+                    curCount *= -1
+                    if curCount > 1:
+                        newCount = -(curCount - 1)
+                        temp.append((newCount, curTask))
+                #if we are out of tasks completely, shouldn't count until end of n
+                if not heap and not temp: break
+            for count, task in temp:
+                heappush(heap, (count, task))
+        
+        return sol
