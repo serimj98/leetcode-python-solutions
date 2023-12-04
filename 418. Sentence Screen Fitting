@@ -1,0 +1,39 @@
+class Solution:
+    def wordsTyping(self, sentence: List[str], rows: int, cols: int) -> int:
+        #Solution 1 TLE: O(rows*cols) / O(1)
+        idx = 0
+        c = cols
+        sol = 0
+        for r in range(rows):
+            while idx < len(sentence) and c - len(sentence[idx]) >= 0:
+                c -= len(sentence[idx]) + 1
+                idx += 1
+                if idx == len(sentence):
+                    idx = 0
+                    sol += 1
+            c = cols
+        return sol
+
+        #Solution 2: O(n*cols + rows) / O(n)
+        self.memo = dict()
+        def dp(idx): #when idx-th word is at beginning of the row
+            if idx in self.memo: return self.memo[idx]
+            c = cols
+            curIdx = idx
+            sentenceCount = 0
+            while curIdx < len(sentence) and c - len(sentence[curIdx]) >= 0: #O(cols)
+                c -= len(sentence[curIdx]) + 1
+                curIdx += 1
+                if curIdx == len(sentence):
+                    curIdx = 0
+                    sentenceCount += 1
+            self.memo[idx] = (curIdx, sentenceCount) #(next idx reached, # of sentence used)
+            return curIdx, sentenceCount
+        
+        sol = 0
+        nextIdx = 0
+        for i in range(rows): #O(rows)
+            curIdx, sentenceCount = dp(nextIdx)
+            nextIdx = curIdx
+            sol += sentenceCount
+        return sol
