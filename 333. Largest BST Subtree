@@ -1,0 +1,23 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def largestBSTSubtree(self, root: Optional[TreeNode]) -> int:
+        #Solution 1: O(n) / O(h)
+        self.sol = 0
+        def recursive(node):
+            if not node: return 0, float('inf'), float('-inf')
+            leftCount, leftMin, leftMax = recursive(node.left)
+            rightCount, rightMin, rightMax = recursive(node.right)
+            curCount = float('-inf') #if not BST, return -inf
+            if leftMax < node.val < rightMin:
+                curCount = leftCount + rightCount + 1
+                self.sol = max(self.sol, curCount)
+            return curCount, min(node.val, leftMin), max(node.val, rightMax)
+        
+        if not root: return 0
+        recursive(root)
+        return self.sol
