@@ -9,20 +9,20 @@ class Solution:
         return sol
 
         #Solution 2: O(n log n) / O(n)
-        numsList = []
+        stack = []
         for i, num in enumerate(nums):
-            numsList.append((num, i))
-        numsList = sorted(numsList, reverse=True) #sort by biggest element, (element, index)
+            stack.append((num, i))
+        stack = sorted(stack, reverse=True) #sort by biggest element, (element, index)
 
         sol = 0
         for i, num in enumerate(nums):
-            while numsList and num > numsList[-1][0]: #cur > smallest element's value
+            while stack and num > stack[-1][0]: #cur > smallest element's value
                 #pop all elements that are smaller as this would be the greatest index diff
-                smallestVal, smallestIdx = numsList.pop()
+                smallestVal, smallestIdx = stack.pop()
                 sol = max(sol, smallestIdx - i + 1)
         return sol
 
-        #Solution 3 Stack: O(n) / O(n)
+        #Solution 3: O(n) / O(n)
         stack = []
         for i in range(len(nums)-1, -1, -1):
             if not stack or nums[i] < nums[stack[-1]]:
