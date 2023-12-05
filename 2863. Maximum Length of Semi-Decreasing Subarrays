@@ -1,0 +1,38 @@
+class Solution:
+    def maxSubarrayLength(self, nums: List[int]) -> int:
+        #Solution 1 TLE: O(n^2) / O(1)
+        sol = 0
+        for i in range(len(nums)-1):
+            for j in range(i+1, len(nums)):
+                if nums[i] > nums[j]:
+                    sol = max(sol, j-i+1)
+        return sol
+
+        #Solution 2: O(n log n) / O(n)
+        numsList = []
+        for i, num in enumerate(nums):
+            numsList.append((num, i))
+        numsList = sorted(numsList, reverse=True) #sort by biggest element, (element, index)
+
+        sol = 0
+        for i, num in enumerate(nums):
+            while numsList and num > numsList[-1][0]: #cur > smallest element's value
+                #pop all elements that are smaller as this would be the greatest index diff
+                smallestVal, smallestIdx = numsList.pop()
+                sol = max(sol, smallestIdx - i + 1)
+        return sol
+
+        #Solution 3 Stack: O(n) / O(n)
+        stack = []
+        for i in range(len(nums)-1, -1, -1):
+            if not stack or nums[i] < nums[stack[-1]]:
+                #add index of elements only if decreasing from end of list
+                stack.append(i)
+
+        sol = 0
+        for i in range(len(nums)):
+            #check if leftmost element of nums added to stack is less than current element
+            while stack and nums[i] > nums[stack[-1]]:
+                sol = max(sol, stack[-1] - i + 1)
+                stack.pop()
+        return sol
