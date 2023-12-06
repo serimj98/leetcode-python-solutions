@@ -1,0 +1,12 @@
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        #Solution 1: O(log n) / O(1)
+        return x**n
+
+        #Solution 2: O(log n) / O(log n)
+        def recursive(curX, curN):
+            if curN == 0: return 1
+            elif curN < 0: return 1 / recursive(curX, -curN)
+            elif curN % 2 == 1: return curX * recursive(curX, curN - 1)
+            elif curN % 2 == 0: return recursive(curX*curX, curN/2)
+        return recursive(x, n)
