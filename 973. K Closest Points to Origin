@@ -1,9 +1,23 @@
 class Solution:
-  def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
-    #Solution 1: O(n log k) / O(k)
-    heap = []
-    for point in points:
-      dist = (point[0]**2) + (point[1]**2)
-      heappush(heap, (-dist, point)) #O(log k)
-      if len(heap) > k: heappop(heap) #O(log k)
-    return [dist[1] for dist in heap]
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        #Solution 1: O(n log n) / O(n)
+        heap = []
+        for x, y in points:
+            heap.append((x*x + y*y, [x, y]))
+        heapify(heap)
+
+        sol = []
+        for i in range(k):
+            sol.append(heappop(heap)[1])
+        return sol
+
+        #Solution 2: O(n log k) / O(k)
+        heap = []
+        for x, y in points:
+            if len(heap) == k: heappushpop(heap, (-(x*x + y*y), [x, y]))   
+            else: heappush(heap, (-(x*x + y*y), [x, y]))
+        
+        sol = []
+        for i in range(k):
+            sol.append(heappop(heap)[1])
+        return sol
