@@ -1,24 +1,32 @@
 class Solution:
     def numDistinctIslands(self, grid: List[List[int]]) -> int:
         #Solution 1: O(r*c) / O(r*c)
-        self.sol = set()
+        dirs = [(-1,0,'U'), (1,0,'D'), (0,-1,'L'), (0,1,'R')]
         self.seen = set()
-        self.moves = ['L', 'R', 'D', 'U']
-        self.dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-
-        def dfs(r, c):
-            pattern = ""
-            if 0 <= r < len(grid) and 0 <= c < len(grid[0]) \
-                and (r, c) not in self.seen and grid[r][c] == 1:
+        def dfs(r, c, seen, curDir): #keep track of string of directions
+            if (r, c) not in self.seen:
                 self.seen.add((r, c))
-                for d, (x, y) in zip(self.moves, self.dirs):
-                    x += r
-                    y += c
-                    pattern += (d + dfs(x, y))
-            return pattern
-            
+                if 0 <= r < len(grid) and 0 <= c < len(grid[0]):
+                    if grid[r][c] == 1:
+                        self.curPath += curDir
+                        for x, y, d in dirs:
+                            newR, newC = r + x, c + y
+                            dfs(newR, newC, seen, d)
+                        self.curPath += 'B' #print 'back' after searching four sides
+                        """
+                        i.e. [[1,1,0], ORDRBBBB
+                              [0,1,1],
+                              [0,0,0],
+                              [1,1,1], ORDBRBBB
+                              [0,1,0]]
+                        """
+        
+        if not grid: return 0
+        islands = set()
         for r in range(len(grid)):
             for c in range(len(grid[0])):
-                if grid[r][c] == 1 and (r, c) not in self.seen:
-                    self.sol.add(dfs(r, c))
-        return len(self.sol)
+                self.curPath = ""
+                dfs(r, c, set(), 'O') #i.e. [[0,1]], island is only one cell
+                if self.curPath: islands.add(self.curPath)
+
+        return len(islands)
