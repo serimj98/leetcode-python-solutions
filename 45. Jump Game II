@@ -10,13 +10,12 @@ class Solution:
         return dp[-1]
 
         #Solution 2: O(n) / O(1)
-        sol = 0
-        #maxJump = farthest reachable index of current index encountered
-        #jumpCount = how many jumps, tracked by starting new jump when we reach maxJump
+        if len(nums) <= 1: return 0
         maxJump, curJump = 0, 0
-        for i in range(len(nums) - 1):
+        sol = 0
+        for i in range(len(nums)):
             maxJump = max(maxJump, i + nums[i])
-            if i == curJump: #looked at range of all possible indices for last jump
+            if i == curJump: #reach range of current jump
                 sol += 1
                 curJump = maxJump
-        return sol
+                if curJump >= len(nums) - 1: return sol
