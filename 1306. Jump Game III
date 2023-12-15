@@ -1,0 +1,26 @@
+class Solution:
+    def canReach(self, arr: List[int], start: int) -> bool:
+        #Solution 1 DFS Iterative: O(n) / O(n)
+        stack = [start]
+        seen = set()
+        seen.add(start)
+        while stack:
+            cur = stack.pop()
+            if arr[cur] == 0: return True
+            if cur + arr[cur] not in seen and 0 <= cur + arr[cur] < len(arr):
+                stack.append(cur + arr[cur])
+                seen.add(cur + arr[cur])
+            if cur - arr[cur] not in seen and 0 <= cur - arr[cur] < len(arr):
+                stack.append(cur - arr[cur])
+                seen.add(cur - arr[cur])
+        return False
+
+        #Solution 2 DFS Recursive: O(n) / O(n)
+        self.seen = set()
+        def recursive(cur):
+            if cur not in self.seen and 0 <= cur < len(arr):
+                if arr[cur] == 0: return True
+                self.seen.add(cur)
+                #return recursive case, which holds True/False boolean
+                return recursive(cur + arr[cur]) or recursive(cur - arr[cur])
+        return recursive(start)
