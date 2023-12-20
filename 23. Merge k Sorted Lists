@@ -5,24 +5,23 @@
 #         self.next = next
 class Solution:
   def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-    #Solution 1 Heap: O(n log k), k = # of linked lists / O(n)
-    heap = []
-    count = 0 #heap will fail to heapify if there are identical elements in the heap
-    for node in lists:
-      if node:
-        heap.append((node.val, count, node))
-        count += 1
-    heapify(heap) #O(n)
-    dummy = cur = ListNode()
-    while heap:
-      val, _, node = heappop(heap) #O(log k)
-      cur.next = node
-      cur = cur.next
-      if node.next: heappush(heap, (node.next.val, count, node.next)) #O(log k)
-      count += 1
-    return dummy.next
+    #Solution 1: O(n log n) / O(n)
+      if not lists: return
+      heap = []
+      for i, node in enumerate(lists):
+        if node: heap.append([node.val, i, node]) #[node value, index, node]
+      heapify(heap) #[1, 1, 2] #O(n)
+
+      dummy = cur = ListNode()
+      while heap: #O(n)
+        val, idx, node = heappop(heap) #O(log n)
+        cur.next = node
+        if node.next: heappush(heap, [node.next.val, idx, node.next]) #O(log n)
+        node.next = None
+        cur = cur.next
+      return dummy.next
   
-    #Solution 2 Divide and Conquer Iterative: O(n log k) / O(1)
+    #Solution 2 Divide and Conquer Iterative: O(n log n) / O(1)
     def mergeTwoLists(l, r):
       dummy = cur = ListNode()
       while l and r:
@@ -45,7 +44,7 @@ class Solution:
     
     return mergeLists(lists)
   
-    #Solution 3 Divide and Conquer Recursive: O(n log k) / O(log k), recursive stack
+    #Solution 3 Divide and Conquer Recursive: O(n log n) / O(log n), recursive stack
     """
     [1,2]
          l
