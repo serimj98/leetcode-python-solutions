@@ -7,7 +7,7 @@ class Solution:
         intLength = 3 -> 10 ~ 99 -> 101, 111, 121, 131 ... 202 ... 303 ... 999 
         intLength = 4 -> 10 ~ 99 -> 1001, 1111, 1221, 1331 ... 2002 ... 3003 ... 9999
         """
-        #consider first (intLength + 1) // 2 characters only
+        #consider first (intLength) // 2 characters only
         def queryPalindrome(query):
             idx = query - 1
             if intLength % 2 == 0: #even
