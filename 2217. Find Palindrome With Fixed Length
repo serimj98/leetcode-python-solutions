@@ -1,0 +1,40 @@
+class Solution:
+    def kthPalindrome(self, queries: List[int], intLength: int) -> List[int]:
+        #Solution 1: O(n*l), l = creating string of length intLength / O(n*l)
+        """
+        intLength = 1 -> 1 ~ 9
+        intLength = 2 -> 1 ~ 9 -> 11, 22 ... 88, 99
+        intLength = 3 -> 10 ~ 99 -> 101, 111, 121, 131 ... 202 ... 303 ... 999 
+        intLength = 4 -> 10 ~ 99 -> 1001, 1111, 1221, 1331 ... 2002 ... 3003 ... 9999
+        """
+        #consider first (intLength + 1) // 2 characters only
+        def queryPalindrome(query):
+            idx = query - 1
+            if intLength % 2 == 0: #even
+                #intLength = 2 -> 0, intLength = 4 -> 1, intLength = 6 -> 2
+                numZeros = (intLength // 2) - 1
+                firstHalfPalindrome = int('1' + '0' * numZeros)
+                maxLength = len(str(firstHalfPalindrome)) #max length of first half digits
+                queryHalfPalindrome = str(firstHalfPalindrome + idx)
+                if len(queryHalfPalindrome) > maxLength:
+                    return -1
+                else:
+                    queryPalindrome = queryHalfPalindrome + queryHalfPalindrome[::-1]
+                    return int(queryPalindrome)
+            else: #odd
+                #intLength = 1 -> 0, intLength = 3 -> 1, intLength = 5 -> 2
+                numZeros = (intLength // 2)
+                firstHalfPalindrome = int('1' + '0' * numZeros)
+                maxLength = len(str(firstHalfPalindrome))
+                queryHalfPalindrome = str(firstHalfPalindrome + idx)
+                if len(queryHalfPalindrome) > maxLength:
+                    return -1
+                else:
+                    #if queryHalfPalindrome == 10, queryPalindrome = 10 + 1 = 101
+                    queryPalindrome = queryHalfPalindrome + queryHalfPalindrome[:-1][::-1]
+                    return int(queryPalindrome)
+        
+        sol = []
+        for query in queries:
+            sol.append(queryPalindrome(query))
+        return sol
