@@ -1,0 +1,33 @@
+class Solution:
+    def numBusesToDestination(self, routes: List[List[int]], source: int, target: int) -> int:
+        #Solution 1: O(n*max stops) / O(n*max stops)
+        if source == target: return 0
+        
+        busDict = defaultdict(list)
+        for bus in range(len(routes)):
+            for stop in routes[bus]:
+                busDict[stop].append(bus) #{1:[0], 2:[0], 3:[1], 6:[1], 7:[0,1]}
+        
+        if source not in busDict or target not in busDict: return -1
+
+        q = deque()
+        q.append(source)
+        busVisited, stopVisited = set(), set()
+        numBus = 0
+        while q:
+            numBus += 1
+            qLen = len(q)
+            newQ = deque()
+            for i in range(qLen):
+                curStop = q.popleft()
+                stopVisited.add(curStop)
+                for bus in busDict[curStop]:
+                    if bus in busVisited: continue
+                    busVisited.add(bus)
+                    for stop in routes[bus]:
+                        if stop in stopVisited: continue
+                        if stop == target: return numBus
+                        #add stops that could potentially be part of another bus's route
+                        newQ.append(stop)
+            q = newQ
+        return -1
