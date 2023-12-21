@@ -25,27 +25,22 @@ class Solution:
         sol = checkPalindrome(i, i+1)
     return sol
 
-    #Solution 3: O(n^2) / O(n), Solution #2 without using checkPalindrome(l, r)
-    def longestPalindrome(self, s: str) -> str:
-      #Solution 1: O(n^2) / O(n)
+    #Solution 3: O(n^2) / O(n)
+      if not s: return 0
       sol = s[0]
-      for i in range(len(s)-1):
-        oddExtend = 1
-        while i - oddExtend >= 0 and i + oddExtend < len(s): #odd length palindrome
-          if s[i - oddExtend] == s[i + oddExtend]:
-            if oddExtend * 2 + 1 > len(sol):
-              sol = s[i - oddExtend:i + oddExtend + 1]
+      for i in range(len(s)):
+        l, r = i, i #odd palindromes
+        while l >= 0 and r < len(s):
+          if s[l] == s[r]:
+            if r - l + 1 > len(sol): sol = s[l:r+1]
+            l -= 1
+            r += 1
           else: break
-          oddExtend += 1
-        
-        if s[i] == s[i+1]: #even length palindrome
-          if len(sol) < 2: sol = s[i:i+2]
-          evenExtend = 1
-          while i - evenExtend >= 0 and i + 1 + evenExtend < len(s):
-            if s[i - evenExtend] == s[i + 1 + evenExtend]:
-              if evenExtend * 2 + 2 > len(sol):
-                sol = s[i - evenExtend: i + 1 + evenExtend + 1]
-            else: break
-            evenExtend += 1
-
-        return sol
+        l, r = i, i + 1 #even palindromes
+        while l >= 0 and r < len(s):
+          if s[l] == s[r]:
+            if r - l + 1 > len(sol): sol = s[l:r+1]
+            l -= 1
+            r += 1
+          else: break
+      return sol
