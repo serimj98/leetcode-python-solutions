@@ -1,39 +1,25 @@
 class Solution:
-  def exist(self, board: List[List[str]], word: str) -> bool:
-    #Solution 1: O(rows*cols*3^len(word)) / O(len(word)) recursion stack
-    rows, cols = len(board), len(board[0])
-    
-    def dfs(r, c, word):
-      if not word: return True
-      if r >= rows or r < 0 or c >= cols or c < 0 or word[0] != board[r][c]:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        #Solution 1: O(r*c*3^word) / O(word)
+        if not board: return True
+
+        self.dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        self.found = False
+        def dfs(r, c, wordIdx):
+            if board[r][c] == word[wordIdx]:
+                if wordIdx == len(word) - 1:
+                    self.found = True
+                    return
+                val = board[r][c]
+                board[r][c] = '#' #mark as visited temporarily while moving to new direction
+                for x, y in self.dirs:
+                    newR, newC = r + x, c + y
+                    if 0 <= newR < len(board) and 0 <= newC < len(board[0]):
+                        dfs(newR, newC, wordIdx + 1)
+                board[r][c] = val
+        
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                dfs(i, j, 0)
+                if self.found: return True
         return False
-      cur = board[r][c]
-      board[r][c] = '#'
-      sol = dfs(r+1, c, word[1:]) or dfs(r-1, c, word[1:]) \
-            or dfs(r, c+1, word[1:]) or dfs(r, c-1, word[1:])
-      board[r][c] = cur
-      return sol
-    
-    for row in range(rows):
-      for col in range(cols):
-        if dfs(row, col, word): return True
-    return False
-  
-    #Solution 2: O(rows*cols*3^len(word)) / O(len(word)) recursion stack
-    rows, cols = len(board), len(board[0])
-    
-    def dfs(r, c, word_idx):
-      if word_idx == len(word): return True
-      if r >= rows or r < 0 or c >= cols or c < 0 or word[word_idx] != board[r][c]:
-        return False
-      cur = board[r][c]
-      board[r][c] = '#'
-      sol = dfs(r+1, c, word_idx+1) or dfs(r-1, c, word_idx+1) \
-            or dfs(r, c+1, word_idx+1) or dfs(r, c-1, word_idx+1)
-      board[r][c] = cur
-      return sol
-    
-    for row in range(rows):
-      for col in range(cols):
-        if dfs(row, col, 0): return True
-    return False
