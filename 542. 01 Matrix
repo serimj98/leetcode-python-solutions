@@ -1,0 +1,24 @@
+class Solution:
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        #Solution 1: O(r*c) / O(r*c)
+        sol = [[0 for i in range(len(mat[0]))] for j in range(len(mat))]
+
+        q = deque()
+        seen = set()
+        for r in range(len(mat)):
+            for c in range(len(mat[0])):
+                if mat[r][c] == 0:
+                    q.append((r, c, 0))
+                    seen.add((r, c))
+        
+        dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        while q:
+            r, c, dist = q.popleft()
+            for i, j in dirs:
+                newR, newC = r + i, c + j
+                #seen would contain all mat[r][c] == 0, only enter if mat[r][c] == 1
+                if 0 <= newR < len(mat) and 0 <= newC < len(mat[0]) and (newR, newC) not in seen:
+                    seen.add((newR, newC))
+                    q.append((newR, newC, dist+1))
+                    sol[newR][newC] = dist+1
+        return sol
