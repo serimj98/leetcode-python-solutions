@@ -1,0 +1,43 @@
+class Leaderboard:
+
+    #Solution 1:
+    def __init__(self):
+        self.players = defaultdict(int)
+
+    def addScore(self, playerId: int, score: int) -> None: #O(1) / O(1)
+        self.players[playerId] += score
+
+    def top(self, K: int) -> int: #O(n log n), n = # of players / O(n)
+        playerScore = []
+        for playerId in self.players:
+            playerScore.append(self.players[playerId])
+        playerScore.sort(reverse=True)
+        return sum(playerScore[:K])
+
+    def reset(self, playerId: int) -> None: #O(1) / O(1)
+        self.players[playerId] = 0
+
+    #Solution 2:
+    def __init__(self):
+        self.players = defaultdict(int)
+
+    def addScore(self, playerId: int, score: int) -> None: #O(1) / O(1)
+        self.players[playerId] += score
+
+    def top(self, K: int) -> int: #O(n log k), n = # of players / O(k)
+        heap = []
+        for playerId in self.players: #O(n)
+            if len(heap) >= K: #O(k)
+                heappushpop(heap, self.players[playerId])
+            else: heappush(heap, self.players[playerId])
+        return sum(heap)
+
+    def reset(self, playerId: int) -> None: #O(1) / O(1)
+        self.players[playerId] = 0
+
+
+# Your Leaderboard object will be instantiated and called as such:
+# obj = Leaderboard()
+# obj.addScore(playerId,score)
+# param_2 = obj.top(K)
+# obj.reset(playerId)
