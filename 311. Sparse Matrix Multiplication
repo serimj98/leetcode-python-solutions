@@ -1,0 +1,11 @@
+class Solution:
+    def multiply(self, mat1: List[List[int]], mat2: List[List[int]]) -> List[List[int]]:
+        #Solution 1: O(m*n*k) / O(n*m)
+        M, K, N = len(mat1), len(mat1[0]), len(mat2[0])
+        sol = [[0 for i in range(N)] for j in range(M)]
+        for m in range(M):
+            for k in range(K):
+                if mat1[m][k]: #if mat1[m][k] is non-zero
+                    for n in range(N):
+                        sol[m][n] += mat1[m][k] * mat2[k][n]
+        return sol
