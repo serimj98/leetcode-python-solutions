@@ -1,0 +1,34 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def findClosestLeaf(self, root: Optional[TreeNode], k: int) -> int:
+        #Solution 1: O(n) / O(n)
+        self.treeDict, self.leaves = defaultdict(list), set()
+        def recursive(node, parent): #node's neighbor can be maximum two children, one parent
+            if not node: return
+            if parent: self.treeDict[node.val].append(parent.val)
+            if not node.left and not node.right: self.leaves.add(node.val) #leaf node
+            if node.left:
+                self.treeDict[node.val].append(node.left.val)
+                recursive(node.left, node)
+            if node.right:
+                self.treeDict[node.val].append(node.right.val)
+                recursive(node.right, node)
+        recursive(root, None)
+        
+        q = deque()
+        q.append((k, 0))
+        seen = set()
+        seen.add(k)
+        while q:
+            cur, steps = q.popleft()
+            if cur in self.leaves: return cur
+            for nei in self.treeDict[cur]:
+                if nei not in seen:
+                    q.append((nei, steps + 1))
+                    seen.add(nei)
