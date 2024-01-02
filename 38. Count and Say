@@ -1,15 +1,33 @@
 class Solution:
-  def countAndSay(self, n: int) -> str:
-    #Solution 1: O(n*sequence length) / O(n*sequence length)
-    def recursive(n):
-      if n == 1: return "1"
-      prev = recursive(n - 1)
-      charCount, curStr = 1, []
-      for i in range(len(prev)):
-        if i == len(prev)-1 or prev[i] != prev[i+1]:
-          curStr.append(str(charCount))
-          curStr.append(prev[i])
-          charCount = 1
-        else: charCount += 1
-      return "".join(curStr)
-    return recursive(n)
+    def countAndSay(self, n: int) -> str:
+        #Solution 1: O(n*sequence length) / O(n*sequence length)
+        def recursive(n):
+            if n == 1: return "1"
+            prev = recursive(n - 1)
+            charCount, curStr = 1, []
+            for i in range(len(prev)):
+                if i == len(prev)-1 or prev[i] != prev[i+1]:
+                    curStr.append(str(charCount))
+                    curStr.append(prev[i])
+                    charCount = 1
+                else: charCount += 1
+            return "".join(curStr)
+        return recursive(n)
+
+        #Solution 2: O(n*sequence length) / O(sequence length)
+        if n == 1: return "1"
+        s = "1"
+        for i in range(n - 1):
+            letter = s[0]
+            cur = ""
+            count = 0
+            for c in s:
+                if c == letter:
+                    count += 1
+                else:
+                    cur += str(count) + letter
+                    letter = c
+                    count = 1
+            cur += str(count) + letter
+            s = cur
+        return s
