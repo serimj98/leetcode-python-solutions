@@ -6,25 +6,27 @@
 #         self.right = right
 class Solution:
   def closestValue(self, root: Optional[TreeNode], target: float) -> int:
-    #Solution 1: O(n) / O(1)
-    self.diff = float('inf')
-    self.sol = None
+    #Solution 1: O(h) / O(h)
+    if not root: return
+    self.sol, self.minDiff = root.val, float('inf')
     def recursive(node):
-      if not node: return
-      if abs(target - node.val) < self.diff:
-        self.sol = node.val
-        self.diff = abs(target - node.val)
-      recursive(node.left)
-      recursive(node.right)
+        if not node: return
+        if abs(node.val - target) < self.minDiff:
+            self.sol = node.val
+            self.minDiff = abs(node.val - target)
+        elif abs(node.val - target) == self.minDiff and node.val < self.sol:
+            self.sol = node.val
+        if target < node.val: recursive(node.left)
+        elif target > node.val: recursive(node.right)
     recursive(root)
     return self.sol
   
     #Solution 2: O(h) / O(1)
     candidate = root.val
     while root:
-      if abs(root.val - target) < abs(candidate - target):
-        candidate = root.val
-      if target == root.val: return root.val
-      elif target < root.val: root = root.left
-      else: root = root.right
+        if abs(root.val - target) < abs(candidate - target):
+            candidate = root.val
+        if target == root.val: return root.val
+        elif target < root.val: root = root.left
+        else: root = root.right
     return candidate
