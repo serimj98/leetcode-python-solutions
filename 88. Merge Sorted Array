@@ -1,0 +1,16 @@
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        #Solution 1: O(n) / O(1)
+        idx1, idx2 = m - 1, n - 1
+        for zeroIdx in range(len(nums1)-1, -1, -1):
+            #remaining nums1 is sorted and less than elements that have been added from nums2
+            if idx2 < 0: break #all of nums2 has been merged in
+            if idx1 >= 0 and nums1[idx1] > nums2[idx2]:
+                nums1[zeroIdx] = nums1[idx1]
+                idx1 -= 1
+            else: #idx2 >= 0 and nums1[idx1] <= nums2[idx2]
+                nums1[zeroIdx] = nums2[idx2]
+                idx2 -= 1
