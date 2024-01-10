@@ -1,0 +1,35 @@
+# """
+# This is HtmlParser's API interface.
+# You should not implement it, or speculate about its implementation
+# """
+#class HtmlParser(object):
+#    def getUrls(self, url):
+#        """
+#        :type url: str
+#        :rtype List[str]
+#        """
+
+class Solution:
+    def crawl(self, startUrl: str, htmlParser: 'HtmlParser') -> List[str]:
+        #Solution 1: O(urls + edges) / O(urls)
+        def parseUrl(url):
+            http, remaining = url.split("//")
+            hostname = remaining.split("/")[0]
+            return hostname
+        parsedStartUrl = parseUrl(startUrl)
+
+        sol = set()
+        sol.add(startUrl)
+        q = deque()
+        q.append(startUrl)
+        seen = set()
+        while q:
+            cur = q.popleft()
+            seen.add(cur)
+            neighbors = htmlParser.getUrls(cur) #O(urls)
+            for nei in neighbors:
+                if nei not in seen:
+                    if parsedStartUrl == parseUrl(nei):
+                        sol.add(nei)
+                        q.append(nei)
+        return list(sol)
