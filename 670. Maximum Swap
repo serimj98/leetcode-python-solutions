@@ -32,3 +32,17 @@ class Solution:
         
         numList[maxIdx], numList[leftIdx] = numList[leftIdx], numList[maxIdx]
         return int("".join(numList))
+
+        #Solution 3: O(n) / O(n)
+        numList = [int(x) for x in str(num)]
+        swap1, swap2 = 0, 0
+        maxIdx = len(numList) - 1
+        for i in range(len(numList)-1, -1, -1):
+            if numList[i] > numList[maxIdx]:
+                maxIdx = i
+            elif numList[i] < numList[maxIdx]:
+                swap1 = i
+                swap2 = maxIdx
+        numList[swap1], numList[swap2] = numList[swap2], numList[swap1]
+        numList = [str(x) for x in numList]
+        return int("".join(numList))
