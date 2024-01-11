@@ -12,7 +12,7 @@ class Solution:
           sol += 1
     return sol
   
-    #Solution 2
+    #Solution 2: O(n) / O(n)
     #when cumulative sum increases by k, we found a valid subarray
     cumHash = defaultdict(int)
     cumHash[0] = 1 #valid when sum of subarray starting at beginning of array is equal to k
