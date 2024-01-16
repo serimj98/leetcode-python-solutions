@@ -2,28 +2,51 @@ class SummaryRanges:
 
     #Solution 1:
     def __init__(self): #O(1) / O(n)
-        self.arr = set()
+        self.nums = set()
 
     def addNum(self, value: int) -> None: #O(1) / O(1)
-        self.arr.add(value) #don't need duplicate values
+        self.nums.add(value)
 
     def getIntervals(self) -> List[List[int]]: #O(n log n) / O(n)
-        if not self.arr: return
         sol = []
-        start, end = None, None
-        for val in sorted(self.arr):
-            if start == None:
-                start = val
-                end = val
-            elif val == end + 1:
-                end = val
+        if not self.nums: return []
+        sortedNums = sorted(self.nums)
+        start, end = sortedNums[0], sortedNums[0]
+        for num in sortedNums[1:]:
+            if end + 1 == num:
+                end = num
             else:
                 sol.append([start, end])
-                start = val
-                end = val
-        if start != None: sol.append([start, end])
+                start = num
+                end = num
+        sol.append([start, end])
         return sol
-   
+
+    #Solution 2:
+    def __init__(self): #O(1) / O(n)
+        self.nums = []
+        self.seen = set()
+
+    def addNum(self, value: int) -> None: #O(log n) / O(1)
+        if value not in self.seen:
+            heappush(self.nums, value) #O(log n)
+            self.seen.add(value)
+
+    def getIntervals(self) -> List[List[int]]: #O(n log n) / O(n)
+        if not self.nums: return []
+        sol = []
+        temp = []
+
+        while self.nums:
+            cur = heappop(self.nums)
+            if sol and sol[-1][1] + 1 == cur:
+                sol[-1][1] = cur
+            else:
+                sol.append([cur, cur])
+            heappush(temp, cur)
+
+        self.nums = temp
+        return sol
 
 # Your SummaryRanges object will be instantiated and called as such:
 # obj = SummaryRanges()
