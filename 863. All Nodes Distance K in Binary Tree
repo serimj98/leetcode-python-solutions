@@ -6,31 +6,61 @@
 #         self.right = None
 
 class Solution:
-  def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-    #Solution 1: O(n) / O(n)
-    adj = defaultdict(list) #create dictionary of node: neighbors, like a graph
-    def graphTransform(node):
-      if not node: return
-      if node.left:
-        adj[node].append(node.left)
-        adj[node.left].append(node)
-        graphTransform(node.left)
-      if node.right:
-        adj[node].append(node.right)
-        adj[node.right].append(node)
-        graphTransform(node.right)
-    graphTransform(root)
-    
-    sol = []
-    visited = set()
-    visited.add(target)
-    def dfs(node, d):
-      if d == 0:
-        sol.append(node.val)
-        return
-      visited.add(node)
-      for n in adj[node]:
-        if n not in visited:
-          dfs(n, d-1)
-    dfs(target, k)
-    return sol
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+      #Solution 1 DFS: O(n) / O(n)
+      adj = defaultdict(list) #create dictionary of node: neighbors, like a graph
+      def graphTransform(node):
+          if not node: return
+          if node.left:
+              adj[node].append(node.left)
+              adj[node.left].append(node)
+              graphTransform(node.left)
+          if node.right:
+              adj[node].append(node.right)
+              adj[node.right].append(node)
+              graphTransform(node.right)
+      graphTransform(root)
+      
+      sol = []
+      visited = set()
+      visited.add(target)
+      def dfs(node, d):
+          if d == 0:
+              sol.append(node.val)
+              return
+          visited.add(node)
+          for n in adj[node]:
+              if n not in visited:
+                  dfs(n, d-1)
+      dfs(target, k)
+      return sol
+
+      #Solution 2 BFS: O(n) / O(n)
+      self.parentDict = defaultdict(TreeNode)
+
+      def recursive(node, parent):
+          if not node:
+              return
+          self.parentDict[node] = parent
+          recursive(node.left, node)
+          recursive(node.right, node)
+      recursive(root, None)
+
+      q = deque()
+      q.append((target, 0))
+      seen = set()
+      sol = []
+      while q:
+          curNode, curK = q.popleft()
+          if curNode.val not in seen:
+              if curK == k:
+                  sol.append(curNode.val)
+              else:
+                  seen.add(curNode.val)
+                  if curNode.left:
+                      q.append((curNode.left, curK + 1))
+                  if curNode.right:
+                      q.append((curNode.right, curK + 1))
+                  if curNode in self.parentDict and self.parentDict[curNode]:
+                      q.append((self.parentDict[curNode], curK + 1))
+      return sol
