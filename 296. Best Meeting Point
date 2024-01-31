@@ -1,0 +1,40 @@
+class Solution:
+    def minTotalDistance(self, grid: List[List[int]]) -> int:
+        #Solution 1 TLE: O(m^2*n^2) / O(m*n)
+        houses = []
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 1: houses.append((i, j))
+        
+        sol = float('inf')
+        for x in range(len(grid)):
+            for y in range(len(grid[0])):
+                curDistance = 0
+                for houseX, houseY in houses:
+                    curDistance += abs(houseX - x) + abs(houseY - y)
+                sol = min(sol, curDistance)
+        return sol
+
+        #Solution 2: O(m*n) / O(m*n)
+        #keep equal number of points to the left and right of the meeting point = median
+        rows, cols = [], []
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 1:
+                    rows.append(i)
+        
+        for j in range(len(grid[0])):
+            for i in range(len(grid)):
+                if grid[i][j] == 1:
+                    cols.append(j)
+                
+        #find median of all x and y coordinates of houses
+        rowMedian = rows[len(rows) // 2]
+        colMedian = cols[len(cols) // 2]
+
+        sol = 0
+        for row in rows:
+            sol += abs(rowMedian - row)
+        for col in cols:
+            sol += abs(colMedian - col)
+        return sol
