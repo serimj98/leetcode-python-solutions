@@ -1,0 +1,45 @@
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        #Solution 1: O(n + m) / O(n)
+        if len(arrays) == 1: return 0
+        minMax = []
+        for array in arrays:
+            minMax.append([array[0], array[-1]])
+
+        totalMin, totalMax = minMax[0][0], minMax[0][1]
+        sol = 0
+        for minVal, maxVal in minMax[1:]:
+            sol = max(sol, max(abs(maxVal - totalMin), abs(minVal - totalMax)))
+            totalMin = min(totalMin, minVal)
+            totalMax = max(totalMax, maxVal)
+        
+        return sol
+
+        #Solution 2: O(n) / O(1)
+        minIdx, minVal = float('inf'), float('inf')
+        for i, array in enumerate(arrays):
+            if array[0] < minVal:
+                minVal = array[0]
+                minIdx = i
+        
+        maxIdx, maxVal = float('-inf'), float('-inf')
+        for i, array in enumerate(arrays):
+            if array[-1] > maxVal:
+                maxVal = array[-1]
+                maxIdx = i
+        
+        if minIdx != maxIdx: return maxVal - minVal
+
+        secondMinIdx, secondMinVal = float('inf'), float('inf')
+        for i, array in enumerate(arrays):
+            if i != minIdx and array[0] < secondMinVal:
+                secondMinVal = array[0]
+                secondMinIdx = i
+        
+        secondMaxIdx, secondMaxVal = float('-inf'), float('-inf')
+        for i, array in enumerate(arrays):
+            if i != maxIdx and array[-1] > secondMaxVal:
+                secondMaxVal = array[-1]
+                secondMaxIdx = i
+
+        return max(maxVal - secondMinVal, secondMaxVal - minVal)
