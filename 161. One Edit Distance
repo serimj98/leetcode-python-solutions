@@ -1,0 +1,15 @@
+class Solution:
+    def isOneEditDistance(self, s: str, t: str) -> bool:
+        #Solution 1: O(n) / O(n), string slicing
+        if not s and not t: return False
+        if len(s) == len(t):
+            if s == t: return False
+            for i in range(len(s)):
+                if s[:i] + s[i+1:] == t[:i] + t[i+1:]: return True
+        elif len(s) + 1 == len(t):
+            for i in range(len(t)):
+                if t[:i] + t[i+1:] == s: return True
+        elif len(t) + 1 == len(s):
+            for i in range(len(s)):
+                if s[:i] + s[i+1:] == t: return True
+        return False
