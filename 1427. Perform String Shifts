@@ -1,0 +1,11 @@
+class Solution:
+    def stringShift(self, s: str, shift: List[List[int]]) -> str:
+        #Solution 1: O(shift + s) / O(s), string slice
+        offset = 0
+        for direction, amount in shift:
+            if direction == 0: offset -= amount
+            else: offset += amount
+        offset %= len(s)
+        if offset == 0: return s
+        if offset > 0:return s[len(s)-offset:] + s[:len(s)-offset]
+        else: return s[-offset:] + s[:-offset]
