@@ -1,0 +1,19 @@
+class Solution:
+    def validateBinaryTreeNodes(self, n: int, leftChild: List[int], rightChild: List[int]) -> bool:
+        #Solution 1: O(n) / O(n)
+        root = 0
+        childNodes = set(leftChild + rightChild)
+        for i in range(n): #find root
+            if i not in childNodes:
+                root = i
+
+        seen = set()
+        q = deque()
+        q.append(root)
+        while q:
+            cur = q.popleft()
+            if cur in seen: return False
+            seen.add(cur)
+            if leftChild[cur] != -1: q.append(leftChild[cur])
+            if rightChild[cur] != -1: q.append(rightChild[cur])
+        return len(seen) == n
