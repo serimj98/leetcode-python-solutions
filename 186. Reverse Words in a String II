@@ -1,0 +1,21 @@
+class Solution:
+    def reverseWords(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        #Solution 1: O(n) / O(1)
+        def reverse(i, j):
+            while i < j:
+                s[i], s[j] = s[j], s[i]
+                i += 1
+                j -= 1
+        
+        reverse(0, len(s) - 1)
+        
+        startIdx = 0
+        for i, c in enumerate(s):
+            if c == " ":
+                reverse(startIdx, i-1)
+                startIdx = i+1
+            elif i == len(s) - 1: #flip last word
+                reverse(startIdx, i)
