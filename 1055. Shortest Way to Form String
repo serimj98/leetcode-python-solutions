@@ -1,0 +1,14 @@
+class Solution:
+    def shortestWay(self, source: str, target: str) -> int:
+        #Solution 1: O(target) / O(source)
+        sourceSet = set(source)
+        sourceIdx, targetIdx, sol = 0, 0, 1
+        while targetIdx < len(target):
+            if target[targetIdx] not in sourceSet: return -1
+            if sourceIdx == len(source):
+                sourceIdx = 0
+                sol += 1
+            if target[targetIdx] == source[sourceIdx]:
+                targetIdx += 1
+            sourceIdx += 1
+        return sol
