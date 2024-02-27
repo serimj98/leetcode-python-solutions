@@ -1,0 +1,22 @@
+class Solution:
+    def nextClosestTime(self, time: str) -> str:
+        #Solution 1: O(1) / O(1), at most 16 values in values
+        hour, minute = time.split(":")
+        twoDigits = sorted(set(hour + minute))
+        values = []
+        for a in twoDigits:
+            for b in twoDigits:
+                values.append(a + b)
+        
+        #check if next valid minute is within hour
+        minuteIdx = values.index(minute)
+        if minuteIdx+1 < len(values) and values[minuteIdx+1] < "60":
+            return hour + ":" + values[minuteIdx+1]
+        
+        #check if next valid hour is within day
+        hourIdx = values.index(hour)
+        if hourIdx+1 < len(values) and values[hourIdx+1] < "24":
+            return values[hourIdx+1] + ":" + values[0] #smallest minute value
+        
+        #earliest time of next day
+        return values[0] + ":" + values[0]
