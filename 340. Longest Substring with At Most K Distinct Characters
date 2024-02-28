@@ -1,0 +1,16 @@
+class Solution:
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        #Solution 1: O(n) / O(k)
+        charDict = defaultdict(int)
+        l, r = 0, 0
+        sol = 0
+        while r < len(s):
+            charDict[s[r]] += 1
+            while len(charDict) > k:
+                charDict[s[l]] -= 1
+                if charDict[s[l]] == 0:
+                    del charDict[s[l]]
+                l += 1
+            sol = max(sol, r - l + 1)
+            r += 1
+        return sol
