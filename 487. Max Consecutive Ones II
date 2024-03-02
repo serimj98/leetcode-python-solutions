@@ -1,0 +1,15 @@
+class Solution:
+    def findMaxConsecutiveOnes(self, nums: List[int]) -> int:
+        #Solution 1: O(n) / O(1)
+        oldCount, curCount = 0, 0
+        foundZero = False
+        sol = 0
+        for i in range(len(nums)):
+            if nums[i] == 0:
+                oldCount, curCount = curCount, 0
+                foundZero = True
+            else:
+                curCount += 1
+            sol = max(sol, oldCount + curCount + 1) #1 representing the flipped 0
+        if not foundZero: return len(nums)
+        return sol
