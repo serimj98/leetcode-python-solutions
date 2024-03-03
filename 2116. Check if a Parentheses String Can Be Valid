@@ -1,0 +1,24 @@
+class Solution:
+    def canBeValid(self, s: str, locked: str) -> bool:
+        #Solution 1: O(n) / O(1)
+        if len(s) % 2 != 0: return False
+
+        #from left to right, if potential openPar balance is greater than closedPar
+        openPar, closedPar = 0, 0
+        for i in range(len(s)):
+            if locked[i] == "0" or s[i] == "(":
+                openPar += 1
+            elif s[i] == ")":
+                closedPar += 1
+            if openPar - closedPar < 0: return False
+
+        #from right to left, if potential closedPar balance is greater than openPar
+        openPar, closedPar = 0, 0
+        for i in range(len(s)-1, -1, -1):
+            if locked[i] == "0" or s[i] == ")":
+                closedPar += 1
+            elif s[i] == "(":
+                openPar += 1
+            if closedPar - openPar < 0: return False
+
+        return True
