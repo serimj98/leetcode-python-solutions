@@ -1,0 +1,19 @@
+class Solution:
+    def numKLenSubstrNoRepeats(self, s: str, k: int) -> int:
+        #Solution 1: O(n) / O(n)
+        l = 0
+        sol = 0
+        subDict = defaultdict(int)
+        for r in range(len(s)):
+            if r - l < k:
+                subDict[s[r]] += 1
+            else:
+                if len(subDict) == k:
+                    sol += 1
+                subDict[s[r]] += 1
+                subDict[s[l]] -= 1
+                if subDict[s[l]] == 0:
+                    del subDict[s[l]]
+                l += 1
+        if len(subDict) == k: sol += 1
+        return sol
