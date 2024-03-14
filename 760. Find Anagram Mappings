@@ -1,0 +1,11 @@
+class Solution:
+    def anagramMappings(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        #Solution 1: O(n) / O(n)
+        numDict = dict()
+        for i, e in enumerate(nums2):
+            numDict[e] = i
+        
+        sol = []
+        for num in nums1:
+            sol.append(numDict[num])
+        return sol
