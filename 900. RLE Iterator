@@ -1,0 +1,22 @@
+class RLEIterator:
+
+    #Solution 1:
+    def __init__(self, encoding: List[int]): #O(1) / O(n)
+        self.encoding = encoding
+        self.idx = 0
+
+    def next(self, n: int) -> int: #O(n) / O(1)
+        while n > 0:
+            if self.idx >= len(self.encoding): return -1
+            if n <= self.encoding[self.idx]:
+                self.encoding[self.idx] -= n
+                return self.encoding[self.idx + 1]
+            else:
+                n -= self.encoding[self.idx]
+                self.encoding[self.idx] = 0
+                self.idx += 2
+
+
+# Your RLEIterator object will be instantiated and called as such:
+# obj = RLEIterator(encoding)
+# param_1 = obj.next(n)
