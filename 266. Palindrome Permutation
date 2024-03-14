@@ -1,0 +1,10 @@
+class Solution:
+    def canPermutePalindrome(self, s: str) -> bool:
+        #Solution 1: O(n) / O(n)
+        sCounter = Counter(s)
+        singleChar = False
+        for c in sCounter:
+            if sCounter[c] % 2 == 1:
+                if not singleChar: singleChar = True
+                else: return False
+        return True
