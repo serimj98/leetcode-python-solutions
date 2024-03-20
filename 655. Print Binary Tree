@@ -1,0 +1,27 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def printTree(self, root: Optional[TreeNode]) -> List[List[str]]:
+        #Solution 1: O(n) / O(h^w)
+        def getHeight(node):
+            if not node: return 0
+            return 1 + max(getHeight(node.left), getHeight(node.right))
+
+        height = getHeight(root)
+        width = 2 ** height - 1
+        self.sol = [[''] * width for i in range(height)]
+
+        def recursive(node, row, l, r):
+            if not node: return
+            m = l + (r - l) // 2
+            self.sol[row][m] = str(node.val)
+            recursive(node.left, row + 1, l, m - 1)
+            recursive(node.right, row + 1, m + 1, r)
+        
+        recursive(root, 0, 0, width - 1)
+        return self.sol
