@@ -1,0 +1,22 @@
+class Solution:
+    def findStrobogrammatic(self, n: int) -> List[str]:
+        #Solution 1: O(n * 5^n) / O(n * 5^n)
+        stroboEven = [["0", "0"], ["1", "1"], ["6", "9"], ["8", "8"], ["9", "6"]] #valid when flipped
+        stroboOdd = ["0", "1", "8"] #same value when flipped
+
+        sol = []
+        def recursive(cur, n):
+            if n == 0:
+                sol.append(cur)
+                return
+            if n % 2 == 1:
+                for odd in stroboOdd:
+                    recursive(cur + odd, n - 1)
+            else:
+                for evenA, evenB in stroboEven:
+                    #edge case of creating a string with leading zeros
+                    if n - 2 == 0 and (evenA, evenB) == ("0", "0"): continue
+                    recursive(evenA + cur + evenB, n - 2)
+
+        recursive("", n)
+        return sol
