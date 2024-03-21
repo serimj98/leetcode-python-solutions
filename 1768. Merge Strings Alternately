@@ -1,0 +1,15 @@
+class Solution:
+    def mergeAlternately(self, word1: str, word2: str) -> str:
+        #Solution 1: O(word1 + word2) / O(word1 + word2)
+        i, j = 0, 0
+        sol = []
+        while i < len(word1) and j < len(word2):
+            if i <= j:
+                sol.append(word1[i])
+                i += 1
+            else:
+                sol.append(word2[j])
+                j += 1
+        if i < len(word1): sol.append(word1[i:])
+        if j < len(word2): sol.append(word2[j:])
+        return "".join(sol)
