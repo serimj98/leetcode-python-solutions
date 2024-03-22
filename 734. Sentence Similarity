@@ -1,0 +1,15 @@
+class Solution:
+    def areSentencesSimilar(self, sentence1: List[str], sentence2: List[str], similarPairs: List[List[str]]) -> bool:
+        #Solution 1: O(n) / O(n)
+        if len(sentence1) != len(sentence2): return False
+        
+        similarDict = defaultdict(set)
+        for a, b in similarPairs:
+            similarDict[a].add(b)
+            similarDict[b].add(a)
+
+        for i in range(len(sentence1)):
+            if sentence1[i] == sentence2[i]: continue
+            if sentence1[i] in similarDict[sentence2[i]]: continue
+            return False
+        return True
