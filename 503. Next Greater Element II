@@ -1,13 +1,19 @@
 class Solution:
-  def nextGreaterElements(self, nums: List[int]) -> List[int]:
-    #Solution 1: O(n) / O(n)
-    sol = [-1] * len(nums)
-    stack = []
-    for _ in range(2):
-      for i in range(len(nums)-1, -1, -1):
-        while stack and nums[i] >= stack[-1]:
-          stack.pop()
-        if stack:
-          sol[i] = stack[-1]
-        stack.append(nums[i])
-    return sol
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        #Solution 1: O(n) / O(n)
+        stack = []
+        sol = [-1 for i in range(len(nums))]
+
+        for i in range(len(nums)):
+            #if we find element greater than last added
+            while stack and nums[stack[-1]] < nums[i]:
+                sol[stack.pop()] = nums[i]
+            stack.append(i) #add current element as potential lesser element
+        
+        #account for elements lying on left that aren't considered in first traversal
+        for i in range(len(nums)):
+            while stack and nums[stack[-1]] < nums[i]:
+                sol[stack.pop()] = nums[i]
+            stack.append(i)
+
+        return sol
