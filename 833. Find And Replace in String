@@ -1,6 +1,6 @@
 class Solution:
     def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
-        #Solution 1: O(n), n = len(indices) / O(n)
+        #Solution 1: O(n*m), n = len(indices), m = max source length / O(n)
         splitS = list(s)
         vals = [] #only add the targets that correspond to matched source
         for idx in range(len(indices)):
