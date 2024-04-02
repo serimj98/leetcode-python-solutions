@@ -1,0 +1,28 @@
+"""
+# Definition for Employee.
+class Employee:
+    def __init__(self, id: int, importance: int, subordinates: List[int]):
+        self.id = id
+        self.importance = importance
+        self.subordinates = subordinates
+"""
+
+class Solution:
+    def getImportance(self, employees: List['Employee'], id: int) -> int:
+        #Solution 1: O(n) / O(n)
+        employeeDict = defaultdict(list)
+        for employee in employees:
+            employeeDict[employee.id] = [employee.importance, employee.subordinates]
+        
+        self.seen = set()
+        self.sol = 0
+        def dfs(node):
+            if node not in self.seen:
+                self.seen.add(node)
+                importance, subordinates = employeeDict[node]
+                self.sol += importance
+                for sub in subordinates:
+                    dfs(sub)
+        
+        dfs(id)
+        return self.sol
