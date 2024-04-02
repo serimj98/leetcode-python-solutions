@@ -1,0 +1,19 @@
+class Solution:
+    def getOrder(self, tasks: List[List[int]]) -> List[int]:
+        #Solution 1: O(n log n) / O(n)
+        tasks = sorted([task[0], task[1], i] for i, task in enumerate(tasks))
+        heap, i, sol = [], 0, []
+        curTime = tasks[0][0]
+    
+        while len(sol) < len(tasks): #need to continue adding index order
+            #add all available tasks that can be enqueued before curTime
+            while i < len(tasks) and tasks[i][0] <= curTime:
+                heappush(heap, (tasks[i][1], tasks[i][2])) #sort by processing time
+                i += 1
+            if heap:
+                processingTime, idx = heappop(heap)
+                curTime += processingTime
+                sol.append(idx)
+            elif i < len(tasks):
+                curTime = tasks[i][0] #update curTime to next available if no next task
+        return sol
