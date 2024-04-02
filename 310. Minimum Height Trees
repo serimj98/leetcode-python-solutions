@@ -1,0 +1,26 @@
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        #Solution 1: O(n) / O(n)
+        if n == 1: return [0]
+        if n == 2: return [0, 1]
+        
+        adjList = defaultdict(list)
+        for a, b in edges:
+            adjList[a].append(b)
+            adjList[b].append(a)
+        
+        leaf = []
+        for node in adjList: #nodes that have degree of 1
+            if len(adjList[node]) == 1: leaf.append(node)
+        
+        while n > 2: #maximum two centroid nodes that are left after trimming
+            n -= len(leaf) #remove leaves
+            nextLeaf = []
+            for l in leaf:
+                #delete a neighbor-leaf pair
+                nei = adjList[l].pop()
+                adjList[nei].remove(l)
+                if len(adjList[nei]) == 1: #if new leaf after removal
+                    nextLeaf.append(nei)
+            leaf = nextLeaf
+        return leaf
