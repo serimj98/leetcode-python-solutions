@@ -1,0 +1,25 @@
+class Solution:
+    def countPairs(self, n: int, edges: List[List[int]]) -> int:
+        #Solution 1: O(n) / O(n)
+        nodeDict = defaultdict(list)
+        for a, b in edges:
+            nodeDict[a].append(b)
+            nodeDict[b].append(a)
+        
+        visited = set()
+        def dfs(node): #return node count of one component
+            if node in visited: return 0
+            visited.add(node)
+            count = 1 #for current node
+            for nei in nodeDict[node]:
+                count += dfs(nei)
+            return count
+        
+        #number of pairs - number of pairs in connected components 
+        sol = n * (n - 1) // 2 #number of pairs with n nodes
+        for node in range(n):
+            if node not in visited:
+                count = dfs(node)
+                sol -= count * (count - 1) // 2
+        
+        return sol
