@@ -1,0 +1,15 @@
+class Solution:
+    def groupStrings(self, strings: List[str]) -> List[List[str]]:
+        #Solution 1: O(n) / O(n)
+        stringSeq = []
+        for string in strings:
+            curString = []
+            for i in range(1, len(string)):
+                curString.append(str((ord(string[i]) - ord(string[i-1])) % 26)) #wraparound
+            stringSeq.append([",".join(curString), string])
+        
+        stringDict = defaultdict(list)
+        for seq, string in stringSeq:
+            stringDict[seq].append(string)
+
+        return stringDict.values()
