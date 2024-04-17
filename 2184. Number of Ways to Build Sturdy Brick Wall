@@ -1,0 +1,36 @@
+class Solution:
+    def buildWall(self, height: int, width: int, bricks: List[int]) -> int:
+        #Solution 1: O(combo^2) / O(combo)
+        self.rowCombos = []
+        def backtrack(cur, remaining): #get possible combinations using bricks
+            if remaining < 0: return
+            if remaining == 0:
+                self.rowCombos.append(tuple(cur)) #for set as dictionary key
+                return
+            for brick in bricks:
+                backtrack(cur + [brick], remaining - brick)
+        backtrack([], width)
+    
+        edgeDict = defaultdict(set)
+        for combo in self.rowCombos: #calculate edge locations for each combo
+            cur = 0
+            for brick in combo[:-1]:
+                cur += brick
+                edgeDict[combo].add(cur) #{(1, 1, 1): {1, 2}, (1, 2): {1}, (2, 1): {2}})
+
+        neiDict = defaultdict(list)
+        for combo in self.rowCombos: #get possible neighbors of possible combinations
+            for nei in self.rowCombos:
+                if len(edgeDict[combo] & edgeDict[nei]) == 0: #if no common edges
+                    neiDict[combo].append(nei) #{(1, 2): [(2, 1)], (2, 1): [(1, 2)]})
+
+        @lru_cache(None)
+        def dfs(combo, remainingRow): #number of ways to build brick to height
+            if remainingRow == 0: return 1
+            return sum(dfs(nei, remainingRow - 1) for nei in neiDict[combo])
+        
+        self.sol = 0
+        for combo in self.rowCombos: #build up to height - 1, except already built first row
+            self.sol += dfs(combo, height - 1) % (10**9 + 7)
+        
+        return self.sol % (10**9 + 7)
