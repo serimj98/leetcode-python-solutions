@@ -1,0 +1,14 @@
+# The rand7() API is already defined for you.
+# def rand7():
+# @return a random integer in the range 1 to 7
+
+class Solution:
+    def rand10(self):
+        """
+        :rtype: int
+        """
+        #Solution 1: O(1), 2 rand7() calls on average / O(1)
+        val = 40
+        while val >= 40:
+            val = (rand7() - 1) + (rand7() - 1) * 7 #between 0 and 48
+        return val % 10 + 1
