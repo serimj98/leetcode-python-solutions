@@ -4,6 +4,7 @@ class Solution:
         def recursive(count, cur, copied):
             if cur == n: return count #get character exactly n times
             if cur > n: return float('inf') #count exceeded n
+            #make sure user doesn't copy/paste nothing forever
             if cur == copied: return recursive(count + 1, cur + copied, copied) #if already copied, paste
             if copied == 0: return recursive(count + 1, cur, cur) #if not copied, copy
             return min(recursive(count + 1, cur + copied, copied), recursive(count + 1, cur, cur))
