@@ -1,0 +1,10 @@
+class Solution:
+    def minSteps(self, n: int) -> int:
+        #Solution 1: O(2^n) / O(2^n)
+        def recursive(count, cur, copied):
+            if cur == n: return count #get character exactly n times
+            if cur > n: return float('inf') #count exceeded n
+            if cur == copied: return recursive(count + 1, cur + copied, copied) #if already copied, paste
+            if copied == 0: return recursive(count + 1, cur, cur) #if not copied, copy
+            return min(recursive(count + 1, cur + copied, copied), recursive(count + 1, cur, cur))
+        return recursive(0, 1, 0)
