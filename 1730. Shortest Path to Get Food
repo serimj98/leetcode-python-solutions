@@ -1,0 +1,28 @@
+class Solution:
+    def getFood(self, grid: List[List[str]]) -> int:
+        #Solution 1: O(m*n) / O(m*n)
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == '*':
+                    startX, startY = i, j
+        
+        dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+        q = deque()
+        q.append((startX, startY, 0))
+        seen = set()
+        seen.add((startX, startY))
+    
+        while q:
+            i, j, steps = q.popleft()
+            print(i, j, steps)
+            if grid[i][j] == '#':
+                return steps
+            for x, y in dirs:
+                newI, newJ = i + x, j + y
+                if (newI, newJ) not in seen:
+                    if 0 <= newI < len(grid) and 0 <= newJ < len(grid[0]):
+                        if grid[newI][newJ] != 'X':
+                            seen.add((newI, newJ))
+                            q.append((newI, newJ, steps + 1))
+        
+        return -1
