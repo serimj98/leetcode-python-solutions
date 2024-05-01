@@ -14,7 +14,6 @@ class Solution:
     
         while q:
             i, j, steps = q.popleft()
-            print(i, j, steps)
             if grid[i][j] == '#':
                 return steps
             for x, y in dirs:
