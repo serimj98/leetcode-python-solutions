@@ -1,0 +1,16 @@
+class Solution:
+    def minAreaFreeRect(self, points: List[List[int]]) -> float:
+        #Solution 1: O(n^3) / O(n^2)
+        sol = float('inf')
+        pointsDict = defaultdict(list)
+        #if you have two diagonals with the same center and distance, you have a rectangle
+        for i, (x0, y0) in enumerate(points):
+            for (x1, y1) in points[i+1:]:
+                centerX, centerY = (x0 + x1) / 2, (y0 + y1) / 2
+                dist = ((x0 - x1)**2 + (y0 - y1)**2) #distance^2 between (x0, y0) and (x1, y1)
+                for (x2, y2) in pointsDict[(centerX, centerY, dist)]:
+                    area = sqrt(((x0 - x2)**2 + (y0 - y2)**2) * ((x1 - x2)**2 + (y1 - y2)**2))
+                    sol = min(sol, area)
+                pointsDict[(centerX, centerY, dist)].append((x0, y0)) #only added when it has a corresponding pair
+        if sol == float('inf'): return 0
+        return sol
