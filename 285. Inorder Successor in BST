@@ -1,0 +1,32 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> Optional[TreeNode]:
+        #Solution 1: O(n) / O(n)
+        self.nodes = []
+        def recursive(node):
+            if not node: return
+            recursive(node.left)
+            self.nodes.append(node)
+            recursive(node.right)
+        recursive(root)
+
+        for i, node in enumerate(self.nodes):
+            if node == p:
+                if i == len(self.nodes) - 1: return None
+                else: return self.nodes[i+1]
+
+        #Solution 2: O(n) / O(1)
+        sol = None
+        while root:
+            if p.val < root.val:
+                sol = root
+                root = root.left
+            else:
+                root = root.right
+        return sol
