@@ -1,0 +1,24 @@
+class Solution:
+    def removeComments(self, source: List[str]) -> List[str]:
+        #Solution 1: O(n) / O(n)
+        block_comment = False
+        sol = []
+        buffer = ''
+        for line in source:
+            i = 0
+            while i < len(line):
+                if line[i] == '/' and (i + 1) < len(line) and line[i+1] == '/' and block_comment == False: #//
+                    i = len(line)
+                elif line[i] == '/' and (i + 1) < len(line) and line[i+1] == '*' and block_comment == False: #/*
+                    block_comment = True
+                    i += 1
+                elif line[i] == '*' and (i + 1) < len(line) and line[i+1] == '/' and block_comment == True: #*/
+                    block_comment = False
+                    i += 1
+                elif not block_comment: #regular character
+                    buffer += line[i]
+                i += 1
+            if buffer and not block_comment:
+                sol.append(buffer)
+                buffer = ''
+        return sol
