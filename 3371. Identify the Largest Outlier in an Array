@@ -1,0 +1,20 @@
+class Solution:
+    def getLargestOutlier(self, nums: List[int]) -> int:
+        #Solution 1: O(n) / O(n)
+        numsSum = sum(nums)
+        
+        #track how many times a number exists in the list
+        numDict = defaultdict(int)
+        for num in nums:
+            numDict[num] += 1
+        
+        #total sum = (sum of special numbers) * 2 + outlier
+        outlier = float('-inf')
+        for sum_special_num in numDict.keys():
+            possible_outlier = numsSum - 2*sum_special_num
+            if possible_outlier in numDict:
+                #make sure we're not considering our possible outlier to be the sum of special numbers
+                if possible_outlier != sum_special_num or numDict[sum_special_num] > 1:
+                    outlier = max(outlier, possible_outlier)
+        
+        return outlier
