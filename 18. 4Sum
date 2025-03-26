@@ -1,0 +1,32 @@
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        #Solution 1: O(n^4) / O(n)
+        def NSum(nums, target, n, cur):
+            if len(nums) < n or n < 2 or nums[0]*n > target or nums[-1]*n < target:
+                return
+            #two sum logic
+            if n == 2:
+                l, r = 0, len(nums)-1
+                while l < r:
+                    s = nums[l] + nums[r]
+                    if s == target:
+                        self.sol.append(cur + [nums[l], nums[r]])
+                        #skip if element is the same to ensure unique quadruplets
+                        while l < r and nums[l] == nums[l-1]:
+                            l += 1
+                        while l < r and nums[r] == nums[r-1]:
+                            r -= 1
+                        l += 1
+                        r -= 1
+                    elif s < target:
+                        l += 1
+                    else:
+                        r -= 1
+            else:
+                for i in range(len(nums) - n + 1):
+                    if i == 0 or nums[i-1] != nums[i]:
+                        NSum(nums[i+1:], target - nums[i], n-1, cur + [nums[i]])
+        
+        self.sol = []
+        NSum(sorted(nums), target, 4, [])
+        return self.sol
