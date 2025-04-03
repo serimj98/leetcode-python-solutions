@@ -1,0 +1,21 @@
+class Solution:
+    def minCapability(self, nums: List[int], k: int) -> int:
+        #Solution 1: O(n log n) / O(1)
+        l, r = min(nums), max(nums) #l = 2, r = 9
+        # minimize the maximum house we steal
+        while l < r:
+            m = (l + r) // 2
+            take = 0
+            last = False
+            for num in nums:
+                if last:
+                    last = False
+                    continue
+                if num <= m: # ensure no house we take as value greater than m
+                    take += 1
+                    last = True
+            if take >= k: # big enough capability
+                r = m
+            else: #don't have big enough capability
+                l = m + 1
+        return l
