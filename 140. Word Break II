@@ -1,0 +1,17 @@
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        #Solution 1: O(2^n * n) / O(2^n)
+        self.sol = []
+        word_set = set(wordDict)
+        def backtrack(start, cur):
+            if start == len(s):
+                self.sol.append(" ".join(cur))
+                return
+            for end in range(start + 1, len(s) + 1):
+                word = s[start:end]
+                if word in word_set:
+                    cur.append(word)
+                    backtrack(end, cur)
+                    cur.pop()
+        backtrack(0, [])
+        return self.sol
