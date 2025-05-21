@@ -1,0 +1,18 @@
+class Solution:
+    def maxVowels(self, s: str, k: int) -> int:
+        #Solution 1: O(n) / O(1)
+        l, r = 0, k
+        vowelSet = set(['a','e','i','o','u'])
+        vowelCounter = defaultdict()
+        curCount = 0
+        for i in range(k):
+            if s[i] in vowelSet:
+                curCount += 1
+        sol = curCount
+        while r < len(s):
+            if s[l] in vowelSet: curCount -= 1
+            if s[r] in vowelSet: curCount += 1
+            sol = max(sol, curCount)
+            l += 1
+            r += 1
+        return sol
