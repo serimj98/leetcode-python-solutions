@@ -1,0 +1,40 @@
+class Solution:
+    def largestIsland(self, grid: List[List[int]]) -> int:
+        #Solution 1: O(r*c) / O(r*c)
+        self.nextNum = 2
+        self.islandSize = defaultdict(int)
+        self.dirs = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+
+        # Calculate the size of the island by newly marked number
+        def dfs(r, c):
+            if r >= 0 and r < len(grid) and c >=0 and c < len(grid[0]):
+                if grid[r][c] == 1:
+                    grid[r][c] = self.nextNum
+                    self.islandSize[self.nextNum] += 1
+                    for x, y in self.dirs:
+                        dfs(r+x, c+y)
+
+        # Change all islands marked as 1 to have each island be marked as its own number
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 1:
+                    dfs(r, c)
+                    self.nextNum += 1
+        
+        # For grids marked as 0, find neighbours with unique numbers (have islandSize info)
+        sol = max(self.islandSize.values()) if self.islandSize else 0
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if grid[r][c] == 0:
+                    nei = set()
+                    for x, y in self.dirs:
+                        newR, newC = r+x, c+y
+                        if newR >= 0 and newR < len(grid) and newC >= 0 and newC < len(grid[0]):
+                            if grid[newR][newC] != 0:
+                                nei.add(grid[newR][newC])
+                    size = 1
+                    for color in nei:
+                        size += self.islandSize[color]
+                    sol = max(sol, size)
+        
+        return sol
